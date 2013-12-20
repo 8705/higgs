@@ -28,16 +28,17 @@ class TasksController extends AppController {
 
 		//SecurityComponentのCSRFチェックを無効
 		if ($this->params['action'] == 'delete' ||
-			$this->params['action'] == 'edit' ||
-			$this->params['action'] == 'check') {
-			$this->Security->csrfCheck = false;
-			$this->Security->validatePost = false;
+            $this->params['action'] == 'edit' ||
+            $this->params['action'] == 'check' ||
+            $this->params['action'] == 'divide') {
+             $this->Security->csrfCheck = false;
+             $this->Security->validatePost = false;
 
 			//token確認
 			if ( !isset($_SERVER['HTTP_X_CSRF_TOKEN'])
 				|| !strtolower($_SERVER['HTTP_X_CSRF_TOKEN']) == $token) { //トークン
 				echo 'token error';
-				throw new NotFoundException(__('Invalid post'));
+                throw new NotFoundException(__('Token error'));
 			}
 		}
 	}
@@ -135,21 +136,39 @@ class TasksController extends AppController {
 	}
 
 	public function divide($id = null) {
-		if (!$this->Task->exists($id)) {
-			throw new NotFoundException(__('Invalid task'));
-		}
-		if ($this->request->is('post')) {
-			$this->Task->create();
-			if ($this->Task->save($this->request->data)) {
-				$this->Session->setFlash(__('The task has been saved.'));
-				return $this->redirect(array('action' => 'index'));
-			} else {
-				$this->Session->setFlash(__('The task could not be saved. Please, try again.'));
-			}
-		}
-		$this->set('user_id', $this->Auth->user('id'));
-		$this->set('task_id', $id);
-	}
+        //Ajax or not
+        if (!$this->request->is('ajax')) {
+            throw new NotFoundException(__('Don\'t ajax!'));
+        }
+        $this->autoRender = false;   // 自動描画をさせない
+
+        if (!$this->Task->exists($id)) {
+            throw new NotFoundException(__('Non exist $id'));
+        }
+
+        //save OK
+        //create()は一体何をやっているのか？あとで調べる。今は無理。酔ってるから2013/12/19深夜
+        $this->Task->create();
+        if ($this->Task->save(array_merge($this->request->data, array('user_id'=>$this->Auth->user('id'))))) {
+            //最後の更新のidを取得 !ただし、他人のタスク更新と区別するためAuthユーザーの条件を付け足す必要あり!
+            $saved_id = $this->Task->getLastInsertID();
+            $options = array('conditions' => array('Task.' . $this->Task->primaryKey => $saved_id));
+            $result = $this->Task->find('first', $options);
+            $error = false;
+            $res = array("error" => $error,"result" => $result["Task"]);
+            $this->response->type('json');
+            echo json_encode($res);
+            exit;
+        //save NG
+        } else {
+            $error = true;
+            $message = $this->Task->validationErrors;
+            $res = $res = compact('error', 'message');
+            $this->response->type('json');
+            echo json_encode($res);
+            exit;
+        }
+    }
 
 	public function delete($id = null) {
 		$this->Task->id = $id;
@@ -169,15 +188,33 @@ class TasksController extends AppController {
 	}
 
 	public function check($id = null) {
-		//Ajax or not
+        //Ajax or not
         if (!$this->request->is('ajax')) {
             throw new NotFoundException(__('Invalid post'));
         }
         $this->autoRender = false;   // 自動描画をさせない
 
-		if (!$this->Task->exists($id)) {
-			throw new NotFoundException(__('Invalid task'));
-		}
-		$this->Task->id = $id;
-	}
+        if (!$this->Task->exists($id)) {
+            throw new NotFoundException(__('Invalid task'));
+        }
+        $this->Task->id = $id;
+        //save OK
+        if ($this->Task->save($this->request->data)) {
+            $options = array('conditions' => array('Task.' . $this->Task->primaryKey => $id));
+            $result = $this->Task->find('first', $options);
+            $error = false;
+            $res = array("error" => $error,"result" => $result["Task"]);
+            $this->response->type('json');
+            echo json_encode($res);
+            exit;
+        //save NG
+        }else {
+            $error = true;
+            $message = $this->Task->validationErrors;
+            $res = $res = compact('error', 'message');
+            $this->response->type('json');
+            echo json_encode($res);
+            exit;
+        }
+    }
 }
