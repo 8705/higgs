@@ -36,13 +36,13 @@
 	<ul class='list-group' id="task-list">
 	<?php foreach ($tasks as $task): ?>
 		<li id="task_<?php echo h($task['Task']['id']); ?>" class="<?php echo h($task['Task']['status']);?> list-group-item clearfix" data-task-id="<?php echo h($task['Task']['id']); ?>">
-			<span class="check-task"><input type="checkbox"></span>
+			<span class="check-task"><input type="checkbox" <?php if($task['Task']['status'] == 'done'){echo h('checked');} ?>></span>
 			<span class="body"><?php echo $this->Html->link(__(h($task['Task']['body'])), array('action' => 'view', $task['Task']['id'])); ?></span>
 			<span class="start_time"><?php echo h($task['Task']['start_time']); ?></span>
 			<span class="status"><?php echo h($task['Task']['status']); ?></span>
 			<span class="d_param"><?php echo h($task['Task']['d_param']); ?></span>
-			<span class="edit-task btn btn-default">編集</span>
-			<span class="divide-task btn btn-default">分割</span>
+			<span class="<?php echo h($task['Task']['status']=='notyet'?'edit-task':'disable-edit btn-disabled');?> btn btn-default">編集</span>
+			<span class="<?php echo h($task['Task']['status']=='notyet'?'divide-task':'disable-divide btn-disabled');?> btn btn-default">分割</span>
 			<span class="delete-task btn btn-default">削除</span>
 		</li>
 	<?php endforeach; ?>
@@ -50,6 +50,6 @@
 	<div class="actions">
 	<h3><?php echo __('Actions'); ?></h3>
 		<?php echo $this->Html->link(__('カレンダー表示'), array('controller'=>'calendars', 'action' => 'viewcalendar')); ?>
-</div>
+	</div>
 </div>
 
