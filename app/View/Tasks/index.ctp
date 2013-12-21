@@ -16,7 +16,7 @@
 			});
 		</script>
 		<?php
-			
+
 
 			//ajax送信用設定
 			echo $this->Js->submit('Submit', array(
@@ -62,7 +62,7 @@
 	<?php endif; ?>
 	</ul>
 	<h3>明日</h3>
-	<ul class="list-group" id="task-list-tomorow">
+	<ul class="list-group" id="task-list-tomorrow">
 	<?php if (count($tasks_tomorrow)): ?>
 	<?php foreach ($tasks_tomorrow as $task): ?>
 		<li id="task_<?php echo h($task['Task']['id']); ?>" class="<?php echo h($task['Task']['status']);?> list-group-item clearfix" data-task-id="<?php echo h($task['Task']['id']); ?>">
@@ -81,8 +81,8 @@
 	<?php endif; ?>
 	</ul>
 	<h3>明後日</h3>
-	<?php if (count($tasks_dayaftertomorrow)): ?>
 	<ul class="list-group" id="task-list-dayaftertomorrow">
+	<?php if (count($tasks_dayaftertomorrow)): ?>
 	<?php foreach ($tasks_dayaftertomorrow as $task): ?>
 		<li id="task_<?php echo h($task['Task']['id']); ?>" class="<?php echo h($task['Task']['status']);?> list-group-item clearfix" data-task-id="<?php echo h($task['Task']['id']); ?>">
 			<span class="check-task"><input type="checkbox" <?php if($task['Task']['status'] == 'done'){echo h('checked');} ?>></span>
