@@ -63,7 +63,7 @@
 		</li>
 	<?php endforeach; ?>
 	</ul>
-	<h3>いつか</h3>
+	<h3>いつかやる</h3>
 	<ul class='list-group' id="task-list">
 	<?php foreach ($tasks_someday as $task): ?>
 		<li id="task_<?php echo h($task['Task']['id']); ?>" class="<?php echo h($task['Task']['status']);?> list-group-item clearfix" data-task-id="<?php echo h($task['Task']['id']); ?>">
