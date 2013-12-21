@@ -64,11 +64,11 @@ function addTask(data, textStatus) {
         return year +'-'+ month +'-'+ date;
     }
 
-    if(data.result.status == getFutureDate(0)) {
+    if(data.result.start_time == getFutureDate(0)) {
         $('#task-list-today').append(elm);
-    } else if ((data.result.status == getFutureDate(1))) {
+    } else if ((data.result.start_time == getFutureDate(1))) {
         $('#task-list-tomorrow').append(elm);
-    } else if((data.result.status == getFutureDate(2))) {
+    } else if((data.result.start_time == getFutureDate(2))) {
         $('#task-list-dayaftertomorrow').append(elm);
     }
 
@@ -78,6 +78,7 @@ function addTask(data, textStatus) {
     popUpPanel(false, '送信されました');
     //formリセット
     $('#TaskBody').val('');
+    $('#TaskIndexForm .datepicker').val('');
 }
 
 function popUpPanel(error, message) {
