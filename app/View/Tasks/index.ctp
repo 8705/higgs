@@ -38,7 +38,7 @@
 		<span class="head-actions"><?php echo __('Actions'); ?></span>
 	</div>
 	<h3>今日</h3>
-	<ul class='list-group' id="task-list">
+	<ul class="list-group" id="task-list">
 	<?php foreach ($tasks_today as $task): ?>
 		<li id="task_<?php echo h($task['Task']['id']); ?>" class="<?php echo h($task['Task']['status']);?> list-group-item clearfix" data-task-id="<?php echo h($task['Task']['id']); ?>">
 			<span class="check-task"><input type="checkbox" <?php if($task['Task']['status'] == 'done'){echo h('checked');} ?>></span>
@@ -53,7 +53,7 @@
 	<?php endforeach; ?>
 	</ul>
 	<h3>明日</h3>
-	<ul class='list-group' id="task-list">
+	<ul class="list-group" id="task-list">
 	<?php foreach ($tasks_tomorrow as $task): ?>
 		<li id="task_<?php echo h($task['Task']['id']); ?>" class="<?php echo h($task['Task']['status']);?> list-group-item clearfix" data-task-id="<?php echo h($task['Task']['id']); ?>">
 			<span class="check-task"><input type="checkbox" <?php if($task['Task']['status'] == 'done'){echo h('checked');} ?>></span>
@@ -68,7 +68,7 @@
 	<?php endforeach; ?>
 	</ul>
 	<h3>いつか</h3>
-	<ul class='list-group' id="task-list">
+	<ul class="list-group" id="task-list">
 	<?php foreach ($tasks_someday as $task): ?>
 		<li id="task_<?php echo h($task['Task']['id']); ?>" class="<?php echo h($task['Task']['status']);?> list-group-item clearfix" data-task-id="<?php echo h($task['Task']['id']); ?>">
 			<span class="check-task"><input type="checkbox" <?php if($task['Task']['status'] == 'done'){echo h('checked');} ?>></span>
