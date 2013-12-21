@@ -8,7 +8,7 @@
 			<th><?php echo __('D値'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
 	</tr>
-	<?php foreach ($tasks as $task): ?>
+	<?php foreach ($tasks_today as $task): ?>
 	<tr>
 		<td><?php echo h($task['Task']['body']); ?>&nbsp;</td>
 		<td><?php echo h($task['Task']['start_time']); ?>&nbsp;</td>

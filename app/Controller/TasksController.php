@@ -46,11 +46,30 @@ class TasksController extends AppController {
 	public function index() {
 		$this->Task->recursive = -1;
 		$this->set('username', $this->Auth->user('username'));
-		$options = array(
-			'conditions' => array('Task.user_id' => $this->Auth->user('id')),
-			'order' => array('Task.start_time'),
+		$opt_today = array(
+			'conditions' => array(
+                'Task.user_id' => $this->Auth->user('id'),
+                'Task.start_time' => date('Y-m-d'),
+            ),
+			'order' => array('Task.d_param'),
 		);
-		$this->set('tasks', $this->Task->find('all', $options));
+        $opt_tomorrow = array(
+            'conditions' => array(
+                'Task.user_id' => $this->Auth->user('id'),
+                'Task.start_time' => date('Y-m-d', strtotime('+1 day')),
+            ),
+            'order' => array('Task.d_param'),
+        );
+        $opt_someday = array(
+            'conditions' => array(
+                'Task.user_id' => $this->Auth->user('id'),
+                'Task.start_time >' => date('Y-m-d', strtotime('+1 day')),
+            ),
+            'order' => array('Task.d_param'),
+        );
+		$this->set('tasks_today', $this->Task->find('all', $opt_today));
+        $this->set('tasks_tomorrow', $this->Task->find('all', $opt_tomorrow));
+        $this->set('tasks_someday', $this->Task->find('all', $opt_someday));
 	}
 
 	public function view($id = null) {
