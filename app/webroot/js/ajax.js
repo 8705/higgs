@@ -68,7 +68,7 @@ function addTask(data, textStatus) {
         $('#task-list-today').append(elm);
     } else if ((data.result.status == getFutureDate(1))) {
         $('#task-list-tomorrow').append(elm);
-    } else ((data.result.status == getFutureDate(2))) {
+    } else if((data.result.status == getFutureDate(2))) {
         $('#task-list-dayaftertomorrow').append(elm);
     }
 
