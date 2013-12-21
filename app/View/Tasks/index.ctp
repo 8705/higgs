@@ -7,11 +7,16 @@
 			<legend><?php echo __('Add Task'); ?></legend>
 		<?php
 			echo $this->Form->input('user_id', array('type'=>'hidden', 'default' => $author['id']));//$user_idから$authorに変更
-			echo $this->Form->input('parent_id', array('type'=>'hidden'));
 			echo $this->Form->input('body');
-			echo $this->Form->input('start_time');
-			echo $this->Form->input('status', array('type'=>'hidden', 'default' => 'notyet'));
-			echo $this->Form->input('d_param', array('type'=>'hidden', 'default' => 1));
+		?>
+		<input type="text" class="datepicker"></input>
+		<script>
+			$(document).ready(function() {
+				$('input.datepicker').Zebra_DatePicker();
+			});
+		</script>
+		<?php
+			//echo $this->Form->input('start_time');
 
 			//ajax送信用設定
 			echo $this->Js->submit('Submit', array(
