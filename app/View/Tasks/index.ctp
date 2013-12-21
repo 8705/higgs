@@ -12,7 +12,7 @@
 		<input type="text" class="datepicker"></input>
 		<script>
 			$(document).ready(function() {
-				$('input.datepicker').Zebra_DatePicker();
+				$('input.datepicker').Zebra_DatePicker({offset:[-225,1000]});
 			});
 		</script>
 		<?php
@@ -43,7 +43,8 @@
 		<span class="head-actions"><?php echo __('Actions'); ?></span>
 	</div>
 	<h3>今日</h3>
-	<ul class="list-group" id="task-list">
+	<ul class="list-group" id="task-list-today">
+	<?php if (count($tasks_today)): ?>
 	<?php foreach ($tasks_today as $task): ?>
 		<li id="task_<?php echo h($task['Task']['id']); ?>" class="<?php echo h($task['Task']['status']);?> list-group-item clearfix" data-task-id="<?php echo h($task['Task']['id']); ?>">
 			<span class="check-task"><input type="checkbox" <?php if($task['Task']['status'] == 'done'){echo h('checked');} ?>></span>
@@ -56,9 +57,13 @@
 			<span class="delete-task btn btn-default">削除</span>
 		</li>
 	<?php endforeach; ?>
+	<?php else: ?>
+		<li class="list-group-item clearfix">タスクがありません</li>
+	<?php endif; ?>
 	</ul>
 	<h3>明日</h3>
-	<ul class="list-group" id="task-list">
+	<ul class="list-group" id="task-list-tomorow">
+	<?php if (count($tasks_tomorrow)): ?>
 	<?php foreach ($tasks_tomorrow as $task): ?>
 		<li id="task_<?php echo h($task['Task']['id']); ?>" class="<?php echo h($task['Task']['status']);?> list-group-item clearfix" data-task-id="<?php echo h($task['Task']['id']); ?>">
 			<span class="check-task"><input type="checkbox" <?php if($task['Task']['status'] == 'done'){echo h('checked');} ?>></span>
@@ -71,10 +76,14 @@
 			<span class="delete-task btn btn-default">削除</span>
 		</li>
 	<?php endforeach; ?>
+	<?php else: ?>
+		<li class="list-group-item clearfix">タスクがありません</li>
+	<?php endif; ?>
 	</ul>
-	<h3>いつか</h3>
-	<ul class="list-group" id="task-list">
-	<?php foreach ($tasks_someday as $task): ?>
+	<h3>明後日</h3>
+	<?php if (count($tasks_dayaftertomorrow)): ?>
+	<ul class="list-group" id="task-list-dayaftertomorrow">
+	<?php foreach ($tasks_dayaftertomorrow as $task): ?>
 		<li id="task_<?php echo h($task['Task']['id']); ?>" class="<?php echo h($task['Task']['status']);?> list-group-item clearfix" data-task-id="<?php echo h($task['Task']['id']); ?>">
 			<span class="check-task"><input type="checkbox" <?php if($task['Task']['status'] == 'done'){echo h('checked');} ?>></span>
 			<span class="body"><?php echo $this->Html->link(__(h($task['Task']['body'])), array('action' => 'view', $task['Task']['id'])); ?></span>
@@ -86,6 +95,9 @@
 			<span class="delete-task btn btn-default">削除</span>
 		</li>
 	<?php endforeach; ?>
+	<?php else: ?>
+		<li class="list-group-item clearfix">タスクがありません</li>
+	<?php endif; ?>
 	</ul>
 	<div class="actions">
 	<h3><?php echo __('Actions'); ?></h3>

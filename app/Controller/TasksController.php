@@ -60,16 +60,16 @@ class TasksController extends AppController {
             ),
             'order' => array('Task.d_param'),
         );
-        $opt_someday = array(
+        $opt_dayaftertomorrow = array(
             'conditions' => array(
                 'Task.user_id' => $this->Auth->user('id'),
-                'Task.start_time >' => date('Y-m-d', strtotime('+1 day')),
+                'Task.start_time' => date('Y-m-d', strtotime('+2 day')),
             ),
             'order' => array('Task.d_param'),
         );
 		$this->set('tasks_today', $this->Task->find('all', $opt_today));
         $this->set('tasks_tomorrow', $this->Task->find('all', $opt_tomorrow));
-        $this->set('tasks_someday', $this->Task->find('all', $opt_someday));
+        $this->set('tasks_dayaftertomorrow', $this->Task->find('all', $opt_dayaftertomorrow));
         $this->set('bar', $this->_bar());
 	}
 
