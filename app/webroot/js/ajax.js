@@ -25,6 +25,13 @@ function htmlDivideElm(parentId){
     return elm;
 }
 
+function htmlEmptyElm() {
+    var elm = $(
+        '<li class="empty list-group-item clearfix">タスクがありません</li>'
+    );
+    return elm;
+}
+
 //タスク描画処理 in success
 function addTask(data, textStatus) {
     //バリデーションエラー
@@ -64,12 +71,36 @@ function addTask(data, textStatus) {
         return year +'-'+ month +'-'+ date;
     }
 
+    var addDay;
     if(data.result.start_time == getFutureDate(0)) {
-        $('#task-list-today').append(elm);
+        addDay = 'today';
     } else if ((data.result.start_time == getFutureDate(1))) {
-        $('#task-list-tomorrow').append(elm);
+        addDay = 'tomorrow';
     } else if((data.result.start_time == getFutureDate(2))) {
-        $('#task-list-dayaftertomorrow').append(elm);
+        addDay = 'dayaftertomorrow';
+    }
+
+    // today or tomorrow or dayaftertomorrow を引数に渡すと空タスクを消す
+    function deleteEmpty(addDay) {
+        if($('#task-list-' + addDay+' .empty').length){
+            //空の場合
+            $('#task-list-' + addDay+' .empty').remove();
+        }
+    }
+
+    switch(addDay) {
+        case 'today' :
+            deleteEmpty(addDay)
+            $('#task-list-today').append(elm);
+            break;
+        case 'tomorrow' :
+            deleteEmpty(addDay)
+            $('#task-list-tomorrow').append(elm);
+            break;
+        case 'dayaftertomorrow' :
+            deleteEmpty(addDay)
+            $('#task-list-dayaftertomorrow').append(elm);
+            break;
     }
 
     $('#task_'+data.result.id).fadeIn('slow');
@@ -134,9 +165,20 @@ $(function(){
                 $('#task_' + taskId +' .delete-task').html('<img src="/img/ajax-loader.gif" alt="" />');
             },
             success : function(){
+
+                var addDayUl = $('#task_' + taskId).parent();
+
                 $('#task_' + taskId).fadeOut(200, function(){
                     popUpPanel(false, 'タスクが削除されました');
+                    $(this).remove();
                 });
+                console.log(addDayUl.find('li'));
+                console.log(addDayUl.find('li').length);
+
+                //最後のタスクなら空リストを挿入
+                if(addDayUl.find('li').length == 1) {
+                    addDayUl.append(htmlEmptyElm());
+                }
             },
             complete : function() {
                 $('#task_' + taskId +' .delete-task').html('削除');
