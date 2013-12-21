@@ -51,13 +51,34 @@ function addTask(data, textStatus) {
         '<span class="delete-task btn btn-default">削除</span>\n' +
         '</li>'
     );
-    $('#task-list').append(elm);
+
+    //日付によって描画する場所を変える
+    //day日後の日付を返す
+    function getFutureDate(day) {
+        var d = new Date();
+        d.setDate(d.getDate() + day);
+        year = d.getFullYear();
+        month = d.getMonth() + 1;
+        date = d.getDate();
+
+        return year +'-'+ month +'-'+ date;
+    }
+
+    if(data.result.start_time == getFutureDate(0)) {
+        $('#task-list-today').append(elm);
+    } else if ((data.result.start_time == getFutureDate(1))) {
+        $('#task-list-tomorrow').append(elm);
+    } else if((data.result.start_time == getFutureDate(2))) {
+        $('#task-list-dayaftertomorrow').append(elm);
+    }
+
     $('#task_'+data.result.id).fadeIn('slow');
 
     //通知ポップ
     popUpPanel(false, '送信されました');
     //formリセット
     $('#TaskBody').val('');
+    $('#TaskIndexForm .datepicker').val('');
 }
 
 function popUpPanel(error, message) {
