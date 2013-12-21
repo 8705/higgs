@@ -244,7 +244,6 @@ class TasksController extends AppController {
     }
 
     public function _bar() {
-        $max = 1000;
         $options = array(
             'conditions' => array(
                 'Task.user_id' => $this->Auth->user('id'),
@@ -254,6 +253,6 @@ class TasksController extends AppController {
             'fields' => array('Task.d_param')
         );
         $d_param = $this->Task->find('list', $options);
-        return $bar = array_sum($d_param)/$max*100;
+        return array_sum($d_param);
     }
 }
