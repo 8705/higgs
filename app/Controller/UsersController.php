@@ -3,7 +3,13 @@ App::uses('AppController', 'Controller');
 
 class UsersController extends AppController {
 
-	public $components = array('Cookie');
+	public $components = array(
+		'Cookie',
+		'Security' => array(
+			'csrfUseOnce' => false,  //CSRFトークンを使いまわす
+			'csrfExpires' => '+1 hour'  //トークンの持続時間を1h延長
+		)
+	);
 	public $name = 'Users';
 	public $uses = array("Passport", "User");//使用するモデルを追加
 	public $expires = "2 weeks";//パスポートの有効期限
@@ -47,7 +53,7 @@ class UsersController extends AppController {
 			if($passport){
 				$user['username']=$passport['User']['username'];
 				$user['password']=$passport['User']['password'];
-				
+
 				if($this->Auth->login($user)){
 					$this->__passportWrite($passport);
 					$this->flash("自動ログインしました。",$this->Auth->redirect());
