@@ -1,6 +1,7 @@
 /*
  *   ajax処理
  */
+var addDay;     //today or tomorrow or dayaftertomorrow
 
 //イベントデフォルトを抑止
 function cancelEvent(e) {
@@ -32,6 +33,53 @@ function htmlEmptyElm() {
     return elm;
 }
 
+//day日後の日付を返す
+function getFutureDate(day) {
+    var d = new Date();
+    d.setDate(d.getDate() + day);
+    year = d.getFullYear();
+    month = d.getMonth() + 1;
+    date = d.getDate();
+
+    return year +'-'+ month +'-'+ date;
+}
+
+// today or tomorrow or dayaftertomorrow を引数に渡すと空タスクを消す
+function deleteEmpty(addDay) {
+    if($('#task-list-' + addDay+' .empty').length){
+        //空の場合
+        $('#task-list-' + addDay+' .empty').remove();
+    }
+}
+
+//start_timeと追加エレメントを渡すとその日の場所にタスクを追加する
+function appendToDay(start_time, elm) {
+    //
+    if(start_time <= getFutureDate(0)) {
+        addDay = 'today';
+    } else if ((start_time == getFutureDate(1))) {
+        addDay = 'tomorrow';
+    } else if((start_time == getFutureDate(2))) {
+        addDay = 'dayaftertomorrow';
+    }
+
+    switch(addDay) {
+        case 'today' :
+            deleteEmpty(addDay)
+            $('#task-list-today').append(elm);
+            break;
+        case 'tomorrow' :
+            deleteEmpty(addDay)
+            $('#task-list-tomorrow').append(elm);
+            break;
+        case 'dayaftertomorrow' :
+            deleteEmpty(addDay)
+            $('#task-list-dayaftertomorrow').append(elm);
+            break;
+    }
+    addDay = '';
+}
+
 //タスク描画処理 in success
 function addTask(data, textStatus) {
     //バリデーションエラー
@@ -60,48 +108,7 @@ function addTask(data, textStatus) {
     );
 
     //日付によって描画する場所を変える
-    //day日後の日付を返す
-    function getFutureDate(day) {
-        var d = new Date();
-        d.setDate(d.getDate() + day);
-        year = d.getFullYear();
-        month = d.getMonth() + 1;
-        date = d.getDate();
-
-        return year +'-'+ month +'-'+ date;
-    }
-
-    var addDay;
-    if(data.result.start_time == getFutureDate(0)) {
-        addDay = 'today';
-    } else if ((data.result.start_time == getFutureDate(1))) {
-        addDay = 'tomorrow';
-    } else if((data.result.start_time == getFutureDate(2))) {
-        addDay = 'dayaftertomorrow';
-    }
-
-    // today or tomorrow or dayaftertomorrow を引数に渡すと空タスクを消す
-    function deleteEmpty(addDay) {
-        if($('#task-list-' + addDay+' .empty').length){
-            //空の場合
-            $('#task-list-' + addDay+' .empty').remove();
-        }
-    }
-
-    switch(addDay) {
-        case 'today' :
-            deleteEmpty(addDay)
-            $('#task-list-today').append(elm);
-            break;
-        case 'tomorrow' :
-            deleteEmpty(addDay)
-            $('#task-list-tomorrow').append(elm);
-            break;
-        case 'dayaftertomorrow' :
-            deleteEmpty(addDay)
-            $('#task-list-dayaftertomorrow').append(elm);
-            break;
-    }
+    appendToDay(data.result.start_time, elm);
 
     $('#task_'+data.result.id).fadeIn('slow');
 
@@ -149,7 +156,7 @@ $(function(){
         }
     })
 
-    //Delete
+    //Delete Task
     $(document).on('click','.delete-task', function(e){
         cancelEvent(e);
         if(!confirm('消すなら書くな！書いたら消すな！＼(^^)／')){
@@ -455,7 +462,9 @@ $(function(){
                     '<span class="delete-task btn btn-default">削除</span>\n' +
                     '</li>'
                 );
-                $('#task_'+taskId).after(elm);
+                 //start_timeによって挿入場所を変える
+                appendToDay(start_time, elm);
+
                 $('#task_'+data.result.id).fadeIn('slow');
 
                 //通知ポップ
