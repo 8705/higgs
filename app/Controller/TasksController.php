@@ -70,7 +70,7 @@ class TasksController extends AppController {
 		$this->set('tasks_today', $this->Task->find('all', $opt_today));
         $this->set('tasks_tomorrow', $this->Task->find('all', $opt_tomorrow));
         $this->set('tasks_someday', $this->Task->find('all', $opt_someday));
-        $this->set('bar', $this->bar());
+        $this->set('bar', $this->_bar());
 	}
 
 	public function view($id = null) {
@@ -238,7 +238,7 @@ class TasksController extends AppController {
         }
     }
 
-    public function bar() {
+    public function _bar() {
         $max = 1000;
         $options = array(
             'conditions' => array(
