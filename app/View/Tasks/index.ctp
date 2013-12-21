@@ -1,7 +1,7 @@
 <div id="noticePanel"></div>
 <h2><?php echo __('User Name: '.h($username)); ?></h2>
 <div class="d-bar progress progress-striped">
-	<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $bar; ?>%">
+	<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $bar/10; ?>%">
 	</div>
 </div>
 <div class="tasks form">
@@ -45,7 +45,7 @@
 		<ul class="list-group task-list" id="task-list-today">
 		<?php if (count($tasks_today)): ?>
 		<?php foreach ($tasks_today as $task): ?>
-			<li id="task_<?php echo h($task['Task']['id']); ?>" class="<?php echo h($task['Task']['status']);?> list-group-item clearfix" data-task-id="<?php echo h($task	['Task']['id']); ?>">
+			<li id="task_<?php echo h($task['Task']['id']); ?>" class="<?php echo h($task['Task']['status']);?> list-group-item clearfix" data-task-id="<?php echo h($task	['Task']['id']); ?>" style="background-color: hsl(<?php echo 120*$task['Task']['d_param']/$bar+240; ?>,100%,<?php echo 90-50*$task['Task']['d_param']/$bar; ?>%);">
 				<span class="check-task"><input type="checkbox" <?php if($task['Task']['status'] == 'done'){echo h('checked');} ?>></span>
 				<span class="body"><?php echo $this->Html->link(__(h($task['Task']['body'])), array('action' => 'view', $task['Task']['id'])); ?></span>
 				<span class="start_time"><?php echo h($task['Task']['start_time']); ?></span>
