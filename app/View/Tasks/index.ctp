@@ -8,15 +8,15 @@
 		<?php
 			echo $this->Form->input('user_id', array('type'=>'hidden', 'default' => $author['id']));//$user_idから$authorに変更
 			echo $this->Form->input('body');
+			echo $this->Form->input('start_time', array('type'=>'text', 'class' => 'datepicker'));
 		?>
-		<input type="text" class="datepicker"></input>
 		<script>
 			$(document).ready(function() {
 				$('input.datepicker').Zebra_DatePicker({offset:[-225,1000]});
 			});
 		</script>
 		<?php
-			//echo $this->Form->input('start_time');
+			
 
 			//ajax送信用設定
 			echo $this->Js->submit('Submit', array(
