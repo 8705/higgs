@@ -110,7 +110,7 @@
 	</div>
 </div>
 <!-- ajax用 -->
-<?php echo "<script>var token = '{$token}'</script>";?>
+<?php echo h(isset($token)?"<script>var token = '{$token}'</script>":"");?>
 <?php echo $this->Html->script('ajax'); ?>
 <?php echo $this->Js->writeBuffer(array( 'inline' => 'true')); ?>
 </body>
