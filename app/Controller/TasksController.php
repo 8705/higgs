@@ -71,6 +71,8 @@ class TasksController extends AppController {
         $this->set('tasks_tomorrow', $this->Task->find('all', $opt_tomorrow));
         $this->set('tasks_dayaftertomorrow', $this->Task->find('all', $opt_dayaftertomorrow));
         $this->set('bar', $this->_bar());
+        $this->set('parents', $this->Task->find('all', array('conditions' =>array('Task.parent_id' => null))));
+        $this->set('bombs', $this->Task->find('all', array('conditions' =>array('Task.status' => 'bomb'))));
 	}
 
 	public function view($id = null) {
