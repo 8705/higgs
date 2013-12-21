@@ -42,7 +42,7 @@
 			<span class="head-actions"><?php echo __('Actions'); ?></span>
 		</div>
 		<h2>今日</h2>
-		<ul class="list-group" id="task-list-today">
+		<ul class="list-group task-list" id="task-list-today">
 		<?php if (count($tasks_today)): ?>
 		<?php foreach ($tasks_today as $task): ?>
 			<li id="task_<?php echo h($task['Task']['id']); ?>" class="<?php echo h($task['Task']['status']);?> list-group-item clearfix" data-task-id="<?php echo h($task	['Task']['id']); ?>">
@@ -61,7 +61,7 @@
 		<?php endif; ?>
 		</ul>
 		<h2>明日</h2>
-		<ul class="list-group" id="task-list-tomorrow">
+		<ul class="list-group task-list" id="task-list-tomorrow">
 		<?php if (count($tasks_tomorrow)): ?>
 		<?php foreach ($tasks_tomorrow as $task): ?>
 			<li id="task_<?php echo h($task['Task']['id']); ?>" class="<?php echo h($task['Task']['status']);?> list-group-item clearfix" data-task-id="<?php echo h($task	['Task']['id']); ?>">
@@ -80,7 +80,7 @@
 		<?php endif; ?>
 		</ul>
 		<h2>明後日</h2>
-		<ul class="list-group" id="task-list-dayaftertomorrow">
+		<ul class="list-group task-list" id="task-list-dayaftertomorrow">
 		<?php if (count($tasks_dayaftertomorrow)): ?>
 		<?php foreach ($tasks_dayaftertomorrow as $task): ?>
 			<li id="task_<?php echo h($task['Task']['id']); ?>" class="<?php echo h($task['Task']['status']);?> list-group-item clearfix" data-task-id="<?php echo h($task	['Task']['id']); ?>">
@@ -107,27 +107,31 @@
 		<br>
 		<div class="tasks parents">
 			<h2>Parents</h2>
-			<?php if (count($parents)): ?>
-			<?php foreach ($parents as $parent): ?>
-				<li id="parent_<?php echo h($parent['Task']['id']); ?>" class="<?php echo h($parent['Task']['status']);?> list-group-item clearfix" data-task-id="<?php echo h($parent['Task']['id']); ?>">
-					<span class="body"><?php echo $this->Html->link(__(h($parent['Task']['body'])), array('action' => 'view', $parent['Task']['id'])); ?></span>
-				</li>
-			<?php endforeach; ?>
-			<?php else: ?>
-			<li class="list-group-item clearfix">タスクがありません</li>
-		<?php endif; ?>
+			<ul class="list-group task-list" id="task-list-parents">
+				<?php if (count($parents)): ?>
+				<?php foreach ($parents as $parent): ?>
+					<li id="parent_<?php echo h($parent['Task']['id']); ?>" class="<?php echo h($parent['Task']['status']);?> list-group-item clearfix" data-task-id="<?php echo h($parent['Task']['id']); ?>">
+						<span class="body"><?php echo $this->Html->link(__(h($parent['Task']['body'])), array('action' => 'view', $parent['Task']['id'])); ?></span>
+					</li>
+				<?php endforeach; ?>
+				<?php else: ?>
+					<li class="list-group-item clearfix">タスクがありません</li>
+				<?php endif; ?>
+			</ul>
 		</div>
 		<div class="tasks bombs">
 			<h2>Bombs</h2>
-			<?php if (count($bombs)): ?>
-			<?php foreach ($bombs as $bomb): ?>
-				<li id="bomb_<?php echo h($bomb['Task']['id']); ?>" class="<?php echo h($bomb['Task']['status']);?> list-group-item clearfix" data-task-id="<?php echo h($bomb['Task']['id']); ?>">
-					<span class="body"><?php echo $this->Html->link(__(h($bomb['Task']['body'])), array('action' => 'view', $bomb['Task']['id'])); ?></span>
-				</li>
-			<?php endforeach; ?>
-			<?php else: ?>
-			<li class="list-group-item clearfix">タスクがありません</li>
-		<?php endif; ?>
+			<ul class="list-group task-list" id="task-list-bombs">
+				<?php if (count($bombs)): ?>
+				<?php foreach ($bombs as $bomb): ?>
+					<li id="bomb_<?php echo h($bomb['Task']['id']); ?>" class="<?php echo h($bomb['Task']['status']);?> list-group-item clearfix" data-task-id="<?php echo h($bomb['Task']['id']); ?>">
+						<span class="body"><?php echo $this->Html->link(__(h($bomb['Task']['body'])), array('action' => 'view', $bomb['Task']['id'])); ?></span>
+					</li>
+				<?php endforeach; ?>
+				<?php else: ?>
+					<li class="list-group-item clearfix">タスクがありません</li>
+				<?php endif; ?>
+			</ul>
 		</div>
 	</div>
 </div>

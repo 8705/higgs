@@ -106,20 +106,20 @@ body {
     width: 82px;
 }
 
-#task-list li span {
+.task-list li span {
     display: inline-block;
 }
-#task-list li .body {
+.task-list li .body {
     padding: 7px 5px;
     width:300px;
 }
-#task-list li span.btn {
+.task-list li span.btn {
     margin-left:10px;
 }
-#task-list li .check-task {
+.task-list li .check-task {
     width:12px;
 }
-#task-list li .status {
+.task-list li .status {
     width: 45px;
 }
 
