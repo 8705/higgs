@@ -80,7 +80,10 @@ class TasksController extends AppController {
 		$parents = $this->Task->getPath($id);
 		$allChildren = $this->Task->children($parents[0]['Task']['id'], null, null, $order='lft');
 		array_unshift($allChildren, $parents[0]);
-		$this->set('tasks', $allChildren);
+        foreach ($allChildren as $key => $val) {
+            $allChildren[$key]['Task']['indent'] = count($this->Task->getPath($val['Task']['id']))-1;
+        }
+        $this->set('tasks', $allChildren);
 	}
 
 	public function add() {
