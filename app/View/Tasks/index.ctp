@@ -26,6 +26,10 @@
 		</fieldset>
 	<?php echo $this->Form->end(); ?>
 	</div>
+	<div class="d-bar progress progress-striped">
+		<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $bar; ?>%">
+		</div>
+	</div>
 	<div class="data-label">
 		<span class="head-body"><?php echo __('Task'); ?></span>
 		<span class="head-deadLin"><?php echo __('Dead Line'); ?></span>

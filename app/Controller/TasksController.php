@@ -49,7 +49,7 @@ class TasksController extends AppController {
 		$opt_today = array(
 			'conditions' => array(
                 'Task.user_id' => $this->Auth->user('id'),
-                'Task.start_time' => date('Y-m-d'),
+                'Task.start_time <=' => date('Y-m-d'),
             ),
 			'order' => array('Task.d_param'),
 		);
@@ -70,6 +70,7 @@ class TasksController extends AppController {
 		$this->set('tasks_today', $this->Task->find('all', $opt_today));
         $this->set('tasks_tomorrow', $this->Task->find('all', $opt_tomorrow));
         $this->set('tasks_someday', $this->Task->find('all', $opt_someday));
+        $this->set('bar', $this->bar());
 	}
 
 	public function view($id = null) {
@@ -235,5 +236,19 @@ class TasksController extends AppController {
             echo json_encode($res);
             exit;
         }
+    }
+
+    public function bar() {
+        $max = 1000;
+        $options = array(
+            'conditions' => array(
+                'Task.user_id' => $this->Auth->user('id'),
+                'Task.status' => 'notyet',
+                'Task.start_time <=' => date('Y-m-d')
+            ),
+            'fields' => array('Task.d_param')
+        );
+        $d_param = $this->Task->find('list', $options);
+        return $bar = array_sum($d_param)/$max*100;
     }
 }
