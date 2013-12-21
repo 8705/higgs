@@ -113,5 +113,6 @@
 <?php echo isset($token)?"<script>var token = '{$token}'</script>":"";?>
 <?php echo $this->Html->script('ajax'); ?>
 <?php echo $this->Js->writeBuffer(array( 'inline' => 'true')); ?>
+<p>ないけどしよか？</p>
 </body>
 </html>
