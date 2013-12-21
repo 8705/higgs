@@ -114,5 +114,10 @@
 <?php echo $this->Html->script('ajax'); ?>
 <?php echo $this->Js->writeBuffer(array( 'inline' => 'true')); ?>
 <p>ないけどしよか？</p>
+<p>この場所わかりづらいわ</p>
+<p>さらに編集</p>
+<p>もっと編集</p>
+<p>もっかい編集</p>
+<p>うまくいってる？</p>
 </body>
 </html>
