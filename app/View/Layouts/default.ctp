@@ -12,9 +12,11 @@
 
 	<?php echo $this->Html->css('bootstrap.min'); ?>
 	<?php echo $this->Html->css('bootstrap-responsive.min'); ?>
+	<?php echo $this->Html->css('zebra-default'); ?>
 	<?php echo $this->Html->css('style'); ?>
 	<?php echo $this->Html->script('jquery.min'); ?>
 	<?php echo $this->Html->script('bootstrap.min'); ?>
+	<?php echo $this->Html->script('zebra_datepicker'); ?>
 </head>
 
 <body>
