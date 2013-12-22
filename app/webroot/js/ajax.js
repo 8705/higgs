@@ -627,6 +627,7 @@ function htmlDivideLi(parentId) {
                     $('#task_'+data.result[i]).fadeOut('slow',function(){
                         $.when($(this).remove()).then(createEmpty());
                     })
+                    deleteEmpty('bombs');
                     $('#task-list-bombs').append(
                         '<li id="bomb_'
                         +data.result[i]
