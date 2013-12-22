@@ -84,7 +84,7 @@ class TasksController extends AppController {
 		$this->set('tasks_today', $this->Task->find('all', $opt_today));
         $this->set('tasks_tomorrow', $this->Task->find('all', $opt_tomorrow));
         $this->set('tasks_dayaftertomorrow', $this->Task->find('all', $opt_dayaftertomorrow));
-        $this->set('bar', array_sum($this->_getdparams()));
+        $this->set('bar', almostzero+array_sum($this->_getdparams()));
         $this->set('parents', $this->Task->find('all', $opt_parents));
         $this->set('bombs', $this->Task->find('all', $opt_parents));
 	}
