@@ -18,6 +18,7 @@ function htmlDivideElm(parentId){
             '<span><input class="body edit-input" type="text" value="" placeholder="タスクを入力して下さい"/></span>\n'+
             '<span><input class="start_time edit-input datepicker" type="text" value="" placeholder="2014-01-01"/></span>\n'+
             '<span class="divide-push btn btn-default">作成</span>\n'+
+            '<span class="divide-more btn btn-default">追加</span>\n'+
             '<input class="status" type="hidden" name="status" value="notyet" />'+
             '<input class="d_param" type="hidden" name="d_param" value="1" />'+
             '<input class="parent_id" type="hidden" name="parent_id" value="'+parentId+'" />'+
@@ -34,7 +35,9 @@ function htmlEmptyElm() {
 }
 
 function makeDatePicker() {
-    $('input.datepicker').Zebra_DatePicker({offset:[-225,1000]});
+    $('input.datepicker').Zebra_DatePicker({
+        direction : [getFutureDate(0), false]
+    });
 }
 
 //day日後の日付を返す
@@ -135,7 +138,7 @@ function popUpPanel(error, message) {
 
     $('#noticePanel').append('<p class="alert'+alert+'">'+ message +'</p>').fadeIn('slow').queue(function(){
         setTimeout(function(){$('#noticePanel').dequeue();
-    }, 3000);
+    }, 2000);
     });
     $('#noticePanel').fadeOut('slow', function(){
         $('#noticePanel').empty();
@@ -523,5 +526,43 @@ $(function(){
             var id = $(this).parent().parent().data('task-id');
             $('#task_'+id).find('.edit-push').click();
         }
+    });
+
+    //Clean UP bombed Task
+    $(document).on('click', '.clean-bomb', function(e){
+        cancelEvent(e);
+        var cleanArr = new Array();
+
+        $('#tasks li.done').each(function(){
+            cleanArr.push($(this).data('task-id'));
+        });
+        $.ajax({
+            url : 'tasks/clean',
+            type : 'POAT',
+            dataType : 'json',
+            timeout : 5000,
+            data : {
+                cleanArr : cleanArr
+            },
+            beforeSend : function(){
+
+            },
+            success : function(){
+
+            },
+            error : function(){
+
+            },
+            complete : function(){
+
+            },
+        });
+        console.log(cleanArr);
+
+        // $('#tasks li.done').each(function(){
+        //     $(this).fadeOut('slow', function(){
+        //         $(this).remove();
+        //     });
+        // })
     });
 });

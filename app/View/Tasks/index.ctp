@@ -1,4 +1,5 @@
 <div id="noticePanel"></div>
+<p class="btn btn-danger clean-bomb">done一括削除</p>
 <h2><?php echo __('User Name: '.h($username)); ?></h2>
 <div class="d-bar progress progress-striped">
 	<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $bar/10; ?>%">
@@ -29,7 +30,7 @@
 	<?php echo $this->Form->end(); ?>
 </div>
 <div class="row clearfix">
-	<div class="tasks index col-md-8 column">
+	<div id="tasks" class="index col-md-8 column">
 		<div class="data-label">
 			<span class="head-body"><?php echo __('Task'); ?></span>
 			<span class="head-deadLin"><?php echo __('Dead Line'); ?></span>
