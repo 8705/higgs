@@ -35,19 +35,16 @@
 		<span class="head-d"><?php echo __('D値'); ?></span>
 		<span class="head-actions"><?php echo __('Actions'); ?></span>
 	</div>
-		<h3>今日</h3>
+	<h3>一族</h3>
 	<ul class="list-group" id="task-list">
-	<?php foreach ($tasks as $task): ?>
-		<li id="task_<?php echo h($task['Task']['id']); ?>" class="<?php echo h($task['Task']['status']);?> list-group-item clearfix" data-task-id="<?php echo h($task['Task']['id']); ?>">
+		<?php $prev = 0; ?>
+		<?php foreach ($tasks as $task): ?>
+			<?php $indent = $task['Task']['indent']-$prev ?>
+			<?php if($indent == 0): ?>
+				<li id="task_<?php echo h($task['Task']['id']); ?>" class="<?php echo h($task['Task']['status']);?> list-group-item clearfix" data-task-id="<?php echo h($task['Task']['id']); ?>">
 			<span class="check-task"><input type="checkbox" <?php if($task['Task']['status'] == 'done'){echo h('checked');} ?>></span>
 			<span class="body">
-				<?php
-					if($task['Task']['indent'] === 0) {
-						echo $this->Html->link(__(h($task['Task']['body'])), array('action' => 'view', $task['Task']['id']));
-					} else {
-						echo str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;', $task['Task']['indent']).'&lfloor;&nbsp;'.$this->Html->link(__(h($task['Task']['body'])), array('action' => 'view', $task['Task']['id']));
-					}
-				?>
+				<?php echo $this->Html->link(__(h($task['Task']['body'])), array('action' => 'view', $task['Task']['id']));?>
 			</span>
 			<span class="start_time"><?php echo h($task['Task']['start_time']); ?></span>
 			<span class="status"><?php echo h($task['Task']['status']); ?></span>
@@ -56,7 +53,38 @@
 			<span class="<?php echo h($task['Task']['status']=='notyet'?'divide-task':'disable-divide btn-disabled');?> btn btn-default">分割</span>
 			<span class="delete-task btn btn-default">削除</span>
 		</li>
-	<?php endforeach; ?>
+			<?php elseif($indent == 1): ?>
+				<ul>
+				<li id="task_<?php echo h($task['Task']['id']); ?>" class="<?php echo h($task['Task']['status']);?> list-group-item clearfix" data-task-id="<?php echo h($task['Task']['id']); ?>">
+			<span class="check-task"><input type="checkbox" <?php if($task['Task']['status'] == 'done'){echo h('checked');} ?>></span>
+			<span class="body">
+				<?php echo $this->Html->link(__(h($task['Task']['body'])), array('action' => 'view', $task['Task']['id']));?>
+			</span>
+			<span class="start_time"><?php echo h($task['Task']['start_time']); ?></span>
+			<span class="status"><?php echo h($task['Task']['status']); ?></span>
+			<span class="d_param"><?php echo h($task['Task']['d_param']); ?></span>
+			<span class="<?php echo h($task['Task']['status']=='notyet'?'edit-task':'disable-edit btn-disabled');?> btn btn-default">編集</span>
+			<span class="<?php echo h($task['Task']['status']=='notyet'?'divide-task':'disable-divide btn-disabled');?> btn btn-default">分割</span>
+			<span class="delete-task btn btn-default">削除</span>
+		</li>
+			<?php elseif($indent < 0): ?>
+				<?php echo str_repeat('</ul>', -$indent) ?>
+				<li id="task_<?php echo h($task['Task']['id']); ?>" class="<?php echo h($task['Task']['status']);?> list-group-item clearfix" data-task-id="<?php echo h($task['Task']['id']); ?>">
+			<span class="check-task"><input type="checkbox" <?php if($task['Task']['status'] == 'done'){echo h('checked');} ?>></span>
+			<span class="body">
+				<?php echo $this->Html->link(__(h($task['Task']['body'])), array('action' => 'view', $task['Task']['id']));?>
+			</span>
+			<span class="start_time"><?php echo h($task['Task']['start_time']); ?></span>
+			<span class="status"><?php echo h($task['Task']['status']); ?></span>
+			<span class="d_param"><?php echo h($task['Task']['d_param']); ?></span>
+			<span class="<?php echo h($task['Task']['status']=='notyet'?'edit-task':'disable-edit btn-disabled');?> btn btn-default">編集</span>
+			<span class="<?php echo h($task['Task']['status']=='notyet'?'divide-task':'disable-divide btn-disabled');?> btn btn-default">分割</span>
+			<span class="delete-task btn btn-default">削除</span>
+		</li>
+			<?php endif; ?>
+			<?php $prev = $task['Task']['indent']; ?>
+		<?php endforeach; ?>
+		<?php echo str_repeat('</ul>', -$indent) ?>
 	</ul>
 </div>
 <div class="actions">
