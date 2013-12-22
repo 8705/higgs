@@ -14,18 +14,19 @@ class BombController extends AppController {
 		);
 	}
 
-    public function _bomb() {
+    public function bomb() {
         $max = dcapacity;
         $dparams = $this->_getdparams();
         arsort($dparams);
         $diff = array_sum($dparams) - $max;
-        if ($diff > 0) {
-            foreach ($dparams as $id => $dparam) {
+        foreach ($dparams as $id => $dparam) {
+            if ($diff > 0) {
                 $this->Task->id = $id;
                 $this->Task->saveField('status', 'bomb');
                 $diff = $diff - $dparam;
             }
         }
+        $this->redirect('/');
     }
 
     public function _getdparams() {
