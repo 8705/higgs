@@ -18,6 +18,7 @@ function htmlAddElm(data) {
         '<span class="check-task"><input type="checkbox"></span>\n'+
         '<span class="body"><a href="/tasks/view/' + data.result.id + '">'+ data.result.body +'</a></span>\n' +
         '<span class="start_time">'+ data.result.start_time +'</span>\n'+
+        '<span class="status">'+ data.result.status +'</span>\n'+
         '<span class="d_param">'+ data.result.d_param +'</span>\n'+
         '<span class="edit-task btn btn-default">編集</span>\n' +
         '<span class="divide-task btn btn-default">分割</span>\n' +
@@ -259,7 +260,7 @@ $(function(){
             '<span class="check-task"><input type="checkbox"></span>\n'+
             '<span class="body"><a href="/tasks/view/' + taskId + '">'+ body +'</a></span>\n' +
             '<span class="start_time">'+ start_time +'</span>\n'+
-            // '<span class="status">'+ status +'</span>\n'+
+            '<span class="status">'+ status +'</span>\n'+
             '<span class="d_param">'+ d_param +'</span>\n'+
             '<span class="edit-task btn btn-default">編集</span>\n' +
             '<span class="divide-task btn btn-default">分割</span>\n' +
