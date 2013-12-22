@@ -144,14 +144,26 @@ li.done span.body a {
 }
 
 /* divideの挙動 */
-.li-divide {
-    background-color: #FAFAFA;
+.ul-divide {
     display: none;
     height: 0px;
-    padding: 0px 15px;
+    /*padding: 0px 0px;*/
     border: 0px;
+    /*border: 1px solid #DDD;*/
+}
+.ul-divide li {
+    background-color: #FAFAFA;
+}
+.li-divide-more {
+    display: none;
+    height:0px;
+    padding:0px 15px;
     border: 1px solid #DDD;
 }
+
+/************************************
+    ボタンの無効化
+************************************/
 .btn-disabled, .btn-disabled:hover {
     color: #bdbdbd;
     text-decoration: line-through;
