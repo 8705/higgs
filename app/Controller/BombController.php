@@ -14,7 +14,7 @@ class BombController extends AppController {
 		);
 	}
 
-    public function bomb() {
+    public function _bomb() {
         $max = dcapacity;
         $dparams = $this->_getdparams();
         arsort($dparams);
