@@ -1,5 +1,5 @@
 <div id="noticePanel"></div>
-<p class="btn btn-danger clean-bomb">done一括削除</p>
+<p id="clean-bomb" class="btn btn-danger">done一括削除</p>
 <h2><?php echo __('User Name: '.h($username)); ?></h2>
 <div class="d-bar progress progress-striped">
 	<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo 100*$bar/dcapacity; ?>%">
@@ -46,7 +46,6 @@
 				<span class="check-task"><input type="checkbox" <?php if($task['Task']['status'] == 'done'){echo h('checked');} ?>></span>
 				<span class="body"><?php echo $this->Html->link(__(h($task['Task']['body'])), array('action' => 'view', $task['Task']['id'])); ?></span>
 				<span class="start_time"><?php echo h($task['Task']['start_time']); ?></span>
-				<span class="status"><?php echo h($task['Task']['status']); ?></span>
 				<span class="d_param"><?php echo h($task['Task']['d_param']); ?></span>
 				<span class="<?php echo h($task['Task']['status']=='notyet'?'edit-task':'disable-edit btn-disabled');?> btn btn-default">編集</span>
 				<span class="<?php echo h($task['Task']['status']=='notyet'?'divide-task':'disable-divide btn-disabled');?> btn btn-default">分割</span>
@@ -54,7 +53,7 @@
 			</li>
 		<?php endforeach; ?>
 		<?php else: ?>
-			<li class="list-group-item clearfix">タスクがありません</li>
+			<li class="empty list-group-item clearfix">タスクがありません</li>
 		<?php endif; ?>
 		</ul>
 		<h2>明日</h2>
@@ -65,7 +64,6 @@
 				<span class="check-task"><input type="checkbox" <?php if($task['Task']['status'] == 'done'){echo h('checked');} ?>></span>
 				<span class="body"><?php echo $this->Html->link(__(h($task['Task']['body'])), array('action' => 'view', $task['Task']['id'])); ?></span>
 				<span class="start_time"><?php echo h($task['Task']['start_time']); ?></span>
-				<span class="status"><?php echo h($task['Task']['status']); ?></span>
 				<span class="d_param"><?php echo h($task['Task']['d_param']); ?></span>
 				<span class="<?php echo h($task['Task']['status']=='notyet'?'edit-task':'disable-edit btn-disabled');?> btn btn-default">編集</span>
 				<span class="<?php echo h($task['Task']['status']=='notyet'?'divide-task':'disable-divide btn-disabled');?> btn btn-default">分割</span>
@@ -73,7 +71,7 @@
 			</li>
 		<?php endforeach; ?>
 		<?php else: ?>
-			<li class="list-group-item clearfix">タスクがありません</li>
+			<li class="empty list-group-item clearfix">タスクがありません</li>
 		<?php endif; ?>
 		</ul>
 		<h2>明後日</h2>
@@ -84,7 +82,6 @@
 				<span class="check-task"><input type="checkbox" <?php if($task['Task']['status'] == 'done'){echo h('checked');} ?>></span>
 				<span class="body"><?php echo $this->Html->link(__(h($task['Task']['body'])), array('action' => 'view', $task['Task']['id'])); ?></span>
 				<span class="start_time"><?php echo h($task['Task']['start_time']); ?></span>
-				<span class="status"><?php echo h($task['Task']['status']); ?></span>
 				<span class="d_param"><?php echo h($task['Task']['d_param']); ?></span>
 				<span class="<?php echo h($task['Task']['status']=='notyet'?'edit-task':'disable-edit btn-disabled');?> btn btn-default">編集</span>
 				<span class="<?php echo h($task['Task']['status']=='notyet'?'divide-task':'disable-divide btn-disabled');?> btn btn-default">分割</span>
@@ -92,7 +89,7 @@
 			</li>
 		<?php endforeach; ?>
 		<?php else: ?>
-			<li class="list-group-item clearfix">タスクがありません</li>
+			<li class="empty list-group-item clearfix">タスクがありません</li>
 		<?php endif; ?>
 		</ul>
 		<div class="actions">
@@ -112,7 +109,7 @@
 					</li>
 				<?php endforeach; ?>
 				<?php else: ?>
-					<li class="list-group-item clearfix">タスクがありません</li>
+					<li class="empty list-group-item clearfix">タスクがありません</li>
 				<?php endif; ?>
 			</ul>
 		</div>
@@ -126,7 +123,7 @@
 					</li>
 				<?php endforeach; ?>
 				<?php else: ?>
-					<li class="list-group-item clearfix">タスクがありません</li>
+					<li class="empty list-group-item clearfix">タスクがありません</li>
 				<?php endif; ?>
 			</ul>
 		</div>

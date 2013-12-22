@@ -30,7 +30,8 @@ class TasksController extends AppController {
 		if ($this->params['action'] == 'delete' ||
             $this->params['action'] == 'edit' ||
             $this->params['action'] == 'check' ||
-            $this->params['action'] == 'divide') {
+            $this->params['action'] == 'divide' ||
+            $this->params['action'] == 'clean') {
              $this->Security->csrfCheck = false;
              $this->Security->validatePost = false;
 
@@ -89,7 +90,6 @@ class TasksController extends AppController {
 	}
 
 	public function add() {
-
 		//Ajax or not
         if (!$this->request->is('ajax')) {
             throw new NotFoundException(__('Invalid post'));
@@ -253,5 +253,37 @@ class TasksController extends AppController {
             'fields' => array('Task.d_param')
         );
         return $this->Task->find('list', $options);
+    }
+
+    public function clean() {
+        if (!$this->request->is('ajax')) {
+            throw new NotFoundException(__('Invalid post'));
+        }
+        $this->autoRender = false;   // 自動描画をさせない
+
+        $json = json_decode($this->request->data['json'], true);
+
+        // $res = $this->Task->updateAll(
+        //     array('Task.status' => "'bomb'"),
+        //     array('Task.id' => $json)
+        // );
+        //save OK
+        $res = true;
+        if($res) {
+            $error = false;
+            $result = $json;
+            $res = array("error" => $error, "result" => $result);
+            $this->response->type('json');
+            echo json_encode($res);
+            exit;
+        //save NG
+        } else {
+            $error = true;
+            $message = $this->Task->validationErrors;
+            $res = $res = compact('error', 'message');
+            $this->response->type('json');
+            echo json_encode($res);
+            exit;
+        }
     }
 }

@@ -12,6 +12,20 @@ function cancelEvent(e) {
     }
 }
 //分割用タスクのhtml部品
+function htmlAddElm(data) {
+    var elm =$(
+        '<li id="task_'+data.result.id+'" class="list-group-item notyet" style="display:none;" data-task-id="'+ data.result.id +'">\n' +
+        '<span class="check-task"><input type="checkbox"></span>\n'+
+        '<span class="body"><a href="/tasks/view/' + data.result.id + '">'+ data.result.body +'</a></span>\n' +
+        '<span class="start_time">'+ data.result.start_time +'</span>\n'+
+        '<span class="d_param">'+ data.result.d_param +'</span>\n'+
+        '<span class="edit-task btn btn-default">編集</span>\n' +
+        '<span class="divide-task btn btn-default">分割</span>\n' +
+        '<span class="delete-task btn btn-default">削除</span>\n' +
+        '</li>'
+    );
+    return elm;
+}
 function htmlDivideElm(parentId){
     var elm = $(
         '<li class="li-divide list-group-item clearfix" data-parent-id="'+parentId+'">'+
@@ -54,10 +68,13 @@ function getFutureDate(day) {
 // today or tomorrow or dayaftertomorrow を引数に渡すと空タスクを消す
 function deleteEmpty(addDay) {
     if($('#task-list-' + addDay+' .empty').length){
+        console.log($('#task-list-' + addDay+' .empty').length);
         //空の場合
         $('#task-list-' + addDay+' .empty').remove();
     }
 }
+
+
 function getAddDay(start_time) {
     if(start_time <= getFutureDate(0)) {
         return 'today';
@@ -92,6 +109,7 @@ function appendToDay(start_time, elm) {
 
 //タスク描画処理 in success
 function addTask(data, textStatus) {
+    console.log(data);
     //バリデーションエラー
     if(data.error === true ) {
         //エラー内容取り出し $ エラーポップ
@@ -104,18 +122,8 @@ function addTask(data, textStatus) {
     }
     //正常時
     //dom生成
-    var elm =$(
-        '<li id="task_'+data.result.id+'" class="list-group-item notyet" style="display:none;" data-task-id="'+ data.result.id +'">\n' +
-        '<span class="check-task"><input type="checkbox"></span>\n'+
-        '<span class="body"><a href="/tasks/view/' + data.result.id + '">'+ data.result.body +'</a></span>\n' +
-        '<span class="start_time">'+ data.result.start_time +'</span>\n'+
-        '<span class="status">'+ data.result.status +'</span>\n'+
-        '<span class="d_param">'+ data.result.d_param +'</span>\n'+
-        '<span class="edit-task btn btn-default">編集</span>\n' +
-        '<span class="divide-task btn btn-default">分割</span>\n' +
-        '<span class="delete-task btn btn-default">削除</span>\n' +
-        '</li>'
-    );
+
+    var elm = htmlAddElm(data);
 
     //日付によって描画する場所を変える
     appendToDay(data.result.start_time, elm);
@@ -166,6 +174,16 @@ $(function(){
         }
     })
 
+    //ulの中身が空になると空タスクを挿入する
+    function createEmpty() {
+        var arr = new Array('today', 'tomorrow', 'dayaftertomorrow');
+        for(i in arr) {
+            if($('#task-list-'+arr[i]).find('li').length == 0) {
+                $('#task-list-'+arr[i]).append(htmlEmptyElm());
+            }
+        }
+    }
+
     //Delete Task
     $(document).on('click','.delete-task', function(e){
         cancelEvent(e);
@@ -183,17 +201,14 @@ $(function(){
             },
             success : function(){
 
-                var addDayUl = $('#task_' + taskId).parent();
-
                 $('#task_' + taskId).fadeOut(200, function(){
                     popUpPanel(false, 'タスクが削除されました');
-                    $(this).remove();
+                    $.when($(this).remove()).then(createEmpty());
                 });
 
-                //最後のタスクなら空リストを挿入
-                if(addDayUl.find('li').length == 1) {
-                    addDayUl.append(htmlEmptyElm());
-                }
+            },
+            error : function() {
+                popUpPanel(true, 'サーバーエラーでタスクを消去できませんでした');
             },
             complete : function() {
                 $('#task_' + taskId +' .delete-task').html('削除');
@@ -244,7 +259,7 @@ $(function(){
             '<span class="check-task"><input type="checkbox"></span>\n'+
             '<span class="body"><a href="/tasks/view/' + taskId + '">'+ body +'</a></span>\n' +
             '<span class="start_time">'+ start_time +'</span>\n'+
-            '<span class="status">'+ status +'</span>\n'+
+            // '<span class="status">'+ status +'</span>\n'+
             '<span class="d_param">'+ d_param +'</span>\n'+
             '<span class="edit-task btn btn-default">編集</span>\n' +
             '<span class="divide-task btn btn-default">分割</span>\n' +
@@ -260,7 +275,8 @@ $(function(){
         var taskId      = $(this).parent().data('task-id');
         var body        = $('#task_'+taskId).find('.body').val();
         var start_time  = $('#task_'+taskId).find('.start_time').val();
-        var status      = $('#task_'+taskId).find('.status').val();
+        // var status      = $('#task_'+taskId).find('.status').val();
+        var status      = 'notyet';
         var d_param     = $('#task_'+taskId).find('.d_param').val();
 
         $.ajax({
@@ -291,23 +307,10 @@ $(function(){
                 }
                 //正常時
                 //dom生成
-                var elm =$(
-                    '<li id="task_'+data.result.id+'" class="list-group-item notyet" style="display:none;" data-task-id="'+ data.result.id +'">\n' +
-                    '<span class="check-task"><input type="checkbox"></span>\n'+
-                    '<span class="body"><a href="/tasks/view/' + data.result.id + '">'+ data.result.body +'</a></span>\n' +
-                    '<span class="start_time">'+ data.result.start_time +'</span>\n'+
-                    '<span class="status">'+ data.result.status +'</span>\n'+
-                    '<span class="d_param">'+ data.result.d_param +'</span>\n'+
-                    '<span class="edit-task btn btn-default">編集</span>\n' +
-                    '<span class="divide-task btn btn-default">分割</span>\n' +
-                    '<span class="delete-task btn btn-default">削除</span>\n' +
-                    '</li>'
-                );
+                var elm = htmlAddElm(data);
                 //編集前のリストがいた日にちの場所
                 oldDay = $('#task_'+data.result.id).parent().attr('id').substr(10);
                 addDay = getAddDay(data.result.start_time);
-                console.log(oldDay);
-                console.log(addDay);
                 //日付が変更されないならその場で挿入、されるなら適切な場所に挿入
                 if(oldDay == addDay) {
                     $('#task_'+data.result.id).hide().after(elm);
@@ -529,35 +532,39 @@ $(function(){
     });
 
     //Clean UP bombed Task
-    $(document).on('click', '.clean-bomb', function(e){
+    $(document).on('click', '#clean-bomb', function(e){
         cancelEvent(e);
         var cleanArr = new Array();
 
         $('#tasks li.done').each(function(){
             cleanArr.push($(this).data('task-id'));
         });
+        var json = JSON.stringify(cleanArr);
         $.ajax({
-            url : 'tasks/clean',
-            type : 'POAT',
+            url : '/tasks/clean',
+            type : 'POST',
             dataType : 'json',
             timeout : 5000,
             data : {
-                cleanArr : cleanArr
+                json : json
             },
             beforeSend : function(){
-
+                $('#clean-bomb').html('<img src="/img/ajax-loader.gif" alt="" />');
             },
-            success : function(){
-
+            success : function(data){
+                for(i in data.result) {
+                    $('#task_'+data.result[i]).fadeOut('slow',function(){
+                        $.when($(this).remove()).then(createEmpty());
+                    })
+                }
             },
             error : function(){
-
+                popUpPanel(true, 'サーバーエラーでタスクを消去できませんでした');
             },
             complete : function(){
-
+                $('#clean-bomb').html('done一括削除');
             },
         });
-        console.log(cleanArr);
 
         // $('#tasks li.done').each(function(){
         //     $(this).fadeOut('slow', function(){
