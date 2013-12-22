@@ -84,7 +84,7 @@
 			<?php endif; ?>
 			<?php $prev = $task['Task']['indent']; ?>
 		<?php endforeach; ?>
-		<?php echo str_repeat('</ul>', -$indent) ?>
+		<?php echo str_repeat('</ul>', $prev); ?>
 	</ul>
 </div>
 <div class="actions">
