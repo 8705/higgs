@@ -27,20 +27,7 @@ function htmlAddElm(data) {
     );
     return elm;
 }
-function htmlDivideElm(parentId){
-    var elm = $(
-        '<li class="li-divide list-group-item clearfix" data-parent-id="'+parentId+'">'+
-            '<span><input class="body edit-input" type="text" value="" placeholder="タスクを入力して下さい"/></span>\n'+
-            '<span><input class="start_time edit-input datepicker" type="text" value="" placeholder="2014-01-01"/></span>\n'+
-            '<span class="divide-push btn btn-default">作成</span>\n'+
-            '<span class="divide-more btn btn-default">追加</span>\n'+
-            '<input class="status" type="hidden" name="status" value="notyet" />'+
-            '<input class="d_param" type="hidden" name="d_param" value="1" />'+
-            '<input class="parent_id" type="hidden" name="parent_id" value="'+parentId+'" />'+
-        '</li>'
-    );
-    return elm;
-}
+
 
 function htmlEmptyElm() {
     var elm = $(
@@ -413,13 +400,65 @@ $(function(){
         });
     });
 
+function htmlDivideUl(parentId){
+    var elm = $(
+        '<ul class="ul-divide" data-parent-id="'+parentId+'">\n'+
+        '<li class="li-divide list-group-item clearfix">\n'+
+            '<span><input class="body edit-input" type="text" value="" placeholder="タスクを入力して下さい"/></span>\n'+
+            '<span><input class="start_time edit-input datepicker" type="text" value="" placeholder="2014-01-01"/></span>\n'+
+            '<span class="divide-del btn btn-danger">☓</span>\n'+
+            '<input class="parent_id" type="hidden" name="parent_id" value="'+parentId+'" />'+
+        '</li>\n'+
+        '<li class="divide-btn-area list-group-item clearfix">'+
+            '<span class="divide-more btn btn-success">＋</span>\n'+
+            '<span class="divide-push btn btn-primary">OK</span>\n'+
+        '</li>\n'+
+        '</ul>'
+    );
+    return elm;
+}
+//divide-moreで挿入されるエレメント
+function htmlDivideLi(parentId) {
+    var elm = $(
+        '<li class="li-divide li-divide-more list-group-item clearfix">\n'+
+            '<span><input class="body edit-input" type="text" value="" placeholder="タスクを入力して下さい"/></span>\n'+
+            '<span><input class="start_time edit-input datepicker" type="text" value="" placeholder="2014-01-01"/></span>\n'+
+            '<span class="divide-del btn btn-danger">☓</span>\n'+
+            '<input class="parent_id" type="hidden" name="parent_id" value="'+parentId+'" />\n'+
+        '</li>\n'
+    );
+    return elm;
+}
     //Divide Task
     $(document).on('click', '.divide-task', function(e){
         cancelEvent(e);
-        var taskId      = $(this).parent().data('task-id');
-        var elm = htmlDivideElm(taskId);
-        $('#task_'+taskId).after(elm);
-        $('li[data-parent-id='+taskId+']').show().animate({
+        var taskId   = $(this).parent().data('task-id');
+        var elm      = htmlDivideUl(taskId);
+        $('#task_' + taskId).after(elm);
+        $('ul[data-parent-id='+taskId+']').show().animate({
+            height : '115px',
+            // padding : '10px 15px',
+            borderWidth : '1px',
+        }, 200);
+
+        //分割ボタンを分割キャンセルボタンにする
+        $('#task_'+taskId).find('.divide-task').replaceWith('<span class="divide-cancel btn btn-default">キャンセル</span>');
+
+        //親タスクのbtnを止める
+        $('#task_'+taskId).find('.edit-task').replaceWith('<span class="disable-edit btn btn-default btn-disabled">編集</span>');
+        $('#task_'+taskId).find('.delete-task').replaceWith('<span class="disable-delete btn btn-default btn-disabled">削除</span>');
+        makeDatePicker();
+    })
+
+    //Divide more
+    $(document).on('click', '.divide-more', function(e){
+        cancelEvent(e);
+        var taskId      = $(this).parent().parent().data('parent-id');
+        console.log(taskId);
+        var elm = htmlDivideLi(taskId);
+        $(this).parent().before(elm);
+        $('ul[data-parent-id='+taskId+']').css("height", "100%");
+        $('.li-divide-more').show().animate({
             height : '59px',
             padding : '10px 15px',
             borderWidth : '1px',
@@ -434,15 +473,35 @@ $(function(){
         makeDatePicker();
     })
 
+    //Divide del
+    $(document).on('click', '.divide-del', function(e){
+        cancelEvent(e);
+        var taskId      = $(this).parent().parent().data('parent-id');
+        $(this).parent().fadeOut(300, function(){
+            $.when($(this).remove()).then(function(){
+                if($('ul[data-parent-id='+taskId+']').find('.li-divide').length == 0) {
+                    $('ul[data-parent-id='+taskId+']').fadeOut().remove();
+
+                    //キャンセルボタンを分割ボタンにする
+                    $('#task_'+taskId).find('.divide-cancel').replaceWith('<span class="divide-task btn btn-default">分割</span>');
+
+                    //親タスクのbtnを元に戻す
+                    $('#task_'+taskId).find('.disable-edit').replaceWith('<span class="edit-task btn btn-default">編集</span>');
+                    $('#task_'+taskId).find('.disable-delete').replaceWith('<span class="delete-task btn btn-default">削除</span>');
+                }
+            });
+        });
+    })
+
     //Divie Cancel
     $(document).on('click', '.divide-cancel', function(e){
         cancelEvent(e);
         var taskId      = $(this).parent().data('task-id');
-        $('li[data-parent-id='+taskId+']').animate({
+        $('ul[data-parent-id='+taskId+']').animate({
             height : '0px',
-            padding : '0px 15px',
+            padding : '0px 0px',
             // borderWidth : '0px',
-        }, 200, function(){
+        }, 100, function(){
             $(this).remove();
         });
 
