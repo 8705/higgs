@@ -537,7 +537,7 @@ $(function(){
         cancelEvent(e);
         var cleanArr = new Array();
 
-        $('#tasks li.done').each(function(){
+        $('#tasks li.bomb').each(function(){
             cleanArr.push($(this).data('task-id'));
         });
         var json = JSON.stringify(cleanArr);

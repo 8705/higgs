@@ -263,12 +263,11 @@ class TasksController extends AppController {
 
         $json = json_decode($this->request->data['json'], true);
 
-        // $res = $this->Task->updateAll(
-        //     array('Task.status' => "'bomb'"),
-        //     array('Task.id' => $json)
-        // );
+        $res = $this->Task->updateAll(
+            array('Task.status' => "'notyet'"),
+            array('Task.id' => $json)
+        );
         //save OK
-        $res = true;
         if($res) {
             $error = false;
             $result = $json;
