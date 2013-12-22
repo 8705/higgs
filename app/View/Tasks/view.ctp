@@ -36,16 +36,14 @@
 		<span class="head-actions"><?php echo __('Actions'); ?></span>
 	</div>
 	<h3>一族</h3>
-	<ul class="list-group task-list" id="task-list">
+	<ul class="list-group task-list children-ul" id="task-list">
 		<?php $prev = 0; ?>
 		<?php foreach ($tasks as $task): ?>
 			<?php $indent = $task['Task']['indent']-$prev ?>
 			<?php if($indent == 0): ?>
 				<li id="task_<?php echo h($task['Task']['id']); ?>" class="<?php echo h($task['Task']['status']);?> list-group-item clearfix" data-task-id="<?php echo h($task['Task']['id']); ?>">
 			<span class="check-task"><input type="checkbox" <?php if($task['Task']['status'] == 'done'){echo h('checked');} ?>></span>
-			<span class="body">
-				<?php echo $this->Html->link(__(h($task['Task']['body'])), array('action' => 'view', $task['Task']['id']));?>
-			</span>
+			<span class="body"><?php echo $this->Html->link(__(h($task['Task']['body'])), array('action' => 'view', $task['Task']['id']));?></span>
 			<span class="start_time"><?php echo h($task['Task']['start_time']); ?></span>
 			<span class="status"><?php echo h($task['Task']['status']); ?></span>
 			<span class="d_param"><?php echo h($task['Task']['d_param']); ?></span>
@@ -57,9 +55,7 @@
 				<ul class="children-ul">
 				<li id="task_<?php echo h($task['Task']['id']); ?>" class="<?php echo h($task['Task']['status']);?> list-group-item clearfix" data-task-id="<?php echo h($task['Task']['id']); ?>">
 			<span class="check-task"><input type="checkbox" <?php if($task['Task']['status'] == 'done'){echo h('checked');} ?>></span>
-			<span class="body">
-				<?php echo $this->Html->link(__(h($task['Task']['body'])), array('action' => 'view', $task['Task']['id']));?>
-			</span>
+			<span class="body"><?php echo $this->Html->link(__(h($task['Task']['body'])), array('action' => 'view', $task['Task']['id']));?></span>
 			<span class="start_time"><?php echo h($task['Task']['start_time']); ?></span>
 			<span class="status"><?php echo h($task['Task']['status']); ?></span>
 			<span class="d_param"><?php echo h($task['Task']['d_param']); ?></span>
@@ -71,9 +67,7 @@
 				<?php echo str_repeat('</ul>', -$indent) ?>
 				<li id="task_<?php echo h($task['Task']['id']); ?>" class="<?php echo h($task['Task']['status']);?> list-group-item clearfix" data-task-id="<?php echo h($task['Task']['id']); ?>">
 			<span class="check-task"><input type="checkbox" <?php if($task['Task']['status'] == 'done'){echo h('checked');} ?>></span>
-			<span class="body">
-				<?php echo $this->Html->link(__(h($task['Task']['body'])), array('action' => 'view', $task['Task']['id']));?>
-			</span>
+			<span class="body"><?php echo $this->Html->link(__(h($task['Task']['body'])), array('action' => 'view', $task['Task']['id']));?></span>
 			<span class="start_time"><?php echo h($task['Task']['start_time']); ?></span>
 			<span class="status"><?php echo h($task['Task']['status']); ?></span>
 			<span class="d_param"><?php echo h($task['Task']['d_param']); ?></span>

@@ -309,19 +309,29 @@ $(function(){
                 //正常時
                 //dom生成
                 var elm = htmlAddElm(data);
-                //編集前のリストがいた日にちの場所
-                oldDay = $('#task_'+data.result.id).parent().attr('id').substr(10);
-                addDay = getAddDay(data.result.start_time);
-                //日付が変更されないならその場で挿入、されるなら適切な場所に挿入
-                if(oldDay == addDay) {
+
+                //トップページか、viewページかで挿入場所場合分け
+                //viewページの場合
+                if($('#task_'+data.result.id).parent().hasClass('children-ul')) {
                     $('#task_'+data.result.id).hide().after(elm);
                     $('#task_'+data.result.id).remove();
                     $('#task_'+data.result.id).fadeIn('slow');
+                //トップページの場合
                 } else {
-                    $('#task_'+data.result.id).remove();
-                    //start_timeによって適切な場所に
-                    appendToDay(data.result.start_time, elm);
-                    $('#task_'+data.result.id).fadeIn('slow');
+                    //編集前のリストがいた日にちの場所
+                    oldDay = $('#task_'+data.result.id).parent().attr('id').substr(10);
+                    addDay = getAddDay(data.result.start_time);
+                    //日付が変更されないならその場で挿入、されるなら適切な場所に挿入
+                    if(oldDay == addDay) {
+                        $('#task_'+data.result.id).hide().after(elm);
+                        $('#task_'+data.result.id).remove();
+                        $('#task_'+data.result.id).fadeIn('slow');
+                    } else {
+                        $('#task_'+data.result.id).remove();
+                        //start_timeによって適切な場所に
+                        appendToDay(data.result.start_time, elm);
+                        $('#task_'+data.result.id).fadeIn('slow');
+                    }
                 }
 
                 //通知
