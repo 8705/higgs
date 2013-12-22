@@ -36,7 +36,7 @@
 		<span class="head-actions"><?php echo __('Actions'); ?></span>
 	</div>
 	<h3>一族</h3>
-	<ul class="list-group" id="task-list">
+	<ul class="list-group task-list" id="task-list">
 		<?php $prev = 0; ?>
 		<?php foreach ($tasks as $task): ?>
 			<?php $indent = $task['Task']['indent']-$prev ?>
