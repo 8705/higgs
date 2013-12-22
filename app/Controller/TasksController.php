@@ -82,6 +82,7 @@ class TasksController extends AppController {
             'conditions' => array(
                 'Task.user_id' => $this->Auth->user('id'),
                 'Task.status' => 'bomb',
+                'Task.bomb' => 1,
             ),
         );
 		$this->set('tasks_today', $this->Task->find('all', $opt_today));
@@ -280,7 +281,8 @@ class TasksController extends AppController {
         $json = json_decode($this->request->data['json'], true);
 
         $res = $this->Task->updateAll(
-            array('Task.bomb' => "'notyet'"),
+            array('Task.bomb' => 0),
+            //array('Task.bomb' => 1)
             array('Task.id' => $json)
         );
         //save OK
