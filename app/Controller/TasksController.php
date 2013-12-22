@@ -50,6 +50,7 @@ class TasksController extends AppController {
 		$opt_today = array(
 			'conditions' => array(
                 'Task.user_id' => $this->Auth->user('id'),
+                'Task.bomb' => 0,
                 'Task.start_time <=' => date('Y-m-d'),
             ),
 			'order' => array('Task.d_param'),
@@ -57,6 +58,7 @@ class TasksController extends AppController {
         $opt_tomorrow = array(
             'conditions' => array(
                 'Task.user_id' => $this->Auth->user('id'),
+                'Task.bomb' => 0,
                 'Task.start_time' => date('Y-m-d', strtotime('+1 day')),
             ),
             'order' => array('Task.d_param'),
@@ -64,6 +66,7 @@ class TasksController extends AppController {
         $opt_dayaftertomorrow = array(
             'conditions' => array(
                 'Task.user_id' => $this->Auth->user('id'),
+                'Task.bomb' => 0,
                 'Task.start_time' => date('Y-m-d', strtotime('+2 day')),
             ),
             'order' => array('Task.d_param'),
@@ -277,7 +280,7 @@ class TasksController extends AppController {
         $json = json_decode($this->request->data['json'], true);
 
         $res = $this->Task->updateAll(
-            array('Task.status' => "'notyet'"),
+            array('Task.bomb' => "'notyet'"),
             array('Task.id' => $json)
         );
         //save OK
