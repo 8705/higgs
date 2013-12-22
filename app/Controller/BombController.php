@@ -26,7 +26,6 @@ class BombController extends AppController {
                 $diff = $diff - $dparam;
             }
         }
-        $this->redirect('/');
     }
 
     public function _getdparams() {
