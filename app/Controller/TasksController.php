@@ -68,12 +68,25 @@ class TasksController extends AppController {
             ),
             'order' => array('Task.d_param'),
         );
+        $opt_parents = array(
+            'conditions' => array(
+                'Task.user_id' => $this->Auth->user('id'),
+                'Task.parent_id' => null,
+                'Task.status' => 'notyet',
+            ),
+        );
+        $opt_bombs = array(
+            'conditions' => array(
+                'Task.user_id' => $this->Auth->user('id'),
+                'Task.status' => 'bomb',
+            ),
+        );
 		$this->set('tasks_today', $this->Task->find('all', $opt_today));
         $this->set('tasks_tomorrow', $this->Task->find('all', $opt_tomorrow));
         $this->set('tasks_dayaftertomorrow', $this->Task->find('all', $opt_dayaftertomorrow));
         $this->set('bar', array_sum($this->_getdparams()));
-        $this->set('parents', $this->Task->find('all', array('conditions' =>array('Task.parent_id' => null))));
-        $this->set('bombs', $this->Task->find('all', array('conditions' =>array('Task.status' => 'bomb'))));
+        $this->set('parents', $this->Task->find('all', $opt_parents));
+        $this->set('bombs', $this->Task->find('all', $opt_parents));
 	}
 
 	public function view($id = null) {
