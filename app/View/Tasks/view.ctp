@@ -54,7 +54,7 @@
 			<span class="delete-task btn btn-default">削除</span>
 		</li>
 			<?php elseif($indent == 1): ?>
-				<ul>
+				<ul class="children-ul">
 				<li id="task_<?php echo h($task['Task']['id']); ?>" class="<?php echo h($task['Task']['status']);?> list-group-item clearfix" data-task-id="<?php echo h($task['Task']['id']); ?>">
 			<span class="check-task"><input type="checkbox" <?php if($task['Task']['status'] == 'done'){echo h('checked');} ?>></span>
 			<span class="body">
