@@ -102,7 +102,7 @@
 	<div id="main" class="row clearfix">
 		<?php echo $this->fetch('content'); ?>
 	</div>
-<?php echo $this->element('sql_dump'); ?>
+	<?php echo $this->element('sql_dump'); ?>
 	<div id="footer" class="row clearfix">
 		<div class="col-md-12 column">
 			<p class="text-center">
@@ -121,13 +121,5 @@
 		//$(document).on('')
 	});
 </script>
-<p>ないけどしよか？</p>
-<p>この場所わかりづらいわ</p>
-<p>さらに編集</p>
-<p>もっと編集</p>
-<p>もっかい編集</p>
-<p>うまくいってる？</p>
-<p>ぱいんず会長です。こんばんは</p>
-<p>ラストチャンス！！</p>
 </body>
 </html>

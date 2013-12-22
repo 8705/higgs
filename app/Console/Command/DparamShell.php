@@ -9,7 +9,8 @@ class DparamShell extends AppShell {
 		$this->BombController = new BombController();
 	}
 
-	public function add() {
-		$this->BombController->add();
+	public function bomb() {
+		$this->BombController->_add();
+        $this->BombController->_bomb();
 	}
 }

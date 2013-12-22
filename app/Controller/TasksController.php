@@ -70,7 +70,7 @@ class TasksController extends AppController {
 		$this->set('tasks_today', $this->Task->find('all', $opt_today));
         $this->set('tasks_tomorrow', $this->Task->find('all', $opt_tomorrow));
         $this->set('tasks_dayaftertomorrow', $this->Task->find('all', $opt_dayaftertomorrow));
-        $this->set('bar', $this->_bar());
+        $this->set('bar', array_sum($this->_getdparams()));
         $this->set('parents', $this->Task->find('all', array('conditions' =>array('Task.parent_id' => null))));
         $this->set('bombs', $this->Task->find('all', array('conditions' =>array('Task.status' => 'bomb'))));
 	}
@@ -243,7 +243,7 @@ class TasksController extends AppController {
         }
     }
 
-    public function _bar() {
+    public function _getdparams() {
         $options = array(
             'conditions' => array(
                 'Task.user_id' => $this->Auth->user('id'),
@@ -252,7 +252,6 @@ class TasksController extends AppController {
             ),
             'fields' => array('Task.d_param')
         );
-        $d_param = $this->Task->find('list', $options);
-        return array_sum($d_param);
+        return $this->Task->find('list', $options);
     }
 }
