@@ -115,5 +115,11 @@
 <?php echo isset($token)?"<script>var token = '{$token}'</script>":"";?>
 <?php echo $this->Html->script('ajax'); ?>
 <?php echo $this->Js->writeBuffer(array( 'inline' => 'true')); ?>
+<script>
+	$(document).ready(function() {
+		$('input.datepicker').Zebra_DatePicker({offset:[-225,1000]});
+		//$(document).on('')
+	});
+</script>
 </body>
 </html>

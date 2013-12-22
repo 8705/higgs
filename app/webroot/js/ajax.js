@@ -16,7 +16,7 @@ function htmlDivideElm(parentId){
     var elm = $(
         '<li class="li-divide list-group-item clearfix" data-parent-id="'+parentId+'">'+
             '<span><input class="body edit-input" type="text" value="" placeholder="タスクを入力して下さい"/></span>\n'+
-            '<span><input class="start_time edit-input" type="text" value="" placeholder="2014-01-01"/></span>\n'+
+            '<span><input class="start_time edit-input datepicker" type="text" value="" placeholder="2014-01-01"/></span>\n'+
             '<span class="divide-push btn btn-default">作成</span>\n'+
             '<input class="status" type="hidden" name="status" value="notyet" />'+
             '<input class="d_param" type="hidden" name="d_param" value="1" />'+
@@ -31,6 +31,10 @@ function htmlEmptyElm() {
         '<li class="empty list-group-item clearfix">タスクがありません</li>'
     );
     return elm;
+}
+
+function makeDatePicker() {
+    $('input.datepicker').Zebra_DatePicker({offset:[-225,1000]});
 }
 
 //day日後の日付を返す
@@ -51,17 +55,20 @@ function deleteEmpty(addDay) {
         $('#task-list-' + addDay+' .empty').remove();
     }
 }
+function getAddDay(start_time) {
+    if(start_time <= getFutureDate(0)) {
+        return 'today';
+    } else if ((start_time == getFutureDate(1))) {
+        return 'tomorrow';
+    } else if((start_time == getFutureDate(2))) {
+        return 'dayaftertomorrow';
+    }
+}
 
 //start_timeと追加エレメントを渡すとその日の場所にタスクを追加する
 function appendToDay(start_time, elm) {
-    //
-    if(start_time <= getFutureDate(0)) {
-        addDay = 'today';
-    } else if ((start_time == getFutureDate(1))) {
-        addDay = 'tomorrow';
-    } else if((start_time == getFutureDate(2))) {
-        addDay = 'dayaftertomorrow';
-    }
+
+    addDay = getAddDay(start_time);
 
     switch(addDay) {
         case 'today' :
@@ -179,8 +186,6 @@ $(function(){
                     popUpPanel(false, 'タスクが削除されました');
                     $(this).remove();
                 });
-                console.log(addDayUl.find('li'));
-                console.log(addDayUl.find('li').length);
 
                 //最後のタスクなら空リストを挿入
                 if(addDayUl.find('li').length == 1) {
@@ -197,6 +202,7 @@ $(function(){
     //Edit Task
     $(document).on('click','.edit-task', function(e){
         cancelEvent(e);
+
         var taskId      = $(this).parent().data('task-id');
         var body        = $('#task_' + taskId).find('.body').text();
         var start_time  = $('#task_' + taskId).find('.start_time').text();
@@ -208,7 +214,7 @@ $(function(){
 
         var elm = $(
             '<span><input class="body edit-input" type="text" value="'+body+'"/></span>\n'+
-            '<span><input class="start_time edit-input" type="text" value="'+start_time+'"/></span>\n'+
+            '<span><input class="start_time edit-input datepicker" type="text" value="'+start_time+'"/></span>\n'+
             '<span class="edit-push btn btn-default">変更</span>\n'+
             '<span class="edit-cancel btn btn-default">キャンセル</span>\n'+
             '<input class="status" type="hidden" name="status" value="'+status+'" />'+
@@ -217,6 +223,8 @@ $(function(){
 
         $('#task_' + taskId).empty().append(elm);
         $('#task_' + taskId +' input:eq(0)').focus();
+
+        makeDatePicker();
     })
 
     //Cancel Task
@@ -281,6 +289,7 @@ $(function(){
                 //正常時
                 //dom生成
                 var elm =$(
+                    '<li id="task_'+data.result.id+'" class="list-group-item notyet" style="display:none;" data-task-id="'+ data.result.id +'">\n' +
                     '<span class="check-task"><input type="checkbox"></span>\n'+
                     '<span class="body"><a href="/tasks/view/' + data.result.id + '">'+ data.result.body +'</a></span>\n' +
                     '<span class="start_time">'+ data.result.start_time +'</span>\n'+
@@ -288,9 +297,25 @@ $(function(){
                     '<span class="d_param">'+ data.result.d_param +'</span>\n'+
                     '<span class="edit-task btn btn-default">編集</span>\n' +
                     '<span class="divide-task btn btn-default">分割</span>\n' +
-                    '<span class="delete-task btn btn-default">削除</span>'
+                    '<span class="delete-task btn btn-default">削除</span>\n' +
+                    '</li>'
                 );
-                $('#task_'+data.result.id).empty().append(elm);
+                //編集前のリストがいた日にちの場所
+                oldDay = $('#task_'+data.result.id).parent().attr('id').substr(10);
+                addDay = getAddDay(data.result.start_time);
+                console.log(oldDay);
+                console.log(addDay);
+                //日付が変更されないならその場で挿入、されるなら適切な場所に挿入
+                if(oldDay == addDay) {
+                    $('#task_'+data.result.id).hide().after(elm);
+                    $('#task_'+data.result.id).remove();
+                    $('#task_'+data.result.id).fadeIn('slow');
+                } else {
+                    $('#task_'+data.result.id).remove();
+                    //start_timeによって適切な場所に
+                    appendToDay(data.result.start_time, elm);
+                    $('#task_'+data.result.id).fadeIn('slow');
+                }
 
                 //通知
                 popUpPanel(false, 'タスクを変更しました');
@@ -389,6 +414,7 @@ $(function(){
         //親タスクのbtnを止める
         $('#task_'+taskId).find('.edit-task').replaceWith('<span class="disable-edit btn btn-default btn-disabled">編集</span>');
         $('#task_'+taskId).find('.delete-task').replaceWith('<span class="disable-delete btn btn-default btn-disabled">削除</span>');
+        makeDatePicker();
     })
 
     //Divie Cancel

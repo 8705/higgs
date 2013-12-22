@@ -13,11 +13,6 @@
 				echo $this->Form->input('body');
 				echo $this->Form->input('start_time', array('type'=>'text', 'class' => 'datepicker'));
 			?>
-			<script>
-				$(document).ready(function() {
-					$('input.datepicker').Zebra_DatePicker({offset:[-225,1000]});
-				});
-			</script>
 			<?php
 				//ajax送信用設定
 				echo $this->Js->submit('Submit', array(
@@ -25,7 +20,8 @@
 					'type'		=> 'json',
 					'success'	=> 'addTask(data, textStatus)',
 					'error'		=> 'popUpPanel(true, "サーバーエラー")',
-					'async'		=> true
+					'async'		=> true,
+					'class' 	=> 'btn btn-primary'
 					)
 				);
 			?>
