@@ -27,7 +27,35 @@ function htmlAddElm(data) {
     );
     return elm;
 }
-
+function htmlDivideUl(parentId){
+    var elm = $(
+        '<ul class="ul-divide" data-parent-id="'+parentId+'">\n'+
+        '<li class="li-divide list-group-item clearfix">\n'+
+            '<span><input class="body edit-input" type="text" value="" placeholder="タスクを入力して下さい"/></span>\n'+
+            '<span><input class="start_time edit-input datepicker" type="text" value="" placeholder="2014-01-01"/></span>\n'+
+            '<span class="divide-del btn btn-danger">☓</span>\n'+
+            '<input class="parent_id" type="hidden" name="parent_id" value="'+parentId+'" />'+
+        '</li>\n'+
+        '<li class="divide-btn-area list-group-item clearfix">'+
+            '<span class="divide-more btn btn-success">＋</span>\n'+
+            '<span class="divide-push btn btn-primary">OK</span>\n'+
+        '</li>\n'+
+        '</ul>'
+    );
+    return elm;
+}
+//divide-moreで挿入されるエレメント
+function htmlDivideLi(parentId) {
+    var elm = $(
+        '<li class="li-divide li-divide-more list-group-item clearfix">\n'+
+            '<span><input class="body edit-input" type="text" value="" placeholder="タスクを入力して下さい"/></span>\n'+
+            '<span><input class="start_time edit-input datepicker" type="text" value="" placeholder="2014-01-01"/></span>\n'+
+            '<span class="divide-del btn btn-danger">☓</span>\n'+
+            '<input class="parent_id" type="hidden" name="parent_id" value="'+parentId+'" />\n'+
+        '</li>\n'
+    );
+    return elm;
+}
 
 function htmlEmptyElm() {
     var elm = $(
@@ -56,9 +84,15 @@ function getFutureDate(day) {
 // today or tomorrow or dayaftertomorrow を引数に渡すと空タスクを消す
 function deleteEmpty(addDay) {
     if($('#task-list-' + addDay+' .empty').length){
-        console.log($('#task-list-' + addDay+' .empty').length);
         //空の場合
         $('#task-list-' + addDay+' .empty').remove();
+    }
+}
+function removeChildUl(id) {
+    console.log('removeChildUlに渡ったid : '+id);
+    //タスクを消去した結果children-ulの中身がからっぽなら、ulも消去
+    if ( $('ul[data-children-ul-id='+id+']').find('li').length == 0) {
+        $('ul[data-children-ul-id='+id+']').remove();
     }
 }
 
@@ -187,11 +221,24 @@ $(function(){
             beforeSend : function() {
                 $('#task_' + taskId +' .delete-task').html('<img src="/img/ajax-loader.gif" alt="" />');
             },
-            success : function(){
+            success : function(data){
 
                 $('#task_' + taskId).fadeOut(200, function(){
                     popUpPanel(false, 'タスクが削除されました');
-                    $.when($(this).remove()).then(createEmpty());
+                    //一族かトップかでul消すかどうかの処理がかわる
+
+                    //view表示時
+                    if($('#task_'+data.result.id).parent().hasClass('children-ul')) {
+                        console.log('view表示だよ');
+                        //子タスク内
+                        if($('ul[data-children-ul-id=' + data.result.parent_id + ']').hasClass('children-ul')) {
+                            console.log('小タスク内だよ');
+                            $.when($('#task_'+data.result.id).remove()).then(removeChildUl(data.result.parent_id));
+                        }
+                    //トップページ表示時
+                    } else {
+                        $.when($(this).remove()).then(createEmpty());
+                    }
                 });
 
             },
@@ -299,25 +346,25 @@ $(function(){
 
                 //トップページか、viewページかで挿入場所場合分け
                 //viewページの場合
-                if($('#task_'+data.result.id).parent().hasClass('children-ul')) {
-                    $('#task_'+data.result.id).hide().after(elm);
-                    $('#task_'+data.result.id).remove();
-                    $('#task_'+data.result.id).fadeIn('slow');
+                if( $('#task_' + data.result.id).parent().hasClass('children-ul')) {
+                    $('#task_' + data.result.id).hide().after(elm);
+                    $('#task_' + data.result.id).remove();
+                    $('#task_' + data.result.id).fadeIn('slow');
                 //トップページの場合
                 } else {
                     //編集前のリストがいた日にちの場所
-                    oldDay = $('#task_'+data.result.id).parent().attr('id').substr(10);
+                    oldDay = $('#task_' + data.result.id).parent().attr('id').substr(10);
                     addDay = getAddDay(data.result.start_time);
                     //日付が変更されないならその場で挿入、されるなら適切な場所に挿入
                     if(oldDay == addDay) {
-                        $('#task_'+data.result.id).hide().after(elm);
-                        $('#task_'+data.result.id).remove();
-                        $('#task_'+data.result.id).fadeIn('slow');
+                        $('#task_' + data.result.id).hide().after(elm);
+                        $('#task_' + data.result.id).remove();
+                        $('#task_' + data.result.id).fadeIn('slow');
                     } else {
-                        $('#task_'+data.result.id).remove();
+                        $('#task_' + data.result.id).remove();
                         //start_timeによって適切な場所に
                         appendToDay(data.result.start_time, elm);
-                        $('#task_'+data.result.id).fadeIn('slow');
+                        $('#task_' + data.result.id).fadeIn('slow');
                     }
                 }
 
@@ -400,35 +447,6 @@ $(function(){
         });
     });
 
-function htmlDivideUl(parentId){
-    var elm = $(
-        '<ul class="ul-divide" data-parent-id="'+parentId+'">\n'+
-        '<li class="li-divide list-group-item clearfix">\n'+
-            '<span><input class="body edit-input" type="text" value="" placeholder="タスクを入力して下さい"/></span>\n'+
-            '<span><input class="start_time edit-input datepicker" type="text" value="" placeholder="2014-01-01"/></span>\n'+
-            '<span class="divide-del btn btn-danger">☓</span>\n'+
-            '<input class="parent_id" type="hidden" name="parent_id" value="'+parentId+'" />'+
-        '</li>\n'+
-        '<li class="divide-btn-area list-group-item clearfix">'+
-            '<span class="divide-more btn btn-success">＋</span>\n'+
-            '<span class="divide-push btn btn-primary">OK</span>\n'+
-        '</li>\n'+
-        '</ul>'
-    );
-    return elm;
-}
-//divide-moreで挿入されるエレメント
-function htmlDivideLi(parentId) {
-    var elm = $(
-        '<li class="li-divide li-divide-more list-group-item clearfix">\n'+
-            '<span><input class="body edit-input" type="text" value="" placeholder="タスクを入力して下さい"/></span>\n'+
-            '<span><input class="start_time edit-input datepicker" type="text" value="" placeholder="2014-01-01"/></span>\n'+
-            '<span class="divide-del btn btn-danger">☓</span>\n'+
-            '<input class="parent_id" type="hidden" name="parent_id" value="'+parentId+'" />\n'+
-        '</li>\n'
-    );
-    return elm;
-}
     //Divide Task
     $(document).on('click', '.divide-task', function(e){
         cancelEvent(e);
@@ -516,27 +534,37 @@ function htmlDivideLi(parentId) {
     //Divide push
     $(document).on('click', '.divide-push', function(e){
         cancelEvent(e);
-        var taskId      = $(this).parent().data('parent-id');
-        var body        = $('li[data-parent-id='+taskId+']').find('.body').val();
-        var start_time  = $('li[data-parent-id='+taskId+']').find('.start_time').val();
-        var status      = $('li[data-parent-id='+taskId+']').find('.status').val();
-        var d_param     = $('li[data-parent-id='+taskId+']').find('.d_param').val();
+        var parentId      = $(this).parent().parent().data('parent-id');
+        var divideArr   = [];
+        var divideCount = Number($('ul[data-parent-id='+parentId+']').find('.li-divide').length);
+        var brotherCount = Number($('ul[data-children-ul-id='+parentId+']').find('li').length);
+        var parent_d    = Number($('#task_'+parentId).find('.d_param').text());
+        var influence   = Math.ceil(parent_d / (divideCount + brotherCount));
+        console.log('divideCount : '+divideCount);
+        console.log('brotherCount : '+brotherCount);
+        console.log('influence : '+influence);
 
+        for ( var i = 0; i <= divideCount - 1; i++) {
+            divideArr.push(
+                {
+                    parent_id   : parentId,
+                    body        : $('ul[data-parent-id='+parentId+']').find('.li-divide').eq(i).find('.body').val(),
+                    start_time  : $('ul[data-parent-id='+parentId+']').find('.li-divide').eq(i).find('.start_time').val(),
+                    d_param     : influence
+                }
+            )
+        }
+        var json = JSON.stringify(divideArr);
         $.ajax({
-            url : '/tasks/divide/'+ taskId,
+            url : '/tasks/divide/'+ parentId,
             type : 'POST',
             dataType : 'json',
             timeout : 5000,
             data : {
-                user_id : 3,
-                parent_id : taskId,
-                body : body,
-                start_time : start_time,
-                status : status,
-                d_param : d_param
+                json : json
             },
             beforeSend : function() {
-                $('li[data-parent-id=' + taskId +'] .divide-push').html('<img src="/img/ajax-loader.gif" alt="" />');
+                $('ul[data-parent-id=' + parentId +'] .divide-push').html('<img src="/img/ajax-loader.gif" alt="" />');
             },
             success : function(data) {
                 //バリデーションエラー
@@ -549,23 +577,34 @@ function htmlDivideLi(parentId) {
 
                     return;
                 }
-                $('li[data-parent-id='+taskId+']').remove();
+                // $('li[data-parent-id='+parentId+']').remove();
+                $('ul[data-parent-id='+data.result[0].parent_id+']').fadeOut(150, function(){
+                    $(this).remove();
+                })
 
-                //dom生成
-                var elm =$(
-                    '<li id="task_'+data.result.id+'" class="list-group-item notyet" style="display:none;" data-task-id="'+ data.result.id +'">\n' +
-                    '<span class="check-task"><input type="checkbox"></span>\n'+
-                    '<span class="body"><a href="/tasks/view/' + data.result.id + '">'+ data.result.body +'</a></span>\n' +
-                    '<span class="start_time">'+ data.result.start_time +'</span>\n'+
-                    '<span class="status">'+ data.result.status +'</span>\n'+
-                    '<span class="d_param">'+ data.result.d_param +'</span>\n'+
-                    '<span class="edit-task btn btn-default">編集</span>\n' +
-                    '<span class="divide-task btn btn-default">分割</span>\n' +
-                    '<span class="delete-task btn btn-default">削除</span>\n' +
-                    '</li>'
-                );
-                 //start_timeによって挿入場所を変える
-                appendToDay(start_time, elm);
+                //分割を追加するタスクがすでに子持ちかどうか判別
+                //持ってない場合children-ulを作る
+                if(!$('#task_'+  data.result[0].parent_id).next().next().hasClass('children-ul')) {
+                    $('#task_'+  data.result[0].parent_id).next().after(
+                        '<ul class="children-ul" data-children-ul-id="'+data.result[0].parent_id+'"></ul>'
+                    );
+                }
+                for(var i in data.result) {
+                    $('ul[data-children-ul-id='+data.result[0].parent_id+']')
+                    .append(
+                        '<li id="task_'+data.result[i].id+'" class="list-group-item notyet" style="display:none;" data-task-id="'+ data.result[i].id +'">\n' +
+                        '<span class="check-task"><input type="checkbox"></span>\n'+
+                        '<span class="body"><a href="/tasks/view/' + data.result[i].id + '">'+ data.result[i].body +'</a></span>\n' +
+                        '<span class="start_time">'+ data.result[i].start_time +'</span>\n'+
+                        '<span class="status">notyet</span>\n'+
+                        '<span class="d_param">'+ data.result[i].d_param +'</span>\n'+
+                        '<span class="edit-task btn btn-default">編集</span>\n' +
+                        '<span class="divide-task btn btn-default">分割</span>\n' +
+                        '<span class="delete-task btn btn-default">削除</span>\n' +
+                        '</li>'
+                    );
+                    $('#task_'+data.result[i].id).fadeIn('slow');
+                }
 
                 $('#task_'+data.result.id).fadeIn('slow');
 
@@ -573,11 +612,11 @@ function htmlDivideLi(parentId) {
                 popUpPanel(false, '送信されました');
 
                 //キャンセルボタンを分割ボタンにする
-                $('#task_'+taskId).find('.divide-cancel').replaceWith('<span class="divide-task btn btn-default">分割</span>');
+                $('#task_'+parentId).find('.divide-cancel').replaceWith('<span class="divide-task btn btn-default">分割</span>');
 
                 //親タスクのbtnを元に戻す
-                $('#task_'+taskId).find('.disable-edit').replaceWith('<span class="edit-task btn btn-default">編集</span>');
-                $('#task_'+taskId).find('.disable-delete').replaceWith('<span class="delete-task btn btn-default">削除</span>');
+                $('#task_'+parentId).find('.disable-edit').replaceWith('<span class="edit-task btn btn-default">編集</span>');
+                $('#task_'+parentId).find('.disable-delete').replaceWith('<span class="delete-task btn btn-default">削除</span>');
             },
             error : function(){
                 //エラーまたかく
@@ -585,7 +624,7 @@ function htmlDivideLi(parentId) {
             complete : function() {
 
                 //バリデーションエラー時、ボタン戻す
-                $('li[data-parent-id=' + taskId +'] .divide-push').html('作成');
+                $('ul[data-parent-id=' + parentId +'] .divide-push').html('作成');
 
 
             }

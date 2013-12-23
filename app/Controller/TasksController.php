@@ -188,21 +188,64 @@ class TasksController extends AppController {
             throw new NotFoundException(__('Non exist $id'));
         }
 
-        //save OK
-        //create()は一体何をやっているのか？あとで調べる。今は無理。酔ってるから2013/12/19深夜
+        $json = json_decode($this->request->data['json'], true);
+        // debug($json);
+        $errorArray = array();
+        $resultArray = array();
         $this->Task->create();
-        if ($this->Task->save(array_merge($this->request->data, array('user_id'=>$this->Auth->user('id'))))) {
-            //最後の更新のidを取得 !ただし、他人のタスク更新と区別するためAuthユーザーの条件を付け足す必要あり!
-            $saved_id = $this->Task->getLastInsertID();
 
-
-            $options = array('conditions' => array('Task.' . $this->Task->primaryKey => $saved_id));
-            $result = $this->Task->find('first', $options);
+        foreach ($json as $row) {
+            $this->Task->create();
+            $data = array(
+                'parent_id'     => $id,
+                'user_id'       => $this->Auth->user('id'),
+                'body'          => $row['body'],
+                'start_time'    => $row['start_time'],
+                'd_param'       => $row['d_param']
+            );
+            $errorArray[]       = $this->Task->save($data);
+            $row                = $this->Task->find('first',array(
+                'conditions'    => array('Task.user_id' =>$this->Auth->user('id')),
+                'order'         => array('Task.id' => 'desc'),
+            ));
+            $resultArray[]      = $row['Task'];
+        }
+        //save OK
+        if(!in_array(false,$errorArray)) {
             $error = false;
-            $res = array("error" => $error,"result" => $result["Task"]);
+            $res = array("error" => $error,"result" => $resultArray);
             $this->response->type('json');
             echo json_encode($res);
             exit;
+        } else {
+
+        }
+    }
+
+	public function delete($id = null) {
+        $this->Task->id = $id;
+        //Ajax or not
+        if (!$this->request->is('ajax')) {
+            throw new NotFoundException(__('Invalid post'));
+        }
+		if (!$this->Task->exists()) {
+			throw new NotFoundException(__('Invalid task'));
+		}
+
+		$this->autoRender = false;
+		$this->autoLayout = false;
+
+        //save OK
+        $this->Task->id = $id;
+        if($this->Task->saveField('status','delete')) {
+            $row = $this->Task->find('first',array(
+                'conditions'    => array('Task.id' =>$id),
+            ));
+            $result = $row['Task'];
+            $error = false;
+            $res = array("error" => $error,"result" => $result);
+            $this->response->type('json');
+            echo json_encode($res);
         //save NG
         } else {
             $error = true;
@@ -212,23 +255,7 @@ class TasksController extends AppController {
             echo json_encode($res);
             exit;
         }
-    }
 
-	public function delete($id = null) {
-		$this->Task->id = $id;
-		if (!$this->Task->exists()) {
-			throw new NotFoundException(__('Invalid task'));
-		}
-
-		$this->autoRender = false;
-		$this->autoLayout = false;
-		$this->request->onlyAllow('post', 'delete');
-		if ($this->Task->delete()) {
-			$this->Session->setFlash(__('The task has been deleted.'));
-		} else {
-			$this->Session->setFlash(__('The task could not be deleted. Please, try again.'));
-		}
-		//return $this->redirect(array('action' => 'index'));
 	}
 
 	public function check($id = null) {
