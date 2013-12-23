@@ -219,43 +219,42 @@ class TasksController extends AppController {
         } else {
 
         }
-
-        // if ($this->Task->save(array_merge($this->request->data, array('user_id'=>$this->Auth->user('id'))))) {
-        //     //最後の更新のidを取得 !ただし、他人のタスク更新と区別するためAuthユーザーの条件を付け足す必要あり!
-        //     $saved_id = $this->Task->getLastInsertID();
-        //     $options = array('conditions' => array('Task.' . $this->Task->primaryKey => $saved_id));
-        //     $result = $this->Task->find('first', $options);
-        //     $error = false;
-        //     $res = array("error" => $error,"result" => $result["Task"]);
-        //     $this->response->type('json');
-        //     echo json_encode($res);
-        //     exit;
-        // //save NG
-        // } else {
-        //     $error = true;
-        //     $message = $this->Task->validationErrors;
-        //     $res = $res = compact('error', 'message');
-        //     $this->response->type('json');
-        //     echo json_encode($res);
-        //     exit;
-        // }
     }
 
 	public function delete($id = null) {
-		$this->Task->id = $id;
+        $this->Task->id = $id;
+        //Ajax or not
+        if (!$this->request->is('ajax')) {
+            throw new NotFoundException(__('Invalid post'));
+        }
 		if (!$this->Task->exists()) {
 			throw new NotFoundException(__('Invalid task'));
 		}
 
 		$this->autoRender = false;
 		$this->autoLayout = false;
-		$this->request->onlyAllow('post', 'delete');
-		if ($this->Task->delete()) {
-			$this->Session->setFlash(__('The task has been deleted.'));
-		} else {
-			$this->Session->setFlash(__('The task could not be deleted. Please, try again.'));
-		}
-		//return $this->redirect(array('action' => 'index'));
+
+        //save OK
+        $this->Task->id = $id;
+        if($this->Task->saveField('status','delete')) {
+            $row = $this->Task->find('first',array(
+                'conditions'    => array('Task.id' =>$id),
+            ));
+            $result = $row['Task'];
+            $error = false;
+            $res = array("error" => $error,"result" => $result);
+            $this->response->type('json');
+            echo json_encode($res);
+        //save NG
+        } else {
+            $error = true;
+            $message = $this->Task->validationErrors;
+            $res = $res = compact('error', 'message');
+            $this->response->type('json');
+            echo json_encode($res);
+            exit;
+        }
+
 	}
 
 	public function check($id = null) {

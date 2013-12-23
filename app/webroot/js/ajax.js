@@ -88,10 +88,11 @@ function deleteEmpty(addDay) {
         $('#task-list-' + addDay+' .empty').remove();
     }
 }
-function removeChildUl() {
+function removeChildUl(id) {
+    console.log('removeChildUlに渡ったid : '+id);
     //タスクを消去した結果children-ulの中身がからっぽなら、ulも消去
-    if ( $('.children-ul').find('li').length == 0) {
-        $('.children-ul').remove();
+    if ( $('ul[data-children-ul-id='+id+']').find('li').length == 0) {
+        $('ul[data-children-ul-id='+id+']').remove();
     }
 }
 
@@ -228,9 +229,11 @@ $(function(){
 
                     //view表示時
                     if($('#task_'+data.result.id).parent().hasClass('children-ul')) {
+                        console.log('view表示だよ');
                         //子タスク内
                         if($('ul[data-children-ul-id=' + data.result.parent_id + ']').hasClass('children-ul')) {
-                            $.when($('#task_'+data.result.id).remove()).then(removeChildUl());
+                            console.log('小タスク内だよ');
+                            $.when($('#task_'+data.result.id).remove()).then(removeChildUl(data.result.parent_id));
                         }
                     //トップページ表示時
                     } else {
