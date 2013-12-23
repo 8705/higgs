@@ -187,28 +187,57 @@ class TasksController extends AppController {
             throw new NotFoundException(__('Non exist $id'));
         }
 
-        //save OK
-        //create()は一体何をやっているのか？あとで調べる。今は無理。酔ってるから2013/12/19深夜
+        $json = json_decode($this->request->data['json'], true);
+        // debug($json);
+        $errorArray = array();
+        $resultArray = array();
         $this->Task->create();
-        if ($this->Task->save(array_merge($this->request->data, array('user_id'=>$this->Auth->user('id'))))) {
-            //最後の更新のidを取得 !ただし、他人のタスク更新と区別するためAuthユーザーの条件を付け足す必要あり!
-            $saved_id = $this->Task->getLastInsertID();
-            $options = array('conditions' => array('Task.' . $this->Task->primaryKey => $saved_id));
-            $result = $this->Task->find('first', $options);
-            $error = false;
-            $res = array("error" => $error,"result" => $result["Task"]);
-            $this->response->type('json');
-            echo json_encode($res);
-            exit;
-        //save NG
-        } else {
-            $error = true;
-            $message = $this->Task->validationErrors;
-            $res = $res = compact('error', 'message');
-            $this->response->type('json');
-            echo json_encode($res);
-            exit;
+        foreach ($json as $row) {
+            $this->Task->create();
+            $data = array(
+                'parent_id'     => $id,
+                'user_id'       => $this->Auth->user('id'),
+                'body'          => $row['body'],
+                'start_time'    => $row['start_time'],
+                'd_param'       => $row['d_param']
+            );
+            $errorArray[]       = $this->Task->save($data);
+            $row                = $this->Task->find('first',array(
+                'conditions'    => array('Task.user_id' =>$this->Auth->user('id')),
+                'order'         => array('Task.id' => 'desc'),
+            ));
+            $resultArray[]      = $row['Task'];
         }
+        //save OK
+        if(!in_array(false,$errorArray)) {
+            $error = false;
+            $res = array("error" => $error,"result" => $resultArray);
+            $this->response->type('json');
+            echo json_encode($res);
+            exit;
+        } else {
+
+        }
+
+        // if ($this->Task->save(array_merge($this->request->data, array('user_id'=>$this->Auth->user('id'))))) {
+        //     //最後の更新のidを取得 !ただし、他人のタスク更新と区別するためAuthユーザーの条件を付け足す必要あり!
+        //     $saved_id = $this->Task->getLastInsertID();
+        //     $options = array('conditions' => array('Task.' . $this->Task->primaryKey => $saved_id));
+        //     $result = $this->Task->find('first', $options);
+        //     $error = false;
+        //     $res = array("error" => $error,"result" => $result["Task"]);
+        //     $this->response->type('json');
+        //     echo json_encode($res);
+        //     exit;
+        // //save NG
+        // } else {
+        //     $error = true;
+        //     $message = $this->Task->validationErrors;
+        //     $res = $res = compact('error', 'message');
+        //     $this->response->type('json');
+        //     echo json_encode($res);
+        //     exit;
+        // }
     }
 
 	public function delete($id = null) {
