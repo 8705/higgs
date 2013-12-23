@@ -645,6 +645,7 @@ $(function(){
         $('#tasks li.bomb').each(function(){
             cleanArr.push($(this).data('task-id'));
         });
+
         var json = JSON.stringify(cleanArr);
         $.ajax({
             url : '/tasks/clean',
@@ -662,7 +663,19 @@ $(function(){
                     $('#task_'+data.result[i]).fadeOut('slow',function(){
                         $.when($(this).remove()).then(createEmpty());
                     })
+                    deleteEmpty('bombs');
+                    $('#task-list-bombs').append(
+                        '<li id="bomb_'
+                        +data.result[i]
+                        +'" class="bomb list-group-item clearfix" style="display:none" data-task-id="'
+                        +data.result[i]+'">'
+                        +'<span class="body"><a href="/tasks/view/'
+                        + data.result[i]+ '">'
+                        +$('#task_'+ data.result[i]).find('.body').text()
+                        +'</a></span></li>\n'
+                    );
                 }
+                $('#task-list-bombs').children().fadeIn('slow');
             },
             error : function(){
                 popUpPanel(true, 'サーバーエラーでタスクを消去できませんでした');
@@ -671,6 +684,17 @@ $(function(){
                 $('#clean-bomb').html('done一括削除');
             },
         });
+
+        /*var elm1 ='';
+        for(i in cleanArr) {
+         elm1 +=
+         '<li id="bomb_'+data.result[i]+'" class="bomb list-group-item clearfix" data-task-id="'+data.result[i]+'">'
+         +'<span class="body"><a href="/tasks/view/' + data.result[i] + '">'
+         +$('#task_' + data.result[i]).find('.body').text()
+         +'</a></span></li>\n';
+        }
+        $('#task-list-bombs').append(elm1)
+$('#task_'+data.result.id).fadeIn('slow');*/
 
         // $('#tasks li.done').each(function(){
         //     $(this).fadeOut('slow', function(){
