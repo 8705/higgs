@@ -84,9 +84,14 @@ function getFutureDate(day) {
 // today or tomorrow or dayaftertomorrow を引数に渡すと空タスクを消す
 function deleteEmpty(addDay) {
     if($('#task-list-' + addDay+' .empty').length){
-        console.log($('#task-list-' + addDay+' .empty').length);
         //空の場合
         $('#task-list-' + addDay+' .empty').remove();
+    }
+}
+function removeChildUl() {
+    //タスクを消去した結果children-ulの中身がからっぽなら、ulも消去
+    if ( $('.children-ul').find('li').length == 0) {
+        $('.children-ul').remove();
     }
 }
 
@@ -225,14 +230,7 @@ $(function(){
                     if($('#task_'+data.result.id).parent().hasClass('children-ul')) {
                         //子タスク内
                         if($('ul[data-children-ul-id=' + data.result.parent_id + ']').hasClass('children-ul')) {
-                            $.when($('#task_'+data.result.id).remove()).then(
-                                //タスクを消去した結果children-ulの中身がからっぽなら、ulも消去
-                                if($('ul[data-children-ul-id=' + data.result.parent_id + ']').find('li').length == 0) {
-                                    $('ul[data-children-ul-id=' + data.result.parent_id + ']').fadeOut(150,function(){
-                                        $(this).remove();
-                                    })
-                                }
-                            );
+                            $.when($('#task_'+data.result.id).remove()).then(removeChildUl());
                         }
                     //トップページ表示時
                     } else {
