@@ -21,8 +21,9 @@ function htmlAddElm(data) {
         '<span class="status">'+ data.result.status +'</span>\n'+
         '<span class="d_param">'+ data.result.d_param +'</span>\n'+
         '<span class="edit-task btn btn-default">編集</span>\n' +
-        '<span class="divide-task btn btn-default">分割</span>\n' +
+        // '<span class="divide-task btn btn-default">分割</span>\n' +
         '<span class="delete-task btn btn-default">削除</span>\n' +
+        '<span class="sequence" style="display:none;">0</span>\n' +
         '</li>'
     );
     return elm;
@@ -705,4 +706,114 @@ $('#task_'+data.result.id).fadeIn('slow');*/
         //     });
         // })
     });
+
+    //sortable
+    $('.task-list').sortable({
+        axis : 'y',
+        opacity : 0.7,
+        cursor : 'move',
+        // grid : [30,30],
+        update : function(){
+            $.ajax({
+                url : '/tasks/sort/manually',
+                type : 'POST',
+                timeout : 5000,
+                data : {
+                    sequence : $(this).sortable('serialize')
+                },
+                beforeSend : function() {
+                    //全ての編集中のタスクを元に戻す。
+                },
+                success : function() {
+
+                },
+                error : function() {
+
+                },
+                complete : function() {
+
+                }
+            })
+        }
+    });
+
+    $('.sort').click(function(e){
+        cancelEvent(e);
+        var day = $(this).attr('href').substr(14);
+        console.log(day);
+        $.ajax({
+            url : $(this).attr('href'),
+            type : 'POST',
+            timeout : 5000,
+            beforeSend : function() {
+                //全ての編集中のタスクを元に戻す。
+            },
+            success : function(data) {
+                var data = $.parseJSON(data);
+                console.log(data);
+                $('#task-list-'+day).html('');
+                for(var i in data.result) {
+                    $('#task-list-'+day).append(
+                        '<li id="task_'+data.result[i].id+'" class="list-group-item notyet" style="display:none;" data-task-id="'+ data.result[i].id +'">\n' +
+                        '<span class="check-task"><input type="checkbox"></span>\n'+
+                        '<span class="body"><a href="/tasks/view/' + data.result[i].id + '">'+ data.result[i].body +'</a></span>\n' +
+                        '<span class="start_time">'+ data.result[i].start_time +'</span>\n'+
+                        '<span class="status">notyet</span>\n'+
+                        '<span class="d_param">'+ data.result[i].d_param +'</span>\n'+
+                        '<span class="edit-task btn btn-default">編集</span>\n' +
+                        '<span class="delete-task btn btn-default">削除</span>\n' +
+                        '<span class="sequence">' + data.result[i].sequence + '</span>\n' +
+                        '</li>'
+                    )
+                }
+                $('#task-list-' +day+' li').fadeIn(150);
+
+            },
+            error : function() {
+
+            },
+            complete : function() {
+
+            }
+        })
+    });
+
+    //ソートをajaxで送る関数
+    function sortAjax(url, data) {
+        $.ajax({
+            url : '/tasks/sort/d/today',
+            type : 'POST',
+            timeout : 5000,
+            beforeSend : function() {
+                //全ての編集中のタスクを元に戻す。
+            },
+            success : function(data) {
+                var data = $.parseJSON(data);
+                console.log(data);
+                $('#task-list-today').html('');
+                for(var i in data.result) {
+                    $('#task-list-today').append(
+                        '<li id="task_'+data.result[i].id+'" class="list-group-item notyet" style="display:none;" data-task-id="'+ data.result[i].id +'">\n' +
+                        '<span class="check-task"><input type="checkbox"></span>\n'+
+                        '<span class="body"><a href="/tasks/view/' + data.result[i].id + '">'+ data.result[i].body +'</a></span>\n' +
+                        '<span class="start_time">'+ data.result[i].start_time +'</span>\n'+
+                        '<span class="status">notyet</span>\n'+
+                        '<span class="d_param">'+ data.result[i].d_param +'</span>\n'+
+                        '<span class="edit-task btn btn-default">編集</span>\n' +
+                        '<span class="delete-task btn btn-default">削除</span>\n' +
+                        '<span class="sequence">' + data.result[i].sequence + '</span>\n' +
+                        '</li>'
+                    )
+                }
+                $('#task-list-today li').fadeIn(150);
+
+            },
+            error : function() {
+
+            },
+            complete : function() {
+
+            }
+        })
+    }
 });
