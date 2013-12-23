@@ -1,6 +1,7 @@
 <?php
 
 App::uses('AppController', 'Controller');
+App::uses('BombController', 'Controller');
 
 class TasksController extends AppController {
 
@@ -120,24 +121,23 @@ class TasksController extends AppController {
         // save OK
         if ($this->Task->save($this->request->data)) {
 
-        	//レンダリングのためにtaskIdを取得する
-        	$saved_id = $this->Task->getLastInsertID();
+            //レンダリングのためにtaskIdを取得する
+            $saved_id = $this->Task->getLastInsertID();
+            /*
+                Userテーブルのレコードも取得してしまっている
+                ユーザー情報を返すのは良くない！
+            */
+            $result = $this->Task->find('first', array(
+                'conditions' => array('Task.id' => $saved_id)
+            ));
 
-        	/*
-        		Userテーブルのレコードも取得してしまっている
-        		ユーザー情報を返すのは良くない！
-        	*/
-        	$result = $this->Task->find('first', array(
-		        'conditions' => array('Task.id' => $saved_id)
-		    ));
-
-        	$error = false;
-        	$res = array("error" => $error,"result" => $result["Task"]);
-        	// $res = array_merge('error'=>$error, $result['Task']);
-        	// debug($res);exit;
-        	$this->response->type('json');
-        	echo json_encode($res);
-        	exit;
+            $error = false;
+            $res = array("error" => $error,"result" => $result["Task"]);
+            // $res = array_merge('error'=>$error, $result['Task']);
+            // debug($res);exit;
+            $this->response->type('json');
+            echo json_encode($res);
+            exit;
 
         // save NG
         } else {
@@ -197,6 +197,7 @@ class TasksController extends AppController {
         $errorArray = array();
         $resultArray = array();
         $this->Task->create();
+
         foreach ($json as $row) {
             $this->Task->create();
             $data = array(
