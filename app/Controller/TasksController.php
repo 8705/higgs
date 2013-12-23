@@ -1,6 +1,7 @@
 <?php
 
 App::uses('AppController', 'Controller');
+App::uses('BombController', 'Controller');
 
 class TasksController extends AppController {
 
@@ -116,24 +117,23 @@ class TasksController extends AppController {
         // save OK
         if ($this->Task->save($this->request->data)) {
 
-        	//レンダリングのためにtaskIdを取得する
-        	$saved_id = $this->Task->getLastInsertID();
+            //レンダリングのためにtaskIdを取得する
+            $saved_id = $this->Task->getLastInsertID();
+            /*
+                Userテーブルのレコードも取得してしまっている
+                ユーザー情報を返すのは良くない！
+            */
+            $result = $this->Task->find('first', array(
+                'conditions' => array('Task.id' => $saved_id)
+            ));
 
-        	/*
-        		Userテーブルのレコードも取得してしまっている
-        		ユーザー情報を返すのは良くない！
-        	*/
-        	$result = $this->Task->find('first', array(
-		        'conditions' => array('Task.id' => $saved_id)
-		    ));
-
-        	$error = false;
-        	$res = array("error" => $error,"result" => $result["Task"]);
-        	// $res = array_merge('error'=>$error, $result['Task']);
-        	// debug($res);exit;
-        	$this->response->type('json');
-        	echo json_encode($res);
-        	exit;
+            $error = false;
+            $res = array("error" => $error,"result" => $result["Task"]);
+            // $res = array_merge('error'=>$error, $result['Task']);
+            // debug($res);exit;
+            $this->response->type('json');
+            echo json_encode($res);
+            exit;
 
         // save NG
         } else {
@@ -194,6 +194,8 @@ class TasksController extends AppController {
         if ($this->Task->save(array_merge($this->request->data, array('user_id'=>$this->Auth->user('id'))))) {
             //最後の更新のidを取得 !ただし、他人のタスク更新と区別するためAuthユーザーの条件を付け足す必要あり!
             $saved_id = $this->Task->getLastInsertID();
+
+
             $options = array('conditions' => array('Task.' . $this->Task->primaryKey => $saved_id));
             $result = $this->Task->find('first', $options);
             $error = false;
