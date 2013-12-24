@@ -3,6 +3,7 @@
 <div class="d-bar progress progress-striped">
 	<div id="d-bar" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo 100*$bar/dcapacity; ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo 100*$bar/dcapacity; ?>%">
 	</div>
+	<?php echo 100*$bar/dcapacity."%"; ?>
 </div>
 <div class="row">
 	<div class="tasks form col-md-12">

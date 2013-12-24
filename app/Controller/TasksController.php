@@ -316,7 +316,7 @@ class TasksController extends AppController {
             'conditions' => array(
                 'Task.user_id' => $this->Auth->user('id'),
                 'Task.status' => 'notyet',
-                'Task.start_time <=' => date('Y-m-d')
+                '(Task.rght - Task.lft)' => 1 
             ),
             'fields' => array('Task.d_param')
         );
