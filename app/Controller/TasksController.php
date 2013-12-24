@@ -83,6 +83,18 @@ class TasksController extends AppController {
                 'Task.status' => 'notyet',
             ),
         );
+        $parents = $this->Task->find('all', $opt_parents);
+        foreach($parents as $key=>$parent) {
+            $children = $this->Task->children($parent['Task']['id']);
+            $sum_dparam = 0;
+            foreach($children as $child) {
+                if($child['Task']['status'] == 'done' and $child['Task']['rght']-$child['Task']['lft'] == 1) {
+                    $sum_dparam += $child['Task']['d_param'];
+                }
+            }
+            $parents[$key]['Task']['complete'] = 100*$sum_dparam/$parent['Task']['d_param'];
+        }
+
         $opt_bombs = array(
             'conditions' => array(
                 'Task.user_id' => $this->Auth->user('id'),
@@ -94,7 +106,7 @@ class TasksController extends AppController {
         $this->set('tasks_tomorrow', $this->Task->find('all', $opt_tomorrow));
         $this->set('tasks_dayaftertomorrow', $this->Task->find('all', $opt_dayaftertomorrow));
         $this->set('bar', almostzero+array_sum($this->_getdparams()));
-        $this->set('parents', $this->Task->find('all', $opt_parents));
+        $this->set('parents', $parents);
         $this->set('bombs', $this->Task->find('all', $opt_bombs));
 	}
 

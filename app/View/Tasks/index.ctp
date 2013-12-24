@@ -108,6 +108,7 @@
 				<?php foreach ($parents as $parent): ?>
 					<li id="parent_<?php echo h($parent['Task']['id']); ?>" class="<?php echo h($parent['Task']['status']);?> list-group-item clearfix" data-task-id="<?php echo h($parent['Task']['id']); ?>">
 						<span class="body"><?php echo $this->Html->link(__(h($parent['Task']['body'])), array('action' => 'view', $parent['Task']['id'])); ?></span>
+						<span><?php echo $parent['Task']['complete'].'%'; ?></span>
 					</li>
 				<?php endforeach; ?>
 				<?php else: ?>
