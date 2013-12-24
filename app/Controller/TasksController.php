@@ -182,7 +182,6 @@ class TasksController extends AppController {
 	}
 
 	public function divide($id = null) {
-        //Ajax or not
         if (!$this->request->is('ajax')) {
             throw new NotFoundException(__('Don\'t ajax!'));
         }
@@ -194,7 +193,6 @@ class TasksController extends AppController {
         
         $json = json_decode($this->request->data['json'], true);
 
-        // debug($json);
         $errorArray = array();
         $resultArray = array();
         $this->Task->create();
@@ -206,7 +204,6 @@ class TasksController extends AppController {
                 'user_id'       => $this->Auth->user('id'),
                 'body'          => $row['body'],
                 'start_time'    => $row['start_time'],
-                'd_param'       => $row['d_param']
             );
             $errorArray[]       = $this->Task->save($data);
             $row                = $this->Task->find('first',array(
@@ -216,16 +213,8 @@ class TasksController extends AppController {
             $resultArray[]      = $row['Task'];
         }
 
-        // $bomb = new BombController;
-        // $influence = $bomb->_influencefromparent($id);
-        // $children = $this->Task->children($id);
-        // foreach($children as $i) {
-        //     $child[] = $i['Task']['id'];
-        // }
-        // $this->Task->updateAll(
-        //     array('Task.influence' => $influence),
-        //     array('Task.id' => $child)
-        // );
+        $bomb = new BombController;
+        $bomb->_modifyinfluence($id);
 
         //save OK
         if(!in_array(false, $errorArray)) {
@@ -264,6 +253,12 @@ class TasksController extends AppController {
                 'conditions'    => array('Task.id' =>$id),
             ));
             $result = $row['Task'];
+
+            $parent = $this->Task->getParentNode($id);
+            $this->Task->removeFromTree($id);
+            $bomb = new BombController;
+            $bomb->_modifyinfluence($parent['Task']['id']);
+
             $error = false;
             $res = array("error" => $error,"result" => $result);
             $this->response->type('json');
@@ -332,7 +327,7 @@ class TasksController extends AppController {
         $json = json_decode($this->request->data['json'], true);
 
         $res = $this->Task->updateAll(
-            array('Task.bomb' => 0),
+            array('Task.status' => 'notyet'),
             //array('Task.bomb' => 1)
             array('Task.id' => $json)
         );
