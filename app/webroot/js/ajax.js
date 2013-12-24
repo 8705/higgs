@@ -537,18 +537,12 @@ $(function(){
         var parentId      = $(this).parent().parent().data('parent-id');
         var divideArr   = [];
         var divideCount = Number($('ul[data-parent-id='+parentId+']').find('.li-divide').length);
-<<<<<<< HEAD
         //var brotherCount = Number($('ul[data-children-ul-id='+parentId+']').find('li').length);
         //var parent_d    = Number($('#task_'+parentId).find('.d_param').text());
         //var d_param   = Math.ceil(parent_d / (divideCount + brotherCount));
         console.log('divideCount : '+divideCount);
         //console.log('brotherCount : '+brotherCount);
         //console.log('influence : '+influence);
-=======
-        var brotherCount = Number($('ul[data-children-ul-id='+parentId+']').find('li').length);
-        var parent_d    = Number($('#task_'+parentId).find('.d_param').text());
-        var influence   = Math.ceil(parent_d / (divideCount + brotherCount));
->>>>>>> 064eb3c588d0962aacb64b3c5ae03599703c3174
 
         for ( var i = 0; i <= divideCount - 1; i++) {
             divideArr.push(
@@ -629,12 +623,9 @@ $(function(){
                 $('#task_'+parentId).find('.disable-delete').replaceWith('<span class="delete-task"><span class="glyphicon glyphicon-trash"></span><b>削除</b></span>');
             },
             error : function(){
-<<<<<<< HEAD
                 console.log('error');
                 //エラーまたかく
-=======
                 popUpPanel(true, 'サーバー');
->>>>>>> 064eb3c588d0962aacb64b3c5ae03599703c3174
             },
             complete : function() {
                 //バリデーションエラー時、ボタン戻す
