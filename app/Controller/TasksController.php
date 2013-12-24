@@ -130,9 +130,10 @@ class TasksController extends AppController {
             $result = $this->Task->find('first', array(
                 'conditions' => array('Task.id' => $saved_id)
             ));
+            $all_d = almostzero+array_sum($this->_getdparams());
 
             $error = false;
-            $res = array("error" => $error,"result" => $result["Task"]);
+            $res = array("error" => $error,"result" => $result["Task"], 'all_d' => $all_d);
             // $res = array_merge('error'=>$error, $result['Task']);
             // debug($res);exit;
             $this->response->type('json');
@@ -165,8 +166,9 @@ class TasksController extends AppController {
 		if ($this->Task->save($this->request->data)) {
 			$options = array('conditions' => array('Task.' . $this->Task->primaryKey => $id));
 			$result = $this->Task->find('first', $options);
+            $all_d = almostzero+array_sum($this->_getdparams());
 			$error = false;
-        	$res = array("error" => $error,"result" => $result["Task"]);
+        	$res = array("error" => $error,"result" => $result["Task"], 'all_d' =>$all_d);
         	$this->response->type('json');
         	echo json_encode($res);
         	exit;
@@ -218,8 +220,9 @@ class TasksController extends AppController {
 
         //save OK
         if(!in_array(false, $errorArray)) {
+            $all_d = almostzero+array_sum($this->_getdparams());
             $error = false;
-            $res = array("error" => $error,"result" => $resultArray);
+            $res = array("error" => $error,"result" => $resultArray, 'all_d' => $all_d);
             $this->response->type('json');
             echo json_encode($res);
             exit;
@@ -259,8 +262,9 @@ class TasksController extends AppController {
             $bomb = new BombController;
             $bomb->_modifyinfluence($parent['Task']['id']);
 
+            $all_d = almostzero + array_sum($this->_getdparams());
             $error = false;
-            $res = array("error" => $error,"result" => $result);
+            $res = array("error" => $error,"result" => $result,"all_d" => $all_d);
             $this->response->type('json');
             echo json_encode($res);
         //save NG
@@ -290,8 +294,9 @@ class TasksController extends AppController {
         if ($this->Task->save($this->request->data)) {
             $options = array('conditions' => array('Task.' . $this->Task->primaryKey => $id));
             $result = $this->Task->find('first', $options);
+            $all_d = almostzero + array_sum($this->_getdparams());
             $error = false;
-            $res = array("error" => $error,"result" => $result["Task"]);
+            $res = array("error" => $error,"result" => $result["Task"],"all_d" => $all_d);
             $this->response->type('json');
             echo json_encode($res);
             exit;
@@ -402,8 +407,9 @@ class TasksController extends AppController {
                     $resultArray[] = $result['Task'];
                 }
                 if(!in_array(false, $errorArray)){
+                    $all_d = almostzero+array_sum($this->_getdparams());
                     $error = false;
-                    $res = array("error" => $error, "result" => $resultArray);
+                    $res = array("error" => $error, "result" => $resultArray, 'all_d' => $all_d);
                     $this->response->type('json');
                     echo json_encode($res);
                     exit;

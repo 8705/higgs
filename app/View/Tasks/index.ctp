@@ -1,7 +1,7 @@
-<p id="clean-bomb" class="btn btn-danger">done一括削除</p>
+<p id="clean-bomb" class="btn btn-danger">Bomb一括削除</p>
 <h2><?php echo __('User Name: '.h($username)); ?></h2>
 <div class="d-bar progress progress-striped">
-	<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo 100*$bar/dcapacity; ?>%">
+	<div id="d-bar" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo 100*$bar/dcapacity; ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo 100*$bar/dcapacity; ?>%">
 	</div>
 </div>
 <div class="row">
@@ -65,7 +65,7 @@
 				<span class="d_param"><?php echo h($task['Task']['d_param']); ?></span>
 				<span class="<?php echo h($task['Task']['status']=='notyet'?'edit-task':'disable-edit btn-disabled');?> btn btn-default">編集</span>
 				<!-- <span class="<?php echo h($task['Task']['status']=='notyet'?'divide-task':'disable-divide btn-disabled');?> btn btn-default">分割</span> -->
-				<span class="delete-task btn btn-default">削除</span>
+				<span class="delete-task"><span class="glyphicon glyphicon-trash"></span><b>削除</b></span>
 				<span class="sequence"><?php echo h($task['Task']['sequence']); ?></span>
 			</li>
 		<?php endforeach; ?>
@@ -85,7 +85,7 @@
 				<span class="d_param"><?php echo h($task['Task']['d_param']); ?></span>
 				<span class="<?php echo h($task['Task']['status']=='notyet'?'edit-task':'disable-edit btn-disabled');?> btn btn-default">編集</span>
 				<!-- <span class="<?php echo h($task['Task']['status']=='notyet'?'divide-task':'disable-divide btn-disabled');?> btn btn-default">分割</span> -->
-				<span class="delete-task btn btn-default">削除</span>
+				<span class="delete-task"><span class="glyphicon glyphicon-trash"></span><b>削除</b></span>
 				<span class="sequence"><?php echo h($task['Task']['sequence']); ?></span>
 			</li>
 		<?php endforeach; ?>
