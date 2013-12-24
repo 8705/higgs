@@ -21,8 +21,9 @@ function htmlAddElm(data) {
         '<span class="status">'+ data.result.status +'</span>\n'+
         '<span class="d_param">'+ data.result.d_param +'</span>\n'+
         '<span class="edit-task btn btn-default">編集</span>\n' +
-        '<span class="divide-task btn btn-default">分割</span>\n' +
-        '<span class="delete-task btn btn-default">削除</span>\n' +
+        // '<span class="divide-task btn btn-default">分割</span>\n' +
+        '<span class="delete-task"><span class="glyphicon glyphicon-trash"></span><b>削除</b></span>\n' +
+        '<span class="sequence" style="display:none;">0</span>\n' +
         '</li>'
     );
     return elm;
@@ -89,7 +90,6 @@ function deleteEmpty(addDay) {
     }
 }
 function removeChildUl(id) {
-    console.log('removeChildUlに渡ったid : '+id);
     //タスクを消去した結果children-ulの中身がからっぽなら、ulも消去
     if ( $('ul[data-children-ul-id='+id+']').find('li').length == 0) {
         $('ul[data-children-ul-id='+id+']').remove();
@@ -131,7 +131,6 @@ function appendToDay(start_time, elm) {
 
 //タスク描画処理 in success
 function addTask(data, textStatus) {
-    console.log(data);
     //バリデーションエラー
     if(data.error === true ) {
         //エラー内容取り出し $ エラーポップ
@@ -144,7 +143,6 @@ function addTask(data, textStatus) {
     }
     //正常時
     //dom生成
-
     var elm = htmlAddElm(data);
 
     //日付によって描画する場所を変える
@@ -229,10 +227,8 @@ $(function(){
 
                     //view表示時
                     if($('#task_'+data.result.id).parent().hasClass('children-ul')) {
-                        console.log('view表示だよ');
                         //子タスク内
                         if($('ul[data-children-ul-id=' + data.result.parent_id + ']').hasClass('children-ul')) {
-                            console.log('小タスク内だよ');
                             $.when($('#task_'+data.result.id).remove()).then(removeChildUl(data.result.parent_id));
                         }
                     //トップページ表示時
@@ -290,6 +286,11 @@ $(function(){
         var d_param = $('#task_'+taskId).find('.d_param').val();
 
         $('#task_' + taskId).removeClass('edit');
+        if ($('#task_' + taskId).parent().hasClass('children-ul')) {
+            var divideSpan = '<span class="divide-task btn btn-default">分割</span>\n';
+        } else {
+            var divideSpan = '';
+        }
         var elm = $(
             '<span class="check-task"><input type="checkbox"></span>\n'+
             '<span class="body"><a href="/tasks/view/' + taskId + '">'+ body +'</a></span>\n' +
@@ -297,8 +298,8 @@ $(function(){
             '<span class="status">'+ status +'</span>\n'+
             '<span class="d_param">'+ d_param +'</span>\n'+
             '<span class="edit-task btn btn-default">編集</span>\n' +
-            '<span class="divide-task btn btn-default">分割</span>\n' +
-            '<span class="delete-task btn btn-default">削除</span>'
+            divideSpan +
+            '<span class="delete-task"><span class="glyphicon glyphicon-trash"></span><b>削除</b></span>'
         );
 
         $('#task_' + taskId).empty().append(elm);
@@ -384,7 +385,7 @@ $(function(){
                     '<span class="d_param">'+ d_param +'</span>\n'+
                     '<span class="edit-task btn btn-default">編集</span>\n' +
                     '<span class="divide-task btn btn-default">分割</span>\n' +
-                    '<span class="delete-task btn btn-default">削除</span>'
+                    '<span class="delete-task"><span class="glyphicon glyphicon-trash"></span><b>削除</b></span>'
                 );
                 $('#task_'+taskId).empty().append(elm);
                 popUpPanel(true, 'サーバーエラーでタスクを変更出来ませんでした。');
@@ -464,7 +465,7 @@ $(function(){
 
         //親タスクのbtnを止める
         $('#task_'+taskId).find('.edit-task').replaceWith('<span class="disable-edit btn btn-default btn-disabled">編集</span>');
-        $('#task_'+taskId).find('.delete-task').replaceWith('<span class="disable-delete btn btn-default btn-disabled">削除</span>');
+        $('#task_'+taskId).find('.delete-task').fadeOut(1);
         makeDatePicker();
     })
 
@@ -472,7 +473,6 @@ $(function(){
     $(document).on('click', '.divide-more', function(e){
         cancelEvent(e);
         var taskId      = $(this).parent().parent().data('parent-id');
-        console.log(taskId);
         var elm = htmlDivideLi(taskId);
         $(this).parent().before(elm);
         $('ul[data-parent-id='+taskId+']').css("height", "100%");
@@ -482,12 +482,12 @@ $(function(){
             borderWidth : '1px',
         }, 200);
 
-        //分割ボタンを分割キャンセルボタンにする
-        $('#task_'+taskId).find('.divide-task').replaceWith('<span class="divide-cancel btn btn-default">キャンセル</span>');
+        // //分割ボタンを分割キャンセルボタンにする
+        // $('#task_'+taskId).find('.divide-task').replaceWith('<span class="divide-cancel btn btn-default">キャンセル</span>');
 
-        //親タスクのbtnを止める
-        $('#task_'+taskId).find('.edit-task').replaceWith('<span class="disable-edit btn btn-default btn-disabled">編集</span>');
-        $('#task_'+taskId).find('.delete-task').replaceWith('<span class="disable-delete btn btn-default btn-disabled">削除</span>');
+        // //親タスクのbtnを止める
+        // $('#task_'+taskId).find('.edit-task').replaceWith('<span class="disable-edit btn btn-default btn-disabled">編集</span>');
+        // $('#task_'+taskId).find('.delete-task').replaceWith('<span class="disable-delete btn btn-default btn-disabled">削除</span>');
         makeDatePicker();
     })
 
@@ -505,7 +505,7 @@ $(function(){
 
                     //親タスクのbtnを元に戻す
                     $('#task_'+taskId).find('.disable-edit').replaceWith('<span class="edit-task btn btn-default">編集</span>');
-                    $('#task_'+taskId).find('.disable-delete').replaceWith('<span class="delete-task btn btn-default">削除</span>');
+                    $('#task_'+taskId).find('.delete-task').fadeIn(100);
                 }
             });
         });
@@ -528,7 +528,7 @@ $(function(){
 
         //親タスクのbtnを元に戻す
         $('#task_'+taskId).find('.disable-edit').replaceWith('<span class="edit-task btn btn-default">編集</span>');
-        $('#task_'+taskId).find('.disable-delete').replaceWith('<span class="delete-task btn btn-default">削除</span>');
+        $('#task_'+taskId).find('.delete-task').fadeIn(100);
     })
 
     //Divide push
@@ -537,12 +537,18 @@ $(function(){
         var parentId      = $(this).parent().parent().data('parent-id');
         var divideArr   = [];
         var divideCount = Number($('ul[data-parent-id='+parentId+']').find('.li-divide').length);
+<<<<<<< HEAD
         //var brotherCount = Number($('ul[data-children-ul-id='+parentId+']').find('li').length);
         //var parent_d    = Number($('#task_'+parentId).find('.d_param').text());
         //var d_param   = Math.ceil(parent_d / (divideCount + brotherCount));
         console.log('divideCount : '+divideCount);
         //console.log('brotherCount : '+brotherCount);
         //console.log('influence : '+influence);
+=======
+        var brotherCount = Number($('ul[data-children-ul-id='+parentId+']').find('li').length);
+        var parent_d    = Number($('#task_'+parentId).find('.d_param').text());
+        var influence   = Math.ceil(parent_d / (divideCount + brotherCount));
+>>>>>>> 064eb3c588d0962aacb64b3c5ae03599703c3174
 
         for ( var i = 0; i <= divideCount - 1; i++) {
             divideArr.push(
@@ -569,8 +575,10 @@ $(function(){
             },
             success : function(data) {
                 console.log('success');
+                console.log(data);
                 //バリデーションエラー
                 if(data.error === true ) {
+                    // console.log('error');
                     //エラー内容取り出し $ エラーポップ
                     for (i in data.message) {
                         //ポップアップ通知
@@ -602,7 +610,7 @@ $(function(){
                         '<span class="d_param">'+ data.result[i].d_param +'</span>\n'+
                         '<span class="edit-task btn btn-default">編集</span>\n' +
                         '<span class="divide-task btn btn-default">分割</span>\n' +
-                        '<span class="delete-task btn btn-default">削除</span>\n' +
+                        '<span class="delete-task"><span class="glyphicon glyphicon-trash"></span><b>削除</b></span>\n' +
                         '</li>'
                     );
                     $('#task_'+data.result[i].id).fadeIn('slow');
@@ -618,11 +626,15 @@ $(function(){
 
                 //親タスクのbtnを元に戻す
                 $('#task_'+parentId).find('.disable-edit').replaceWith('<span class="edit-task btn btn-default">編集</span>');
-                $('#task_'+parentId).find('.disable-delete').replaceWith('<span class="delete-task btn btn-default">削除</span>');
+                $('#task_'+parentId).find('.disable-delete').replaceWith('<span class="delete-task"><span class="glyphicon glyphicon-trash"></span><b>削除</b></span>');
             },
             error : function(){
+<<<<<<< HEAD
                 console.log('error');
                 //エラーまたかく
+=======
+                popUpPanel(true, 'サーバー');
+>>>>>>> 064eb3c588d0962aacb64b3c5ae03599703c3174
             },
             complete : function() {
                 //バリデーションエラー時、ボタン戻す
@@ -707,4 +719,111 @@ $('#task_'+data.result.id).fadeIn('slow');*/
         //     });
         // })
     });
+
+    //sortable
+    $('.sort-list').sortable({
+        axis : 'y',
+        opacity : 0.7,
+        cursor : 'move',
+        // grid : [30,30],
+        update : function(){
+            $.ajax({
+                url : '/tasks/sort/manually',
+                type : 'POST',
+                timeout : 5000,
+                data : {
+                    sequence : $(this).sortable('serialize')
+                },
+                beforeSend : function() {
+                    //全ての編集中のタスクを元に戻す。
+                },
+                success : function() {
+
+                },
+                error : function() {
+
+                },
+                complete : function() {
+
+                }
+            })
+        }
+    });
+
+    $('.sort-link').click(function(e){
+        cancelEvent(e);
+        var day = $(this).attr('href').substr(14);
+        $.ajax({
+            url : $(this).attr('href'),
+            type : 'POST',
+            timeout : 5000,
+            beforeSend : function() {
+                //全ての編集中のタスクを元に戻す。
+            },
+            success : function(data) {
+                var data = $.parseJSON(data);
+                $('#task-list-'+day).html('');
+                for(var i in data.result) {
+                    $('#task-list-'+day).append(
+                        '<li id="task_'+data.result[i].id+'" class="list-group-item notyet" style="display:none;" data-task-id="'+ data.result[i].id +'">\n' +
+                        '<span class="check-task"><input type="checkbox"></span>\n'+
+                        '<span class="body"><a href="/tasks/view/' + data.result[i].id + '">'+ data.result[i].body +'</a></span>\n' +
+                        '<span class="start_time">'+ data.result[i].start_time +'</span>\n'+
+                        '<span class="status">notyet</span>\n'+
+                        '<span class="d_param">'+ data.result[i].d_param +'</span>\n'+
+                        '<span class="edit-task btn btn-default">編集</span>\n' +
+                        '<span class="delete-task"><span class="glyphicon glyphicon-trash"></span><b>削除</b></span>\n' +
+                        '<span class="sequence">' + data.result[i].sequence + '</span>\n' +
+                        '</li>'
+                    )
+                }
+                $('#task-list-' +day+' li').fadeIn(150);
+
+            },
+            error : function() {
+
+            },
+            complete : function() {
+
+            }
+        })
+    });
+
+    //ソートをajaxで送る関数
+    function sortAjax(url, data) {
+        $.ajax({
+            url : '/tasks/sort/d/today',
+            type : 'POST',
+            timeout : 5000,
+            beforeSend : function() {
+                //全ての編集中のタスクを元に戻す。
+            },
+            success : function(data) {
+                var data = $.parseJSON(data);
+                $('#task-list-today').html('');
+                for(var i in data.result) {
+                    $('#task-list-today').append(
+                        '<li id="task_'+data.result[i].id+'" class="list-group-item notyet" style="display:none;" data-task-id="'+ data.result[i].id +'">\n' +
+                        '<span class="check-task"><input type="checkbox"></span>\n'+
+                        '<span class="body"><a href="/tasks/view/' + data.result[i].id + '">'+ data.result[i].body +'</a></span>\n' +
+                        '<span class="start_time">'+ data.result[i].start_time +'</span>\n'+
+                        '<span class="status">notyet</span>\n'+
+                        '<span class="d_param">'+ data.result[i].d_param +'</span>\n'+
+                        '<span class="edit-task btn btn-default">編集</span>\n' +
+                        '<span class="delete-task"><span class="glyphicon glyphicon-trash"></span><b>削除</b></span>\n' +
+                        '<span class="sequence">' + data.result[i].sequence + '</span>\n' +
+                        '</li>'
+                    )
+                }
+                $('#task-list-today li').fadeIn(150);
+
+            },
+            error : function() {
+
+            },
+            complete : function() {
+
+            }
+        })
+    }
 });

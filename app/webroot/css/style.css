@@ -77,7 +77,9 @@ body {
 	padding-top: 50px;
 }
 
-/* 通知パネル */
+/*********************************
+    通知パネル
+**********************************/
 #noticePanel {
     width:100%;
     display: none;
@@ -121,6 +123,27 @@ body {
 }
 .task-list li .status {
     width: 45px;
+}
+/****** ボタン *******************/
+/* ボタン全般 */
+.btn {
+    font-size:12px;
+}
+/* deleteボタン */
+.delete-task {
+    font-size: 12px;
+    color: #CCC;
+    cursor: pointer;
+    position: absolute;
+    right: 10px;
+    bottom: 5px;
+}
+.delete-task:hover {
+    color: #6f6f6f;
+}
+.delete-task span {
+    margin-right: 2px;
+    font-size: 10px;
 }
 
 /* チェックボックスの挙動 */
@@ -197,9 +220,12 @@ li.done span.body a {
 }
 
 
-/*********
-tmp
-**********/
+/****************************
+    [tmp] 開発中一時的に
+****************************/
 .task-list ul {
     margin-left : 50px;
+}
+li.delete {
+    background-color:#ccc;
 }

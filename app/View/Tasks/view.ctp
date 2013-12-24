@@ -49,7 +49,8 @@
 			<span class="d_param"><?php echo h($task['Task']['d_param']); ?></span>
 			<span class="<?php echo h($task['Task']['status']=='notyet'?'edit-task':'disable-edit btn-disabled');?> btn btn-default">編集</span>
 			<span class="<?php echo h($task['Task']['status']=='notyet'?'divide-task':'disable-divide btn-disabled');?> btn btn-default">分割</span>
-			<span class="delete-task btn btn-default">削除</span>
+			<!-- <span class="delete-task btn btn-default">削除</span> -->
+			<span class="delete-task"><span class="glyphicon glyphicon-trash"></span><b>削除</b></span>
 		</li>
 			<?php elseif($indent == 1): ?>
 				<ul class="children-ul" data-children-ul-id="<?php echo h($task['Task']['parent_id']); ?>">
@@ -61,7 +62,8 @@
 			<span class="d_param"><?php echo h($task['Task']['d_param']); ?></span>
 			<span class="<?php echo h($task['Task']['status']=='notyet'?'edit-task':'disable-edit btn-disabled');?> btn btn-default">編集</span>
 			<span class="<?php echo h($task['Task']['status']=='notyet'?'divide-task':'disable-divide btn-disabled');?> btn btn-default">分割</span>
-			<span class="delete-task btn btn-default">削除</span>
+			<!-- <span class="delete-task btn btn-default">削除</span> -->
+			<span class="delete-task"><span class="glyphicon glyphicon-trash"></span><b>削除</b></span>
 		</li>
 			<?php elseif($indent < 0): ?>
 				<?php echo str_repeat('</ul>', -$indent) ?>
@@ -73,7 +75,8 @@
 			<span class="d_param"><?php echo h($task['Task']['d_param']); ?></span>
 			<span class="<?php echo h($task['Task']['status']=='notyet'?'edit-task':'disable-edit btn-disabled');?> btn btn-default">編集</span>
 			<span class="<?php echo h($task['Task']['status']=='notyet'?'divide-task':'disable-divide btn-disabled');?> btn btn-default">分割</span>
-			<span class="delete-task btn btn-default">削除</span>
+			<!-- <span class="delete-task btn btn-default">削除</span> -->
+			<span class="delete-task"><span class="glyphicon glyphicon-trash"></span><b>削除</b></span>
 		</li>
 			<?php endif; ?>
 			<?php $prev = $task['Task']['indent']; ?>
