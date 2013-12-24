@@ -28,12 +28,18 @@ class BombController extends AppController {
         }
     }
 
-    public function _influence($id) {
+    public function _myinfluence($id) {
         $parent = $this->Task->getParentNode($id);
-
         if(!$parent) return 1;
+        return $this->_returninfluence($parent['Task']['id']);
+    }
 
-        $count = $this->Task->childCount($parent['Task']['id'],true);
+    public function _influencefromparent($id) {
+        return $this->_returninfluence($id);
+    }
+
+    public function _returninfluence($id) {
+        $count = $this->Task->childCount($id,true);
         $options = array('conditions'=>array('Task.id'=>$parent['Task']['id']),'fields'=>'influence');
         $influence_parent = $this->Task->find('list',$options);
         return $influence_parent[$parent['Task']['id']]/$count;
@@ -46,7 +52,7 @@ class BombController extends AppController {
             $allChildren = $this->Task->children($parents[0]['Task']['id'], null, null, $order='lft');
             array_unshift($allChildren, $parents[0]);
             foreach($allChildren as $child) { 
-                $influence = $this->_influence($child['Task']['id']);
+                $influence = $this->_myinfluence($child['Task']['id']);
                 $this->Task->id = $child['Task']['id'];
                 $this->Task->saveField('influence', $influence);
             }
