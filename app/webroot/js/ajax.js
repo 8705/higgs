@@ -14,7 +14,7 @@ function cancelEvent(e) {
 //分割用タスクのhtml部品
 function htmlAddElm(data) {
     var elm =$(
-        '<li id="task_'+data.result.id+'" class="list-group-item notyet" style="display:none;" data-task-id="'+ data.result.id +'">\n' +
+        '<li id="task_'+data.result.id+'" class="list-group-item notyet" style="display:none;background-color:'+getHsl(data.result.d_param, data.all_d)+'" data-task-id="'+ data.result.id +'">\n' +
         '<span class="check-task"><input type="checkbox"></span>\n'+
         '<span class="body"><a href="/tasks/view/' + data.result.id + '">'+ data.result.body +'</a></span>\n' +
         '<span class="start_time">'+ data.result.start_time +'</span>\n'+
@@ -63,6 +63,10 @@ function htmlEmptyElm() {
         '<li class="empty list-group-item clearfix">タスクがありません</li>'
     );
     return elm;
+}
+function getHsl(d_param, all_d) {
+    var amount = 100 - 70 * d_param / all_d;
+    return 'hsl(0,100%,'+amount+'%);';
 }
 
 function makeDatePicker() {
@@ -236,7 +240,7 @@ $(function(){
                         $.when($(this).remove()).then(createEmpty());
                     }
                 });
-
+                ajastDBar(data.all_d);
             },
             error : function() {
                 popUpPanel(true, 'サーバーエラーでタスクを消去できませんでした');
@@ -426,6 +430,7 @@ $(function(){
             },
             success:function(data){
                 data = $.parseJSON(data);
+                //チェックを外した時
                 if (data.result.status == 'notyet') {
                     $('#task_'+taskId).removeClass('done').addClass('notyet');
                     $('#task_'+taskId).find('.status').text(data.result.status);
@@ -433,6 +438,7 @@ $(function(){
                     //親タスクのbtnを元に戻す
                     $('#task_'+taskId).find('.disable-edit').replaceWith('<span class="edit-task btn btn-default">編集</span>');
                     $('#task_'+taskId).find('.disable-divide').replaceWith('<span class="divide-task btn btn-default">分割</span>');
+                //チェックを入れた時
                 } else if (data.result.status == 'done'){
                     $('#task_'+taskId).removeClass('notyet').addClass('done');
                     $('#task_'+taskId).find('.status').text(data.result.status);
@@ -441,12 +447,23 @@ $(function(){
                     $('#task_'+taskId).find('.edit-task').replaceWith('<span class="disable-edit btn btn-default btn-disabled">編集</span>');
                     $('#task_'+taskId).find('.divide-task').replaceWith('<span class="disable-divide btn btn-default btn-disabled">分割</span>');
                 }
+                ajastDBar(data.all_d);
+                // console.log(data.all_d);
             },
             complete : function() {
                 $('#task_' + taskId +' .check-task').html('<input type="checkbox" '+ checked +'/>');
             },
         });
     });
+    function ajastDBar(amount) {
+        var d = (100 * amount) / 1000;
+        $('#d-bar').animate({
+            width : d+"%"
+        },{
+            'duration' : 500,
+            'easing' : 'linear'
+        })
+    }
 
     //Divide Task
     $(document).on('click', '.divide-task', function(e){
@@ -591,7 +608,7 @@ $(function(){
                 for(var i in data.result) {
                     $('ul[data-children-ul-id='+data.result[0].parent_id+']')
                     .append(
-                        '<li id="task_'+data.result[i].id+'" class="list-group-item notyet" style="display:none;" data-task-id="'+ data.result[i].id +'">\n' +
+                        '<li id="task_'+data.result[i].id+'" class="list-group-item notyet" style="display:none;background-color:'+getHsl(data.result[i].d_param, data.all_d)+'" data-task-id="'+ data.result[i].id +'">\n' +
                         '<span class="check-task"><input type="checkbox"></span>\n'+
                         '<span class="body"><a href="/tasks/view/' + data.result[i].id + '">'+ data.result[i].body +'</a></span>\n' +
                         '<span class="start_time">'+ data.result[i].start_time +'</span>\n'+
@@ -749,7 +766,7 @@ $('#task_'+data.result.id).fadeIn('slow');*/
                 $('#task-list-'+day).html('');
                 for(var i in data.result) {
                     $('#task-list-'+day).append(
-                        '<li id="task_'+data.result[i].id+'" class="list-group-item notyet" style="display:none;" data-task-id="'+ data.result[i].id +'">\n' +
+                        '<li id="task_'+data.result[i].id+'" class="list-group-item notyet" style="display:none;background-color:'+getHsl(data.result[i].d_param, data.all_d)+'" data-task-id="'+ data.result[i].id +'">\n' +
                         '<span class="check-task"><input type="checkbox"></span>\n'+
                         '<span class="body"><a href="/tasks/view/' + data.result[i].id + '">'+ data.result[i].body +'</a></span>\n' +
                         '<span class="start_time">'+ data.result[i].start_time +'</span>\n'+
@@ -810,4 +827,66 @@ $('#task_'+data.result.id).fadeIn('slow');*/
             }
         })
     }
+
+    //ポップアップ操作中にパネル以外をクリック時、パネル消す
+    var edit_flg = false;  //1:true パネル出現、2:false パネル無し
+    $('body').click(function(){
+        console.log(edit_flg);
+        if(edit_flg) {
+            $('#calendarPanel').fadeOut(100, function(){
+                $(this).remove();
+            })
+        }
+        edit_flg = false;
+    })
+
+    //カレンダー
+    $('.calendartask').click(function(e){
+        cancelEvent(e);
+        var id = $(this).data('task-id');
+        $.ajax({
+            url : '/calendars/status/'+id,
+            type : 'POST',
+            dataType : 'json',
+            timeout  : 5000,
+            data : {
+
+            },
+            beforeSend : function() {
+                $('#calendarPanel').remove();
+                edit_flg = true;
+            },
+            success : function(data) {
+                $('body').append('<div id="calendarPanel"></div>');
+                $('#calendarPanel').append(
+                    '<div class="body-area">\n'+
+                    '<p><span><input type="checkbox" /></span><span class="body">'+data.result.body+'</span></p>\n'+
+                    '<p class="task-date"><span>'+data.result.start_time+'</span></p>\n'+
+                    '</div>\n'+
+                    '<div class="action-area clearfix">\n'+
+                    '<span class="edit-cal-task action-icon"><span class="glyphicon glyphicon-edit"></span>編集</span>\n'+
+                    '<span class="delete-cal-task action-icon"><span class="glyphicon glyphicon-trash"></span>削除</span>\n'+
+                    '</div>\n'+
+                    '\n'+
+                    '<a class="cal-panel-cancel"><span class="glyphicon glyphicon-remove"></span></a>\n'
+                );
+            },
+            error : function(XMLHttpRequest, textStatus, errorThrown) {
+
+            },
+            complete : function() {
+
+            },
+        });
+    })
+
+    //Cal Delete Task
+    $(document).on('click', '.cal-panel-cancel',function(e){
+        cancelEvent(e);
+        $('#calendarPanel').fadeOut(100, function(){
+            $(this).remove();
+        })
+        edit_flg = false;
+        console.log(edit_flg);
+    })
 });

@@ -6,7 +6,36 @@ class CalendarsController extends AppController {
 
 	public $uses = array('Task');
 	public $helpers = array('Calendar');
-	public $components = array('Auth');
+	public $components = array(
+		'Auth',
+		'Security' => array(
+			'csrfUseOnce' => false,  //CSRFトークンを使いまわす
+			'csrfExpires' => '+1 hour'  //トークンの持続時間を1h延長
+		)
+	);
+	public function beforeFilter() {
+		parent::beforeFilter();
+		//$this->Auth->deny();
+		//全てのアクションでログインユーザー情報を格納する$authorを定義
+		$this->set('author', $this->Auth->user());
+
+		//CSRF対策用にSecurityComponentが生成したトークンを取得
+		$token = $this->Session->read('_Token.key');
+		$this->set('token', $token);
+
+		//SecurityComponentのCSRFチェックを無効
+		if ($this->params['action'] == 'status') {
+             $this->Security->csrfCheck = false;
+             $this->Security->validatePost = false;
+
+			//token確認
+			if ( !isset($_SERVER['HTTP_X_CSRF_TOKEN'])
+				|| !strtolower($_SERVER['HTTP_X_CSRF_TOKEN']) == $token) { //トークン
+				echo 'token error';
+                throw new NotFoundException(__('Token error'));
+			}
+		}
+	}
 
 	public function viewcalendar() {
 		if(isset($this->params['url']['date'])) {
@@ -50,6 +79,41 @@ class CalendarsController extends AppController {
 		$this->set('id', $id);
 		$this->set('body', $body);
 		$this->set('selectday', $date);
+	}
+
+	//task-idからタスクレコードを引っ張って返す
+	public function status($id) {
+		$this->Task->id = $id;
+		//Ajax or not
+        if (!$this->request->is('ajax')) {
+            throw new NotFoundException(__('Don\'t ajax!'));
+        }
+        $this->autoRender = false;   // 自動描画をさせない
+
+        if (!$this->Task->exists($id)) {
+            throw new NotFoundException(__('Non exist $id'));
+        }
+        $row = $this->Task->find('first',array(
+        	'conditions' => array(
+        		'Task.id' => $id,
+        	),
+        	'recursive' => 1,
+        ));
+        if($row) {
+        	$result = $row['Task'];
+        	$error = false;
+            $res = array("error" => $error,"result" => $result);
+            $this->response->type('json');
+            echo json_encode($res);
+            exit;
+        } else  {
+        	$error = true;
+            $message = 'データ取得失敗';
+            $res = $res = compact('error', 'message');
+            $this->response->type('json');
+            echo json_encode($res);
+            exit;
+        }
 	}
 
 }

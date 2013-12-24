@@ -12,12 +12,12 @@ class CalendarHelper extends AppHelper {
 
 		$cal  = "<table class=\"table calendar\">";
 		$cal .= "<tr>";
-		$cal .= 
+		$cal .=
 			"<th>".
 				$this->Html->link(__('←'), array('action' => $this->action, '?'=>array('date'=>$prev, 'task_id'=>$id)))
 			."</th>";
 		$cal .= "<th colspan=\"5\">".h($yyyy)."年".h($mm)."月</th>";
-		$cal .= 
+		$cal .=
 			"<th>".
 				$this->Html->link(__('→'), array('action' => $this->action, '?'=>array('date'=>$next, 'task_id'=>$id)))
 			."</th>";
@@ -41,7 +41,7 @@ class CalendarHelper extends AppHelper {
 						if(array_key_exists((int)$mm, $task[(int)$yyyy])) {
 							if(array_key_exists($d, $task[(int)$yyyy][(int)$mm])) {
 								foreach($task[(int)$yyyy][(int)$mm][$d] as $t) {
-									$cal .= "<p class=\"calendartask\">".h($t['body'])."</p>";
+									$cal .= "<p class=\"calendartask ".h($t['status'])."\" id=\"task_".h($t['id'])."\" data-task-id=\"".h($t['id'])."\">".h($t['body'])."</p>";
 								}
 							}
 						}
