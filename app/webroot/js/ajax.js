@@ -90,7 +90,6 @@ function deleteEmpty(addDay) {
     }
 }
 function removeChildUl(id) {
-    console.log('removeChildUlに渡ったid : '+id);
     //タスクを消去した結果children-ulの中身がからっぽなら、ulも消去
     if ( $('ul[data-children-ul-id='+id+']').find('li').length == 0) {
         $('ul[data-children-ul-id='+id+']').remove();
@@ -132,7 +131,6 @@ function appendToDay(start_time, elm) {
 
 //タスク描画処理 in success
 function addTask(data, textStatus) {
-    console.log(data);
     //バリデーションエラー
     if(data.error === true ) {
         //エラー内容取り出し $ エラーポップ
@@ -230,10 +228,8 @@ $(function(){
 
                     //view表示時
                     if($('#task_'+data.result.id).parent().hasClass('children-ul')) {
-                        console.log('view表示だよ');
                         //子タスク内
                         if($('ul[data-children-ul-id=' + data.result.parent_id + ']').hasClass('children-ul')) {
-                            console.log('小タスク内だよ');
                             $.when($('#task_'+data.result.id).remove()).then(removeChildUl(data.result.parent_id));
                         }
                     //トップページ表示時
@@ -291,6 +287,11 @@ $(function(){
         var d_param = $('#task_'+taskId).find('.d_param').val();
 
         $('#task_' + taskId).removeClass('edit');
+        if ($('#task_' + taskId).parent().hasClass('children-ul')) {
+            var divideSpan = '<span class="divide-task btn btn-default">分割</span>\n';
+        } else {
+            var divideSpan = '';
+        }
         var elm = $(
             '<span class="check-task"><input type="checkbox"></span>\n'+
             '<span class="body"><a href="/tasks/view/' + taskId + '">'+ body +'</a></span>\n' +
@@ -298,7 +299,7 @@ $(function(){
             '<span class="status">'+ status +'</span>\n'+
             '<span class="d_param">'+ d_param +'</span>\n'+
             '<span class="edit-task btn btn-default">編集</span>\n' +
-            '<span class="divide-task btn btn-default">分割</span>\n' +
+            divideSpan +
             '<span class="delete-task btn btn-default">削除</span>'
         );
 
@@ -473,7 +474,6 @@ $(function(){
     $(document).on('click', '.divide-more', function(e){
         cancelEvent(e);
         var taskId      = $(this).parent().parent().data('parent-id');
-        console.log(taskId);
         var elm = htmlDivideLi(taskId);
         $(this).parent().before(elm);
         $('ul[data-parent-id='+taskId+']').css("height", "100%");
@@ -541,9 +541,6 @@ $(function(){
         var brotherCount = Number($('ul[data-children-ul-id='+parentId+']').find('li').length);
         var parent_d    = Number($('#task_'+parentId).find('.d_param').text());
         var influence   = Math.ceil(parent_d / (divideCount + brotherCount));
-        console.log('divideCount : '+divideCount);
-        console.log('brotherCount : '+brotherCount);
-        console.log('influence : '+influence);
 
         for ( var i = 0; i <= divideCount - 1; i++) {
             divideArr.push(
@@ -740,7 +737,6 @@ $('#task_'+data.result.id).fadeIn('slow');*/
     $('.sort').click(function(e){
         cancelEvent(e);
         var day = $(this).attr('href').substr(14);
-        console.log(day);
         $.ajax({
             url : $(this).attr('href'),
             type : 'POST',
@@ -750,7 +746,6 @@ $('#task_'+data.result.id).fadeIn('slow');*/
             },
             success : function(data) {
                 var data = $.parseJSON(data);
-                console.log(data);
                 $('#task-list-'+day).html('');
                 for(var i in data.result) {
                     $('#task-list-'+day).append(
@@ -789,7 +784,6 @@ $('#task_'+data.result.id).fadeIn('slow');*/
             },
             success : function(data) {
                 var data = $.parseJSON(data);
-                console.log(data);
                 $('#task-list-today').html('');
                 for(var i in data.result) {
                     $('#task-list-today').append(
