@@ -93,6 +93,15 @@ function deleteEmpty(addDay) {
         $('#task-list-' + addDay+' .empty').remove();
     }
 }
+//ulの中身が空になると空タスクを挿入する
+function createEmpty() {
+    var arr = new Array('today', 'tomorrow', 'dayaftertomorrow');
+    for(i in arr) {
+        if($('#task-list-'+arr[i]).find('li').length == 0) {
+            $('#task-list-'+arr[i]).append(htmlEmptyElm());
+        }
+    }
+}
 function removeChildUl(id) {
     //タスクを消去した結果children-ulの中身がからっぽなら、ulも消去
     if ( $('ul[data-children-ul-id='+id+']').find('li').length == 0) {
@@ -197,16 +206,6 @@ $(function(){
             $('#TaskIndexForm .submit input').removeAttr('disabled');
         }
     })
-
-    //ulの中身が空になると空タスクを挿入する
-    function createEmpty() {
-        var arr = new Array('today', 'tomorrow', 'dayaftertomorrow');
-        for(i in arr) {
-            if($('#task-list-'+arr[i]).find('li').length == 0) {
-                $('#task-list-'+arr[i]).append(htmlEmptyElm());
-            }
-        }
-    }
 
     //Delete Task
     $(document).on('click','.delete-task', function(e){
@@ -837,15 +836,26 @@ $('#task_'+data.result.id).fadeIn('slow');*/
 
     //ポップアップ操作中にパネル以外をクリック時、パネル消す
     var edit_flg = false;  //1:true パネル出現、2:false パネル無し
-    $('body').click(function(){
-        console.log(edit_flg);
-        if(edit_flg) {
-            $('#calendarPanel').fadeOut(100, function(){
-                $(this).remove();
-            })
-        }
+    $('#calendarPanel').hover(function(){
+        edit_flg = true;
+    }, function(){
         edit_flg = false;
     })
+
+    $('body').mouseup(function(){
+        if(!edit_flg) {
+            $('#calendarPanel').fadeOut(100,function(){
+                $(this).html('');
+            });
+        }
+    })
+    //マウスの動きを追う
+    var x;
+    var y;
+    $("html").mousemove(function(e){
+        x = e.clientX;
+        y = e.clientY;
+    });
 
     //カレンダー
     $('.calendartask').click(function(e){
@@ -857,14 +867,13 @@ $('#task_'+data.result.id).fadeIn('slow');*/
             dataType : 'json',
             timeout  : 5000,
             data : {
-
             },
             beforeSend : function() {
-                $('#calendarPanel').remove();
-                edit_flg = true;
+                $('#calendarPanel').fadeOut(100,function(){
+            $(this).html('');
+        });
             },
             success : function(data) {
-                $('body').append('<div id="calendarPanel"></div>');
                 $('#calendarPanel').append(
                     '<div class="body-area">\n'+
                     '<p><span><input type="checkbox" /></span><span class="body">'+data.result.body+'</span></p>\n'+
@@ -877,6 +886,24 @@ $('#task_'+data.result.id).fadeIn('slow');*/
                     '\n'+
                     '<a class="cal-panel-cancel"><span class="glyphicon glyphicon-remove"></span></a>\n'
                 );
+                var windowWidth = $(window).width();
+                var windowHeight = $(window).height();
+                var panelWidth = $('#calendarPanel').width();
+                var panelHeight = $('#calendarPanel').height();
+                if((50 + panelHeight + 40) > y) { //パネルが上にはみでちゃうパターン
+                    y += 40;
+                } else {
+                    y -= (40 + panelHeight);
+                }
+                if((20 + (panelWidth / 2)) > x) { //パネルが左にはみでちゃうパターン
+                    x += 20;
+                } else if ((windowWidth - (panelWidth / 2)) < x) {
+                    x -= (panelWidth + 20);
+                } else {
+                    x -= (panelWidth / 2);
+                }
+                $('#calendarPanel').css({'top':y+'px', 'left':x+'px'});
+                $('#calendarPanel').fadeIn(100);
             },
             error : function(XMLHttpRequest, textStatus, errorThrown) {
 
@@ -890,10 +917,8 @@ $('#task_'+data.result.id).fadeIn('slow');*/
     //Cal Delete Task
     $(document).on('click', '.cal-panel-cancel',function(e){
         cancelEvent(e);
-        $('#calendarPanel').fadeOut(100, function(){
-            $(this).remove();
-        })
-        edit_flg = false;
-        console.log(edit_flg);
+        $('#calendarPanel').fadeOut(100,function(){
+            $(this).html('');
+        });
     })
 });
