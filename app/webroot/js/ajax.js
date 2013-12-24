@@ -554,9 +554,12 @@ $(function(){
         var parentId      = $(this).parent().parent().data('parent-id');
         var divideArr   = [];
         var divideCount = Number($('ul[data-parent-id='+parentId+']').find('.li-divide').length);
-        var brotherCount = Number($('ul[data-children-ul-id='+parentId+']').find('li').length);
-        var parent_d    = Number($('#task_'+parentId).find('.d_param').text());
-        var influence   = Math.ceil(parent_d / (divideCount + brotherCount));
+        //var brotherCount = Number($('ul[data-children-ul-id='+parentId+']').find('li').length);
+        //var parent_d    = Number($('#task_'+parentId).find('.d_param').text());
+        //var d_param   = Math.ceil(parent_d / (divideCount + brotherCount));
+        console.log('divideCount : '+divideCount);
+        //console.log('brotherCount : '+brotherCount);
+        //console.log('influence : '+influence);
 
         for ( var i = 0; i <= divideCount - 1; i++) {
             divideArr.push(
@@ -564,7 +567,8 @@ $(function(){
                     parent_id   : parentId,
                     body        : $('ul[data-parent-id='+parentId+']').find('.li-divide').eq(i).find('.body').val(),
                     start_time  : $('ul[data-parent-id='+parentId+']').find('.li-divide').eq(i).find('.start_time').val(),
-                    d_param     : influence
+                    //d_param     : d_param
+                    //influence     : influence
                 }
             )
         }
@@ -581,6 +585,7 @@ $(function(){
                 $('ul[data-parent-id=' + parentId +'] .divide-push').html('<img src="/img/ajax-loader.gif" alt="" />');
             },
             success : function(data) {
+                console.log('success');
                 console.log(data);
                 //バリデーションエラー
                 if(data.error === true ) {
@@ -635,6 +640,8 @@ $(function(){
                 $('#task_'+parentId).find('.disable-delete').replaceWith('<span class="delete-task"><span class="glyphicon glyphicon-trash"></span><b>削除</b></span>');
             },
             error : function(){
+                console.log('error');
+                //エラーまたかく
                 popUpPanel(true, 'サーバー');
             },
             complete : function() {

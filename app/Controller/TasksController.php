@@ -193,8 +193,9 @@ class TasksController extends AppController {
         if (!$this->Task->exists($id)) {
             throw new NotFoundException(__('Non exist $id'));
         }
-
+        
         $json = json_decode($this->request->data['json'], true);
+
         // debug($json);
         $errorArray = array();
         $resultArray = array();
@@ -216,6 +217,18 @@ class TasksController extends AppController {
             ));
             $resultArray[]      = $row['Task'];
         }
+
+        // $bomb = new BombController;
+        // $influence = $bomb->_influencefromparent($id);
+        // $children = $this->Task->children($id);
+        // foreach($children as $i) {
+        //     $child[] = $i['Task']['id'];
+        // }
+        // $this->Task->updateAll(
+        //     array('Task.influence' => $influence),
+        //     array('Task.id' => $child)
+        // );
+
         //save OK
         if(!in_array(false, $errorArray)) {
             $all_d = almostzero+array_sum($this->_getdparams());
