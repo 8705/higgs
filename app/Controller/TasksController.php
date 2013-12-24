@@ -222,7 +222,12 @@ class TasksController extends AppController {
             echo json_encode($res);
             exit;
         } else {
-
+            $error = true;
+            $message = $this->Task->validationErrors;
+            $res = $res = compact('error', 'message');
+            $this->response->type('json');
+            echo json_encode($res);
+            exit;
         }
     }
 

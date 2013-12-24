@@ -1,38 +1,39 @@
-<div id="noticePanel"></div>
 <p id="clean-bomb" class="btn btn-danger">done一括削除</p>
 <h2><?php echo __('User Name: '.h($username)); ?></h2>
 <div class="d-bar progress progress-striped">
 	<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo 100*$bar/dcapacity; ?>%">
 	</div>
 </div>
-<div class="tasks form">
-	<?php echo $this->Form->create('Task'); ?>
-		<fieldset>
-			<legend><?php echo __('Add Task'); ?></legend>
-			<?php
-				echo $this->Form->input('user_id', array('type'=>'hidden', 'default' => $author['id']));//$user_idから$authorに変更
-				echo $this->Form->input('body');
-				echo $this->Form->input('start_time', array('type'=>'text', 'class' => 'datepicker'));
-			?>
-			<?php
-				//ajax送信用設定
-				echo $this->Js->submit('Submit', array(
-					'url'		=> 'add',
-					'type'		=> 'json',
-					'success'	=> 'addTask(data, textStatus)',
-					'error'		=> 'popUpPanel(true, "サーバーエラー")',
-					'async'		=> true,
-					'class' 	=> 'btn btn-primary'
-					)
-				);
-			?>
-		</fieldset>
-	<?php echo $this->Form->end(); ?>
+<div class="row">
+	<div class="tasks form col-md-12">
+		<?php echo $this->Form->create('Task'); ?>
+			<fieldset>
+				<legend><?php echo __('Add Task'); ?></legend>
+				<?php
+					echo $this->Form->input('user_id', array('type'=>'hidden', 'default' => $author['id']));//$user_idから$authorに変更
+					echo $this->Form->input('body');
+					echo $this->Form->input('start_time', array('type'=>'text', 'class' => 'datepicker'));
+				?>
+				<?php
+					//ajax送信用設定
+					echo $this->Js->submit('Submit', array(
+						'url'		=> 'add',
+						'type'		=> 'json',
+						'success'	=> 'addTask(data, textStatus)',
+						'error'		=> 'popUpPanel(true, "サーバーエラー")',
+						'async'		=> true,
+						'class' 	=> 'btn btn-primary'
+						)
+					);
+				?>
+			</fieldset>
+		<?php echo $this->Form->end(); ?>
+	</div>
 </div>
 <div class="row clearfix">
 	<div id="tasks" class="index col-md-8 column">
-		<h2>今日</h2><a class="btn btn-success sort" href="/tasks/sort/d/today">D値並べ替え</a>
-		<ul class="list-group task-list" id="task-list-today">
+		<h2>今日</h2><a class="btn btn-success sort-link" href="/tasks/sort/d/today">D値並べ替え</a>
+		<ul class="list-group task-list sort-list" id="task-list-today">
 		<?php if (count($tasks_today)): ?>
 		<?php foreach ($tasks_today as $task): ?>
 			<li id="task_<?php echo h($task['Task']['id']); ?>" class="<?php echo h($task['Task']['status']);?> list-group-item clearfix" data-task-id="<?php echo h($task	['Task']['id']); ?>" style="background-color: hsl(<?php echo 0; ?>,100%,<?php echo 100-70*$task['Task']['d_param']/$bar; ?>%);">
@@ -43,7 +44,8 @@
 				<span class="d_param"><?php echo h($task['Task']['d_param']); ?></span>
 				<span class="<?php echo h($task['Task']['status']=='notyet'?'edit-task':'disable-edit btn-disabled');?> btn btn-default">編集</span>
 				<!-- <span class="<?php echo h($task['Task']['status']=='notyet'?'divide-task':'disable-divide btn-disabled');?> btn btn-default">分割</span> -->
-				<span class="delete-task btn btn-default">削除</span>
+				<span class="delete-task"><span class="glyphicon glyphicon-trash"></span><b>削除</b></span>
+				<!-- <span class="delete-task btn btn-default">削除</span> -->
 				<span class="sequence"><?php echo h($task['Task']['sequence']); ?></span>
 			</li>
 		<?php endforeach; ?>
@@ -51,8 +53,8 @@
 			<li class="empty list-group-item clearfix">タスクがありません</li>
 		<?php endif; ?>
 		</ul>
-		<h2>明日</h2><a class="btn btn-success sort" href="/tasks/sort/d/tomorrow">D値並べ替え</a>
-		<ul class="list-group task-list" id="task-list-tomorrow">
+		<h2>明日</h2><a class="btn btn-success sort-link" href="/tasks/sort/d/tomorrow">D値並べ替え</a>
+		<ul class="list-group task-list sort-list" id="task-list-tomorrow">
 		<?php if (count($tasks_tomorrow)): ?>
 		<?php foreach ($tasks_tomorrow as $task): ?>
 			<li id="task_<?php echo h($task['Task']['id']); ?>" class="<?php echo h($task['Task']['status']);?> list-group-item clearfix" data-task-id="<?php echo h($task	['Task']['id']); ?>">
@@ -71,8 +73,8 @@
 			<li class="empty list-group-item clearfix">タスクがありません</li>
 		<?php endif; ?>
 		</ul>
-		<h2>明後日</h2><a class="btn btn-success sort" href="/tasks/sort/d/dayaftertomorrow">D値並べ替え</a>
-		<ul class="list-group task-list" id="task-list-dayaftertomorrow">
+		<h2>明後日</h2><a class="btn btn-success sort-link" href="/tasks/sort/d/dayaftertomorrow">D値並べ替え</a>
+		<ul class="list-group task-list sort-list" id="task-list-dayaftertomorrow">
 		<?php if (count($tasks_dayaftertomorrow)): ?>
 		<?php foreach ($tasks_dayaftertomorrow as $task): ?>
 			<li id="task_<?php echo h($task['Task']['id']); ?>" class="<?php echo h($task['Task']['status']);?> list-group-item clearfix" data-task-id="<?php echo h($task	['Task']['id']); ?>">

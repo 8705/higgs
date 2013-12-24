@@ -99,6 +99,7 @@
 			</nav>
 		</div>
 	</div>
+	<div id="noticePanel"></div>
 	<div id="main" class="row clearfix">
 		<?php echo $this->fetch('content'); ?>
 	</div>
