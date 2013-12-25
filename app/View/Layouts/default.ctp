@@ -20,10 +20,7 @@
 </head>
 <body>
 <div class="container">
-	<?php if($this->params["controller"] == 'users'): ?>
-		<div id="noticePanel"></div>
-		<div id="main" class="row clearfix">
-	<?php else: ?>
+	<?php if($this->params["controller"] != 'users'): ?>
 		<div id="header" class="row clearfix">
 			<div class="col-md-12 column">
 				<nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
@@ -101,14 +98,16 @@
 				</nav>
 			</div>
 		</div>
-		<div id="noticePanel"></div>
+	<?php endif; ?>
+	<div id="noticePanel"></div>
 		<div id="main" class="row clearfix">
-			<div id="side-menu" class="tasks col-md-4 column">
+	<?php if($this->params["controller"] != 'users'): ?>
+		<div id="side-menu" class="tasks col-md-4 column">
 			<p id="clean-bomb" class="btn btn-danger">Bomb一括削除</p>
 			<h2><?php echo __("Bombバー"); ?></h2>
 			<div class="d-bar progress progress-striped">
 				<div id="d-bar" class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="<?php echo 100*$bar/dcapacity; ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo 100*$bar/dcapacity; ?>%">
-					<?php echo 100*$bar/dcapacity."%"; ?>
+					<?php echo round(100*$bar/dcapacity,-1)."%"; ?>
 				</div>
 			</div>
 			<div class="tasks">
