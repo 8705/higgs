@@ -97,15 +97,15 @@
 			</nav>
 		</div>
 	</div>
-	<div id="noticePanel"></div>
-	<div class="d-bar progress progress-striped">
+	<div id="noticePanel"></div>	
+	<div id="main" class="row clearfix">
+		<div class="tasks side col-md-4 column">
+			<h2><?php echo __(h($username)); ?></h2>
+			<div class="d-bar progress progress-striped">
 		<div id="d-bar" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo 100*$bar/dcapacity; ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo 100*$bar/dcapacity; ?>%">
 			<?php echo 100*$bar/dcapacity."%"; ?>
 		</div>
 	</div>
-	<div id="main" class="row clearfix">
-		<div class="tasks side col-md-4 column">
-			<h2><?php echo __(h($username)); ?></h2>
 			<p id="clean-bomb" class="btn btn-danger">Bomb一括削除</p>
 			<div class="tasks">
 				<?php echo $this->Form->create('Task'); ?>
