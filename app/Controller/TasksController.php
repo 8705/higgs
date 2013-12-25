@@ -17,38 +17,8 @@ class TasksController extends AppController {
 	//Jsヘルパー追加
 	public $helper = array('Js');
 
-	public function beforeFilter() {
-		parent::beforeFilter();
-		$this->Auth->deny();
-		//全てのアクションでログインユーザー情報を格納する$authorを定義
-		$this->set('author', $this->Auth->user());
-
-		//CSRF対策用にSecurityComponentが生成したトークンを取得
-		$token = $this->Session->read('_Token.key');
-		$this->set('token', $token);
-
-		//SecurityComponentのCSRFチェックを無効
-		if ($this->params['action'] == 'delete' ||
-            $this->params['action'] == 'edit' ||
-            $this->params['action'] == 'check' ||
-            $this->params['action'] == 'divide' ||
-            $this->params['action'] == 'clean' ||
-            $this->params['action'] == 'sort') {
-             $this->Security->csrfCheck = false;
-             $this->Security->validatePost = false;
-
-			//token確認
-			if ( !isset($_SERVER['HTTP_X_CSRF_TOKEN'])
-				|| !strtolower($_SERVER['HTTP_X_CSRF_TOKEN']) == $token) { //トークン
-				echo 'token error';
-                throw new NotFoundException(__('Token error'));
-			}
-		}
-	}
-
 	public function index() {
 		$this->Task->recursive = -1;
-		$this->set('username', $this->Auth->user('username'));
 		$opt_today = array(
 			'conditions' => array(
                 'Task.user_id' => $this->Auth->user('id'),
@@ -76,24 +46,7 @@ class TasksController extends AppController {
             ),
             'order' => array('Task.sequence'=>'asc'),
         );
-        $opt_parents = array(
-            'conditions' => array(
-                'Task.user_id' => $this->Auth->user('id'),
-                'Task.parent_id' => null,
-                'Task.status' => 'notyet',
-            ),
-        );
-        $parents = $this->Task->find('all', $opt_parents);
-        foreach($parents as $key=>$parent) {
-            $children = $this->Task->children($parent['Task']['id']);
-            $sum_dparam = 0;
-            foreach($children as $child) {
-                if($child['Task']['status'] == 'done' and $child['Task']['rght']-$child['Task']['lft'] == 1) {
-                    $sum_dparam += $child['Task']['d_param'];
-                }
-            }
-            $parents[$key]['Task']['complete'] = 100*$sum_dparam/$parent['Task']['d_param'];
-        }
+        
 
         $opt_bombs = array(
             'conditions' => array(
@@ -105,8 +58,6 @@ class TasksController extends AppController {
 		$this->set('tasks_today', $this->Task->find('all', $opt_today));
         $this->set('tasks_tomorrow', $this->Task->find('all', $opt_tomorrow));
         $this->set('tasks_dayaftertomorrow', $this->Task->find('all', $opt_dayaftertomorrow));
-        $this->set('bar', almostzero+array_sum($this->_getdparams()));
-        $this->set('parents', $parents);
         $this->set('bombs', $this->Task->find('all', $opt_bombs));
 	}
 

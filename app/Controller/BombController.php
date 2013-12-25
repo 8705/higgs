@@ -79,16 +79,4 @@ class BombController extends AppController {
             }
         }
     }
-
-    public function _getdparams() {
-        $options = array(
-            'conditions' => array(
-                'Task.user_id' => $this->Auth->user('id'),
-                'Task.status' => 'notyet',
-                'Task.start_time <=' => date('Y-m-d')
-            ),
-            'fields' => array('Task.d_param')
-        );
-        return $this->Task->find('list', $options);
-    }
 }
