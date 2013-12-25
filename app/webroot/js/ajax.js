@@ -413,26 +413,17 @@ $(function(){
     $(document).on('click','.check-task', function(e){
         cancelEvent(e);
         var taskId      = $(this).parent().data('task-id');
-        var body        = $('#task_' + taskId).find('.body').text();
-        var start_time  = $('#task_' + taskId).find('.start_time').text();
-        var status      = $('#task_' + taskId).find('.status').text();
-        var d_param     = $('#task_' + taskId).find('.d_param').text();
-        var checked;
-        if ($('#task_'+taskId).hasClass('done')) {
-            status      = 'notyet';
-            checked     = '';
-        } else if($('#task_'+taskId).hasClass('notyet')){
-            status      = 'done';
-            checked = 'checked';
-        }
+        // var body        = $('#task_' + taskId).find('.body').text();
+        // var start_time  = $('#task_' + taskId).find('.start_time').text();
+        // var status      = $('#task_' + taskId).find('.status').text();
+        // var d_param     = $('#task_' + taskId).find('.d_param').text();
+        var checked = '';
 
         $.ajax({
             url: '/tasks/check/'+ taskId,
             type: 'POST',
             timeout:5000,
             data : {
-                status : status,
-
             },
             beforeSend : function() {
                 $('#task_' + taskId +' .check-task').html('<img src="/img/ajax-loader.gif" alt="" />');
@@ -442,6 +433,7 @@ $(function(){
                 //チェックを外した時
                 if (data.result.status == 'notyet') {
                     $('#task_'+taskId).removeClass('done').addClass('notyet');
+                    //最終的に消す
                     $('#task_'+taskId).find('.status').text(data.result.status);
 
                     //親タスクのbtnを元に戻す
@@ -450,11 +442,14 @@ $(function(){
                 //チェックを入れた時
                 } else if (data.result.status == 'done'){
                     $('#task_'+taskId).removeClass('notyet').addClass('done');
+                    //最終的に消す
                     $('#task_'+taskId).find('.status').text(data.result.status);
 
                     //親タスクのbtnを止める
                     $('#task_'+taskId).find('.edit-task').replaceWith('<span class="disable-edit btn btn-default btn-disabled">編集</span>');
                     $('#task_'+taskId).find('.divide-task').replaceWith('<span class="disable-divide btn btn-default btn-disabled">分割</span>');
+
+                    checked = 'checked';
                 }
                 ajastDBar(data.all_d);
             },
@@ -702,23 +697,6 @@ $(function(){
                 $('#clean-bomb').html('done一括削除');
             },
         });
-
-        /*var elm1 ='';
-        for(i in cleanArr) {
-         elm1 +=
-         '<li id="bomb_'+data.result[i]+'" class="bomb list-group-item clearfix" data-task-id="'+data.result[i]+'">'
-         +'<span class="body"><a href="/tasks/view/' + data.result[i] + '">'
-         +$('#task_' + data.result[i]).find('.body').text()
-         +'</a></span></li>\n';
-        }
-        $('#task-list-bombs').append(elm1)
-$('#task_'+data.result.id).fadeIn('slow');*/
-
-        // $('#tasks li.done').each(function(){
-        //     $(this).fadeOut('slow', function(){
-        //         $(this).remove();
-        //     });
-        // })
     });
 
     //sortable
@@ -881,12 +859,14 @@ $('#task_'+data.result.id).fadeIn('slow');*/
             success : function(data) {
                 if(data.result.status == 'notyet') {
                     var editElm = '<a data-cal-task-id="'+data.result.id+'" class="edit-cal-task action-icon"><span class="glyphicon glyphicon-edit"></span>編集</a>\n';
+                    var checked = '';
                 } else {
                     var editElm = '';
+                    var checked = 'checked';
                 }
                 $('#calendarPanel').append(
                     '<div class="body-area">\n'+
-                    '<p class="task-body"><span><input type="checkbox" /></span><span class="body">'+data.result.body+'</span></p>\n'+
+                    '<p class="task-body"><span class="check-cal-task" data-cal-task-id="'+data.result.id+'"><input type="checkbox" '+checked+'/></span><span class="body">'+data.result.body+'</span></p>\n'+
                     '<p class="task-date"><span>'+data.result.start_time+'</span></p>\n'+
                     '</div>\n'+
                     '<div class="action-area clearfix">\n'+
@@ -1039,9 +1019,46 @@ $('#task_'+data.result.id).fadeIn('slow');*/
             },
             success : function(data) {
                 popUpPanel(false, '「'+data.result.body+'」を削除しました');
+                $('#task_'+data.reult.id).fadeOut(200,function(){
+                    $(this).remove();
+                })
             },
             error : function(XMLHttpRequest, textStatus, errorThrown) {
+                popUpPanel(true, 'サーバーエラーで削除失敗しました');
+            },
+            complete : function() {
+                $('#calendarPanel').fadeOut(300,function(){
+                    $(this).html('');
+                })
+                //パネルが消えてマウスが外にだされる
+                edit_flg = false;
+            },
+        });
+    })
 
+    //Cal Check Task
+    //Cal Delete Task
+    $(document).on('click', '.delete-cal-task',function(e){
+        cancelEvent(e);
+        var id = $(this).data('cal-task-id');
+        if(!confirm('「'+$('#task_'+id).text() + '」を削除しますか？')){
+            return false;
+        }
+        $.ajax({
+            url : '/tasks/delete/'+id,
+            type : 'POST',
+            dataType : 'json',
+            timeout  : 5000,
+            data : {
+            },
+            beforeSend : function() {
+                $('.delete-cal-task').html('<img src="/img/ajax-loader.gif" alt="" />');
+            },
+            success : function(data) {
+                popUpPanel(false, '「'+data.result.body+'」を削除しました');
+            },
+            error : function(XMLHttpRequest, textStatus, errorThrown) {
+                popUpPanel(true, 'サーバーエラーで削除失敗しました');
             },
             complete : function() {
                 $('#calendarPanel').fadeOut(300,function(){

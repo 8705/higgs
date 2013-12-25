@@ -47,7 +47,12 @@ class CalendarsController extends AppController {
 		$values = explode("-", $val);
 		$keys = array("year", "month", "day");
 		$date = array_combine($keys, $values);
-		$options = array('conditions' => array('Task.user_id' => $this->Auth->user('id')));
+		$options = array(
+			'conditions' => array(
+				'Task.user_id' => $this->Auth->user('id'),
+				'Task.status !=' => 'delete',
+			)
+		);
 		$tasks = $this->Task->find('all', $options);
 		foreach($tasks as $task) {
 			$start = explode("-", $task['Task']['start_time']);

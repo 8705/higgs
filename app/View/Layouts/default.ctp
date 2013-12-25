@@ -118,7 +118,7 @@
 				<?php
 					//ajax送信用設定
 					echo $this->Js->submit('Submit', array(
-						'url'		=> 'add',
+						'url'		=> '/tasks/add',
 						'type'		=> 'json',
 						'success'	=> 'addTask(data, textStatus)',
 						'error'		=> 'popUpPanel(true, "サーバーエラー")',
