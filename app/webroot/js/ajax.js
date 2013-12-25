@@ -38,8 +38,8 @@ function htmlDivideUl(parentId){
             '<input class="parent_id" type="hidden" name="parent_id" value="'+parentId+'" />'+
         '</li>\n'+
         '<li class="divide-btn-area list-group-item clearfix">'+
-            '<span class="divide-more btn btn-success no-empty-submit" disabled="diabled">＋</span>\n'+
-            '<span class="divide-push btn btn-primary no-empty-submit" disabled="diabled">OK</span>\n'+
+            '<span class="divide-more btn btn-success no-empty-submit">＋</span>\n'+
+            '<span class="divide-push btn btn-primary no-empty-submit">OK</span>\n'+
         '</li>\n'+
         '</ul>'
     );
