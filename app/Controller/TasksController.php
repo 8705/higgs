@@ -263,10 +263,13 @@ class TasksController extends AppController {
             'recursive' => -1,
         ));
         $status = $res['Task']['status'];
+        // echo 'ステ:'.$status;
         if($status == 'done'){
             $status = 'notyet';
+        } else {
+            $status = 'done';
         }
-        $this->Task->set('status', $stauts);
+        $this->Task->set('status', $status);
         //save OK
         if ($this->Task->save($this->request->data)) {
             $options = array('conditions' => array('Task.' . $this->Task->primaryKey => $id));

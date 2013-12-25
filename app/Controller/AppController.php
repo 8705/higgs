@@ -12,6 +12,10 @@ class AppController extends Controller {
 			'loginRedirect' => array('controller' => 'tasks', 'action' => 'index'),
 			'logoutRedirect' => array('controller' => 'users', 'action' => 'index'),
 		),
+        'Security' => array(
+            'csrfUseOnce' => false,  //CSRFトークンを使いまわす
+            'csrfExpires' => '+1 hour'  //トークンの持続時間を1h延長
+        ),
 	);
 
     public function beforeFilter() {

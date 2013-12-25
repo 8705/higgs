@@ -123,7 +123,8 @@
 						'success'	=> 'addTask(data, textStatus)',
 						'error'		=> 'popUpPanel(true, "サーバーエラー")',
 						'async'		=> true,
-						'class' 	=> 'btn btn-primary'
+						'class' 	=> 'btn btn-primary',
+						'complete'  => '$("input.datepicker").val(getFutureDate(0))'
 						)
 					);
 				?>
