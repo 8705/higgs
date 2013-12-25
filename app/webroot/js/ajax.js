@@ -30,16 +30,16 @@ function htmlAddElm(data) {
 }
 function htmlDivideUl(parentId){
     var elm = $(
-        '<ul class="ul-divide" data-parent-id="'+parentId+'">\n'+
+        '<ul class="ul-divide no-empty-form" data-parent-id="'+parentId+'">\n'+
         '<li class="li-divide list-group-item clearfix">\n'+
-            '<span><input class="body edit-input" type="text" value="" placeholder="タスクを入力して下さい"/></span>\n'+
-            '<span><input class="start_time edit-input datepicker" type="text" value="" placeholder="2014-01-01"/></span>\n'+
+            '<span><input class="body edit-input no-empty-body" type="text" value="" placeholder="タスクを入力して下さい"/></span>\n'+
+            '<span><input class="start_time edit-input datepicker no-empty-cal" type="text" value="" placeholder="2014-01-01" readonly /></span>\n'+
             '<span class="divide-del btn btn-danger">☓</span>\n'+
             '<input class="parent_id" type="hidden" name="parent_id" value="'+parentId+'" />'+
         '</li>\n'+
         '<li class="divide-btn-area list-group-item clearfix">'+
-            '<span class="divide-more btn btn-success">＋</span>\n'+
-            '<span class="divide-push btn btn-primary">OK</span>\n'+
+            '<span class="divide-more btn btn-success no-empty-submit" disabled="diabled">＋</span>\n'+
+            '<span class="divide-push btn btn-primary no-empty-submit" disabled="diabled">OK</span>\n'+
         '</li>\n'+
         '</ul>'
     );
@@ -49,8 +49,8 @@ function htmlDivideUl(parentId){
 function htmlDivideLi(parentId) {
     var elm = $(
         '<li class="li-divide li-divide-more list-group-item clearfix">\n'+
-            '<span><input class="body edit-input" type="text" value="" placeholder="タスクを入力して下さい"/></span>\n'+
-            '<span><input class="start_time edit-input datepicker" type="text" value="" placeholder="2014-01-01"/></span>\n'+
+            '<span><input class="body edit-input no-empty-body" type="text" value="" placeholder="タスクを入力して下さい"/></span>\n'+
+            '<span><input class="start_time edit-input datepicker no-empty-cal" type="text" value="" placeholder="2014-01-01" readonly /></span>\n'+
             '<span class="divide-del btn btn-danger">☓</span>\n'+
             '<input class="parent_id" type="hidden" name="parent_id" value="'+parentId+'" />\n'+
         '</li>\n'
@@ -214,6 +214,14 @@ $(function(){
             $('#TaskIndexForm .submit input').removeAttr('disabled');
         }
     });
+    // $(document).on('keyup', '.no-empty-body',function(){
+    //     if('' === $('.no-empty-body').val() || '' === $('.no-empty-cal').val()) {
+    //         $('.no-empty-submit').attr({disabled : "disabled"});
+    //     }else {
+    //         $('.no-empty-submit').removeAttr('disabled');
+    //     }
+    // })
+
     //タスク新規追加時にトップ画面のタスクリストから適切なシーケンスを取得
     $('#TaskIndexForm .submit').mouseover(function(){
         //日付がいつか判定
@@ -483,6 +491,10 @@ $(function(){
             borderWidth : '1px',
         }, 200);
 
+        //今日の日付をプリセット
+        $("input.datepicker").val(getFutureDate(0));
+        $('ul[data-parent-id='+taskId+']').find('.body').focus();
+
         //分割ボタンを分割キャンセルボタンにする
         $('#task_'+taskId).find('.divide-task').replaceWith('<span class="divide-cancel btn btn-default">キャンセル</span>');
 
@@ -504,6 +516,9 @@ $(function(){
             padding : '10px 15px',
             borderWidth : '1px',
         }, 200);
+
+        //今日の日付をプリセット
+        $("input.datepicker").val(getFutureDate(0));
 
         // //分割ボタンを分割キャンセルボタンにする
         // $('#task_'+taskId).find('.divide-task').replaceWith('<span class="divide-cancel btn btn-default">キャンセル</span>');
@@ -1082,4 +1097,36 @@ $(function(){
             },
         });
     })
+
+    //test
+    $('#taskcalendar td').sortable({
+        connectWith : '.connected',
+        opacity : 0.6,
+        receive : function() {
+            $.ajax({
+                url : '/calendars/sort',
+                type : 'POST',
+                timeout : 5000,
+                data : {
+                    date : date,
+                    sequence : $(this).sortable('serialize')
+                },
+                beforeSend : function() {
+                    //全ての編集中のタスクを元に戻す。
+                },
+                success : function() {
+
+                },
+                error : function() {
+
+                },
+                complete : function() {
+
+                }
+            })
+        },
+        over : function() {
+            date = $(this).data('cal-date');
+        },
+    }).disableSelection();
 });

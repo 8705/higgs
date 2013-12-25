@@ -25,7 +25,8 @@ class CalendarsController extends AppController {
 
 		//SecurityComponentのCSRFチェックを無効
 		if ($this->params['action'] == 'status' ||
-			$this->params['action'] == 'edit') {
+			$this->params['action'] == 'edit' ||
+			$this->params['action'] == 'sort') {
              $this->Security->csrfCheck = false;
              $this->Security->validatePost = false;
 
@@ -182,6 +183,46 @@ class CalendarsController extends AppController {
         		break;
         	default:
         		throw new NotFoundException(__("Non exist $status"));
+        }
+	}
+	public function sort(){
+		//Ajax or not
+        if (!$this->request->is('ajax')) {
+            throw new NotFoundException(__('Don\'t ajax!'));
+        }
+        $this->autoRender = false;   // 自動描画をさせない
+        $errorArray = array();
+        $request = $this->request->data['sequence'];
+        $date = $this->request->data['date'];
+        //リクエスト値が 'task[]=130&task[]=210&...'という形なので、$task(array)に値が入っている
+        parse_str($request);
+        foreach ($task as $sequence => $id) {
+            $this->Task->create();
+            // $this->Task->id = $id;
+            $errorArray[] = $this->Task->save(
+            	array(
+            		'id' 			=> $id,
+            		'start_time' 	=> $date,
+            		'sequence' 		=> $sequence,
+            	),
+            	false,
+            	array('start_time','sequence')
+            );
+        }
+        //saveOK
+        if(!in_array(false, $errorArray)) {
+            $error = false;
+            $res = array("error" => $error);
+            $this->response->type('json');
+            echo json_encode($res);
+            exit;
+        } else {
+        	$error = true;
+            $message = 'サーバーエラーでタスクの移動に失敗しました';
+            $res = $res = compact('error', 'message');
+            $this->response->type('json');
+            echo json_encode($res);
+            exit;
         }
 	}
 }

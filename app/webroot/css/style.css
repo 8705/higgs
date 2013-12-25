@@ -135,8 +135,7 @@ input:hover, textarea:hover {
     display: inline-block;
 }
 .task-list li .body {
-    padding: 7px 5px;
-    width:300px;
+    width:250px;
 }
 .task-list li span.btn {
     margin-left:10px;
@@ -237,16 +236,23 @@ li.done span.body a {
 }
 
 .calendartask {
-    background-color: #AAC863;
+    background-color: #A8EE79;;
     border-radius: 2px;
     padding: 2px 5px 1px;
     margin-bottom: 1px;
     cursor: pointer;
 }
 .calendartask:hover {
-    background-color: #859C4D;
+    background-color: #BDDD6F;
 }
-
+.calendartask.done {
+    background-color: #F3F3F3;
+    color: #CCC;
+    text-decoration: line-through;
+}
+.calendartask.done:hover {
+    background-color: #e9e9e9;
+}
 /** ポップアップパネル **/
 #calendarPanel {
     display: none;

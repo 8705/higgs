@@ -10,7 +10,7 @@ class CalendarHelper extends AppHelper {
 		$prev = date("Y-m-d", mktime(0, 0, 0, $date['month']-1, $date['day'], $date['year']));
 		$next = date("Y-m-d", mktime(0, 0, 0, $date['month']+1, $date['day'], $date['year']));
 
-		$cal  = "<table class=\"table calendar\" data-cal-month=\"".h($yyyy)."\">";
+		$cal  = "<table id=\"taskcalendar\" class=\"table calendar\" data-cal-month=\"".h($yyyy)."\">";
 		$cal .= "<tr>";
 		$cal .=
 			"<th>".
@@ -34,9 +34,9 @@ class CalendarHelper extends AppHelper {
 			for ($j = 0; $j <= 6; $j++) {
 				$d = $i * 7 + $j - $wd1 + 1;
 				if ($d > $lastd or $d  < 1) {
-					$cal .= "<td></td>";
+					$cal .= "<td data-cal-date=\"".h($yyyy)."-".h($mm)."-".$d."\"></td>";
 				} else {
-					$cal .= "<td data-cal-date=\"".h($yyyy)."-".h($mm)."-".$d."\">$d";
+					$cal .= "<td class=\"connected\" data-cal-date=\"".h($yyyy)."-".h($mm)."-".$d."\">$d";
 					if(array_key_exists((int)$yyyy, $task)) {
 						if(array_key_exists((int)$mm, $task[(int)$yyyy])) {
 							if(array_key_exists($d, $task[(int)$yyyy][(int)$mm])) {
