@@ -95,24 +95,21 @@ class TasksController extends AppController {
             $result = $this->Task->find('first', array(
                 'conditions' => array('Task.id' => $saved_id)
             ));
-            $all_d = almostzero+array_sum($this->_getdparams());
+            $all_d = almostzero + array_sum($this->_getdparams());
 
             $error = false;
             $res = array("error" => $error,"result" => $result["Task"], 'all_d' => $all_d);
-            // $res = array_merge('error'=>$error, $result['Task']);
-            // debug($res);exit;
             $this->response->type('json');
             echo json_encode($res);
             exit;
-
         // save NG
         } else {
-        	$error = true;
-        	$message = $this->Task->validationErrors;
-        	$res = $res = compact('error', 'message');
-        	$this->response->type('json');
-        	echo json_encode($res);
-        	exit;
+            $error = true;
+            $message = $this->Task->validationErrors;
+            $res = $res = compact('error', 'message');
+            $this->response->type('json');
+            echo json_encode($res);
+            exit;
         }
 	}
 
