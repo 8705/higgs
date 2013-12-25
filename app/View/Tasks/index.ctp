@@ -7,6 +7,7 @@
 <div class="d-bar progress progress-striped">
 	<div id="d-bar" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo 100*$bar/dcapacity; ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo 100*$bar/dcapacity; ?>%">
 	</div>
+	<?php echo 100*$bar/dcapacity."%"; ?>
 </div>
 <div class="row">
 	<div class="tasks form col-md-12">
@@ -109,6 +110,7 @@
 				<?php foreach ($parents as $parent): ?>
 					<li id="parent_<?php echo h($parent['Task']['id']); ?>" class="<?php echo h($parent['Task']['status']);?> list-group-item clearfix" data-task-id="<?php echo h($parent['Task']['id']); ?>">
 						<span class="body"><?php echo $this->Html->link(__(h($parent['Task']['body'])), array('action' => 'view', $parent['Task']['id'])); ?></span>
+						<span><?php echo $parent['Task']['complete'].'%'; ?></span>
 					</li>
 				<?php endforeach; ?>
 				<?php else: ?>
