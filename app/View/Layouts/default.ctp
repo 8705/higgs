@@ -113,7 +113,7 @@
 				<?php
 					echo $this->Form->input('user_id', array('type'=>'hidden', 'default' => $author['id']));//$user_idから$authorに変更
 					echo $this->Form->input('body', array('placeholder' => 'Add Project'));
-					echo $this->Form->input('start_time', array('type'=>'text', 'class' => 'datepicker'));
+					echo $this->Form->input('start_time', array('type'=>'text', 'class' => 'datepicker','readonly' => 'readonly'));
 				?>
 				<?php
 					//ajax送信用設定
@@ -189,6 +189,7 @@
 		$('input.datepicker').Zebra_DatePicker({
 	        direction : [getFutureDate(0), false]
 	    });
+	    $('input.datepicker').val(getFutureDate(0));
 	});
 </script>
 <?php echo $this->Html->script('jquery-ui-1.10.3.custom.min'); ?>

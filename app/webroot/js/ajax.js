@@ -195,16 +195,26 @@ $(function(){
     $('#TaskBody').focus();
     //初期でサブミットボタンを使用禁止
     $('#TaskIndexForm .submit input').attr({disabled : "disabled"});
-    if ($('#TaskBody').val() != '') {
+    if ($('#TaskBody').val() != '' && $('#TaskStartTime') != '') {
         $('#TaskIndexForm .submit input').removeAttr('disabled');
     }
     //inputが空白でなくなったらsubmitボタン有効化
     $('#TaskBody').keyup(function(){
-        if('' === $('#TaskBody').val()) {
+        if('' === $('#TaskBody').val() || '' === $('#TaskStartTime').val()) {
             $('#TaskIndexForm .submit input').attr({disabled : "disabled"});
         }else {
             $('#TaskIndexForm .submit input').removeAttr('disabled');
         }
+    });
+    //タスク新規追加時にトップ画面のタスクリストから適切なシーケンスを取得
+    $('#TaskIndexForm .submit').mouseover(function(){
+        //日付がいつか判定
+        var day = getAddDay($('#TaskStartTime').val());
+        //日付に基づくシーケンス取得
+        var sequence = $('#task-list-'+day).find('li:last .sequence').text();
+        if(sequence == '') {sequence = 0;}
+        //.sequenceにセット
+        $('#TaskIndexForm').find('.sequence').attr({'value':sequence});
     })
 
     //Delete Task
@@ -447,7 +457,6 @@ $(function(){
                     $('#task_'+taskId).find('.divide-task').replaceWith('<span class="disable-divide btn btn-default btn-disabled">分割</span>');
                 }
                 ajastDBar(data.all_d);
-                // console.log(data.all_d);
             },
             complete : function() {
                 $('#task_' + taskId +' .check-task').html('<input type="checkbox" '+ checked +'/>');
@@ -456,12 +465,7 @@ $(function(){
     });
     function ajastDBar(amount) {
         var d = (100 * amount) / 1000;
-        $('#d-bar').animate({
-            width : d+"%"
-        },{
-            'duration' : 500,
-            'easing' : 'linear'
-        })
+        $('#d-bar').css({'width':d+'%'});
     }
 
     //Divide Task
@@ -553,12 +557,6 @@ $(function(){
         var parentId      = $(this).parent().parent().data('parent-id');
         var divideArr   = [];
         var divideCount = Number($('ul[data-parent-id='+parentId+']').find('.li-divide').length);
-        //var brotherCount = Number($('ul[data-children-ul-id='+parentId+']').find('li').length);
-        //var parent_d    = Number($('#task_'+parentId).find('.d_param').text());
-        //var d_param   = Math.ceil(parent_d / (divideCount + brotherCount));
-        console.log('divideCount : '+divideCount);
-        //console.log('brotherCount : '+brotherCount);
-        //console.log('influence : '+influence);
 
         for ( var i = 0; i <= divideCount - 1; i++) {
             divideArr.push(
@@ -584,11 +582,8 @@ $(function(){
                 $('ul[data-parent-id=' + parentId +'] .divide-push').html('<img src="/img/ajax-loader.gif" alt="" />');
             },
             success : function(data) {
-                console.log('success');
-                console.log(data);
                 //バリデーションエラー
                 if(data.error === true ) {
-                    // console.log('error');
                     //エラー内容取り出し $ エラーポップ
                     for (i in data.message) {
                         //ポップアップ通知
@@ -639,7 +634,6 @@ $(function(){
                 $('#task_'+parentId).find('.disable-delete').replaceWith('<span class="delete-task"><span class="glyphicon glyphicon-trash"></span><b>削除</b></span>');
             },
             error : function(){
-                console.log('error');
                 //エラーまたかく
                 popUpPanel(true, 'サーバー');
             },
@@ -785,6 +779,7 @@ $('#task_'+data.result.id).fadeIn('slow');*/
                     )
                 }
                 $('#task-list-' +day+' li').fadeIn(150);
+                createEmpty();
 
             },
             error : function() {
@@ -841,10 +836,19 @@ $('#task_'+data.result.id).fadeIn('slow');*/
     }, function(){
         edit_flg = false;
     })
+    //パネル外のカレンダーのマウスオーバー/リーブも考慮
+    $(document).on({
+        mouseenter : function(){
+            edit_flg = true;
+        },
+        mouseleave : function(){
+            edit_flg = false;
+        }
+    }, '.Zebra_DatePicker');
 
     $('body').mouseup(function(){
         if(!edit_flg) {
-            $('#calendarPanel').fadeOut(100,function(){
+            $('#calendarPanel').removeClass('edit').fadeOut(100,function(){
                 $(this).html('');
             });
         }
@@ -858,7 +862,8 @@ $('#task_'+data.result.id).fadeIn('slow');*/
     });
 
     //カレンダー
-    $('.calendartask').click(function(e){
+    //パネル表示
+    $(document).on('click','.calendartask',function(e){
         cancelEvent(e);
         var id = $(this).data('task-id');
         $.ajax({
@@ -874,14 +879,19 @@ $('#task_'+data.result.id).fadeIn('slow');*/
         });
             },
             success : function(data) {
+                if(data.result.status == 'notyet') {
+                    var editElm = '<a data-cal-task-id="'+data.result.id+'" class="edit-cal-task action-icon"><span class="glyphicon glyphicon-edit"></span>編集</a>\n';
+                } else {
+                    var editElm = '';
+                }
                 $('#calendarPanel').append(
                     '<div class="body-area">\n'+
-                    '<p><span><input type="checkbox" /></span><span class="body">'+data.result.body+'</span></p>\n'+
+                    '<p class="task-body"><span><input type="checkbox" /></span><span class="body">'+data.result.body+'</span></p>\n'+
                     '<p class="task-date"><span>'+data.result.start_time+'</span></p>\n'+
                     '</div>\n'+
                     '<div class="action-area clearfix">\n'+
-                    '<span class="edit-cal-task action-icon"><span class="glyphicon glyphicon-edit"></span>編集</span>\n'+
-                    '<span class="delete-cal-task action-icon"><span class="glyphicon glyphicon-trash"></span>削除</span>\n'+
+                    editElm +
+                    '<a data-cal-task-id="'+data.result.id+'" class="delete-cal-task action-icon"><span class="glyphicon glyphicon-trash"></span>削除</a>\n'+
                     '</div>\n'+
                     '\n'+
                     '<a class="cal-panel-cancel"><span class="glyphicon glyphicon-remove"></span></a>\n'
@@ -917,8 +927,129 @@ $('#task_'+data.result.id).fadeIn('slow');*/
     //Cal Delete Task
     $(document).on('click', '.cal-panel-cancel',function(e){
         cancelEvent(e);
-        $('#calendarPanel').fadeOut(100,function(){
+        $('#calendarPanel').removeClass('edit').fadeOut(100,function(){
             $(this).html('');
+        });
+    });
+    //Cal Edit Task
+    $(document).on('click', '.edit-cal-task',function(e){
+        cancelEvent(e);
+        var id = $(this).data('cal-task-id');
+        $.ajax({
+            url : '/calendars/edit/status/'+id,
+            type : 'POST',
+            dataType : 'json',
+            timeout  : 5000,
+            data : {
+            },
+            beforeSend : function() {
+                $('.edit-cal-task').html('<img src="/img/ajax-loader.gif" alt="" />');
+            },
+            success : function(data) {
+                $('#calendarPanel').addClass('edit');
+                $('#calendarPanel .task-body').html('<textarea data-cal-task-id="'+data.result.id+'" type="text">'+data.result.body+'</textarea>');
+                $('#calendarPanel .task-date').html('<input data-cal-task-id="'+data.result.id+'" class="datepicker" type="text" value="'+data.result.start_time+'"/>');
+                $('#calendarPanel .action-area').html('');
+                $('#calendarPanel .action-area').append(
+                    '<a class="cal-edit-push" data-cal-task-id="'+data.result.id+'"><span class="btn btn-primary">OK</span></a>'
+                );
+                $('#calendarPanel .body-area').append(
+                    '<input type="hidden" class="old_start_time" valur="'+data.result.start_time+'"/>'
+                    )
+                makeDatePicker();
+            },
+            error : function(XMLHttpRequest, textStatus, errorThrown) {
+
+            },
+            complete : function() {
+                $('.edit-cal-task').html('<span class="glyphicon glyphicon-edit"></span>編集');
+            },
+        });
+    })
+
+    //Cal Push Task
+    $(document).on('click', '.cal-edit-push',function(e){
+        cancelEvent(e);
+        var id = $(this).data('cal-task-id');
+        $.ajax({
+            url : '/calendars/edit/push/'+id,
+            type : 'POST',
+            dataType : 'json',
+            timeout  : 5000,
+            data : {
+                body : $('textarea[data-cal-task-id='+id+']').val(),
+                start_time : $('input[data-cal-task-id='+id+']').val()
+            },
+            beforeSend : function() {
+                $('.cal-edit-push').html('<img src="/img/ajax-loader.gif" alt="" />');
+            },
+            success : function(data) {
+                $('#calendarPanel').removeClass('edit');
+                $('#calendarPanel .task-body').html('<span><input data-cal-task-id="'+data.result.id+'" type="checkbox" /></span><span class="body">'+data.result.body+'</span>')
+                $('#calendarPanel .task-date').html('<span>'+data.result.start_time+'</span>');
+                $('#calendarPanel .action-area').html('');
+                $('#calendarPanel .action-area').append(
+                    '<a data-cal-task-id="'+data.result.id+'" class="edit-cal-task action-icon"><span class="glyphicon glyphicon-edit"></span>編集</a>'+
+                    '<a data-cal-task-id="'+data.result.id+'" class="delete-cal-task action-icon"><span class="glyphicon glyphicon-trash"></span>削除</a>\n'
+                );
+                $('#task_'+data.result.id).text(data.result.body);
+                $('#calendarPanel .action-area').append(
+                    '<span class="success">（保存しました）</span>'
+                )
+
+                //カレンダーの表示タスクを適切な日付の枠へ移動
+                var old_day  = $('#task_'+data.result.id).parent().data('cal-date');
+                if(old_day != data.result.start_time) {
+                    $('#task_'+data.result.id).fadeOut(300, function(){
+                        $(this).remove();
+                    })
+                    $('td[data-cal-date='+data.result.start_time+']').append(
+                        '<p class="calendartask notyet" id="task_'+data.result.id+'" data-task-id="'+data.result.id+'">'+data.result.body+'</p>'
+                    );
+                    $('#task_'+data.result.id).show(200);
+                }
+                //送信後パネルの高さが縮んでマウスがパネル外に行くから
+                edit_flg = false;
+            },
+            error : function(XMLHttpRequest, textStatus, errorThrown) {
+
+            },
+            complete : function() {
+                $('.edit-cal-task').html('<span class="glyphicon glyphicon-edit"></span>編集');
+            },
+        });
+    })
+
+    //Cal Delete Task
+    $(document).on('click', '.delete-cal-task',function(e){
+        cancelEvent(e);
+        var id = $(this).data('cal-task-id');
+        if(!confirm('「'+$('#task_'+id).text() + '」を削除しますか？')){
+            return false;
+        }
+        $.ajax({
+            url : '/tasks/delete/'+id,
+            type : 'POST',
+            dataType : 'json',
+            timeout  : 5000,
+            data : {
+            },
+            beforeSend : function() {
+                $('.delete-cal-task').html('<img src="/img/ajax-loader.gif" alt="" />');
+            },
+            success : function(data) {
+                popUpPanel(false, '「'+data.result.body+'」を削除しました');
+            },
+            error : function(XMLHttpRequest, textStatus, errorThrown) {
+
+            },
+            complete : function() {
+                $('#calendarPanel').fadeOut(300,function(){
+                    $(this).html('');
+                })
+                //パネルが消えてマウスが外にだされる
+                edit_flg = false;
+            },
         });
     })
 });
