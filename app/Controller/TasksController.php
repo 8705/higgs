@@ -46,7 +46,7 @@ class TasksController extends AppController {
             ),
             'order' => array('Task.sequence'=>'asc'),
         );
-        
+
 
         $opt_bombs = array(
             'conditions' => array(
@@ -155,7 +155,7 @@ class TasksController extends AppController {
         if (!$this->Task->exists($id)) {
             throw new NotFoundException(__('Non exist $id'));
         }
-        
+
         $json = json_decode($this->request->data['json'], true);
 
         $errorArray = array();
@@ -245,6 +245,7 @@ class TasksController extends AppController {
 	}
 
 	public function check($id = null) {
+        $this->Task->id = $id;
         //Ajax or not
         if (!$this->request->is('ajax')) {
             throw new NotFoundException(__('Invalid post'));
@@ -254,7 +255,18 @@ class TasksController extends AppController {
         if (!$this->Task->exists($id)) {
             throw new NotFoundException(__('Invalid task'));
         }
-        $this->Task->id = $id;
+
+        $res = $this->Task->find('first',array(
+            'conditions' => array(
+                'id' => $id,
+            ),
+            'recursive' => -1,
+        ));
+        $status = $res['Task']['status'];
+        if($status == 'done'){
+            $status = 'notyet';
+        }
+        $this->Task->set('status', $stauts);
         //save OK
         if ($this->Task->save($this->request->data)) {
             $options = array('conditions' => array('Task.' . $this->Task->primaryKey => $id));
@@ -281,7 +293,7 @@ class TasksController extends AppController {
             'conditions' => array(
                 'Task.user_id' => $this->Auth->user('id'),
                 'Task.status' => 'notyet',
-                '(Task.rght - Task.lft)' => 1 
+                '(Task.rght - Task.lft)' => 1
             ),
             'fields' => array('Task.d_param')
         );
