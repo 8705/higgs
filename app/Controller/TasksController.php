@@ -220,10 +220,12 @@ class TasksController extends AppController {
             ));
             $result = $row['Task'];
 
-            $parent = $this->Task->getParentNode($id);
             $this->Task->removeFromTree($id);
-            $bomb = new BombController;
-            $bomb->_modifyinfluence($parent['Task']['id']);
+            $parent = $this->Task->getParentNode($id);
+            if($parent) {
+                $bomb = new BombController;
+                $bomb->_modifyinfluence($parent['Task']['id']);
+            }
 
             $all_d = almostzero + array_sum($this->_getdparams());
             $error = false;
