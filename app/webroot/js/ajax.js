@@ -754,7 +754,6 @@ $(function(){
             })
         }
     });
-
     $('.sort-link').click(function(e){
         cancelEvent(e);
         var day = $(this).attr('href').substr(14);
