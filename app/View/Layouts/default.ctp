@@ -97,21 +97,21 @@
 			</nav>
 		</div>
 	</div>
-	<div id="noticePanel"></div>	
+	<div id="noticePanel"></div>
 	<div id="main" class="row clearfix">
-		<div class="tasks side col-md-4 column">
+		<div id="side-menu" class="tasks col-md-4 column">
 			<h2><?php echo __(h($username)); ?></h2>
 			<div class="d-bar progress progress-striped">
-		<div id="d-bar" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo 100*$bar/dcapacity; ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo 100*$bar/dcapacity; ?>%">
+				<div id="d-bar" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo 100*$bar/dcapacity; ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo 100*$bar/dcapacity; ?>%">
 			<?php echo 100*$bar/dcapacity."%"; ?>
-		</div>
-	</div>
+				</div>
+			</div>
 			<p id="clean-bomb" class="btn btn-danger">Bomb一括削除</p>
 			<div class="tasks">
 				<?php echo $this->Form->create('Task'); ?>
 			<fieldset>
 				<?php
-					echo $this->Form->input('user_id', array('type'=>'hidden', 'default' => $author['id']));//$user_idから$authorに変更
+					echo $this->Form->input('user_id', array('type'=>'hidden', 'default' => $author['id']));
 					echo $this->Form->input('body', array('placeholder' => 'Add Project'));
 					echo $this->Form->input('start_time', array('type'=>'text', 'class' => 'datepicker','readonly' => 'readonly'));
 				?>
@@ -146,24 +146,11 @@
 					<?php endif; ?>
 				</ul>
 			</div>
-			<div class="tasks bombs">
-				<h2>Bombs</h2>
-				<ul class="list-group" id="task-list-bombs">
-				<?php if (count($bombs)): ?>
-				<?php foreach ($bombs as $bomb): ?>
-					<li id="bomb_<?php echo h($bomb['Task']['id']); ?>" class="<?php echo h($bomb['Task']['status']);?> list-group-item clearfix" data-task-id="<?php echo h($bomb['Task']['id']); ?>">
-						<span class="body"><?php echo $this->Html->link(__(h($bomb['Task']['body'])), array('action' => 'view', $bomb['Task']['id'])); ?></span>
-					</li>
-				<?php endforeach; ?>
-				<?php else: ?>
-					<li class="empty list-group-item clearfix">タスクがありません</li>
-				<?php endif; ?>
-				</ul>
-			</div>
 			<div class="actions">
 				<h3><?php echo __('Actions'); ?></h3>
 				<ul>
 					<li><?php echo $this->Html->link(__('List Tasks'), array('controller'=>'tasks', 'action' => 'index')); ?> </li>
+					<li><?php echo $this->Html->link(__('List Bombs'), array('controller'=>'tasks', 'action' => 'bomb')); ?> </li>
 					<li><?php echo $this->Html->link(__('カレンダー表示'), array('controller'=>'calendars', 'action' => 'viewcalendar')); ?></li>
 				</ul>
 			</div>
@@ -172,7 +159,6 @@
 			<?php echo $this->fetch('content'); ?>
 		</div>
 	</div>
-	<?php echo $this->element('sql_dump'); ?>
 	<div id="footer" class="row clearfix">
 		<div class="col-md-12 column">
 			<p class="text-center">
@@ -180,6 +166,7 @@
 			</p>
 		</div>
 	</div>
+	<?php echo $this->element('sql_dump'); ?>
 </div>
 <!-- ajax用 -->
 <?php echo isset($token)?"<script>var token = '{$token}'</script>":"";?>

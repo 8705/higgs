@@ -46,19 +46,9 @@ class TasksController extends AppController {
             ),
             'order' => array('Task.sequence'=>'asc'),
         );
-
-
-        $opt_bombs = array(
-            'conditions' => array(
-                'Task.user_id' => $this->Auth->user('id'),
-                'Task.status' => 'bomb',
-                'Task.bomb' => 1,
-            ),
-        );
 		$this->set('tasks_today', $this->Task->find('all', $opt_today));
         $this->set('tasks_tomorrow', $this->Task->find('all', $opt_tomorrow));
         $this->set('tasks_dayaftertomorrow', $this->Task->find('all', $opt_dayaftertomorrow));
-        $this->set('bombs', $this->Task->find('all', $opt_bombs));
 	}
 
 	public function view($id = null) {
@@ -73,6 +63,18 @@ class TasksController extends AppController {
         }
         $this->set('tasks', $allChildren);
 	}
+
+    public function bomb() {
+        $this->Task->recursive = -1;
+        $opt_bombs = array(
+            'conditions' => array(
+                'Task.user_id' => $this->Auth->user('id'),
+                'Task.status' => 'bomb',
+                'Task.bomb' => 1,
+            ),
+        );
+        $this->set('bombs', $this->Task->find('all', $opt_bombs));
+    }
 
 	public function add() {
 		//Ajax or not
