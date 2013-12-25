@@ -57,7 +57,9 @@ img {
   /**/
   }
 
-
+/*********************************
+    全体
+**********************************/
 body {
 	background-color: #FFF67F;
 }
@@ -75,6 +77,23 @@ body {
 
 #top-img {
 	padding-top: 50px;
+}
+textarea {
+    border-radius: 3px;
+    border: 1px solid #CCC;
+    padding: 3px;
+    resize:none;
+}
+input {
+    padding:3px 5px 2px;
+    border-radius:3px;
+    border:1px solid #ccc;
+}
+input:hover, textarea:hover {
+    background-color:#fafafa;
+}
+.datepicker {
+    width:120px;
 }
 
 /*********************************
@@ -236,15 +255,17 @@ li.done span.body a {
     width:400px;
     border: 1px solid #F1F1F1;
 }
-#calendarPanel span {
+#calendarPanel span, #calendarPanel a {
     display: inline-block;
 }
 #calendarPanel .body-area {
     padding:20px 10px;
 }
+#calendarPanel.edit .task-body {
+    margin-left: 20px;
+}
 #calendarPanel .body {
     margin-left: 6px;
-    mar
 }
 #calendarPanel .task-date {
     margin:10px 0 0 20px;
@@ -257,6 +278,11 @@ li.done span.body a {
     font-size: 12px;
     border-bottom-right-radius: 3px;
     border-bottom-left-radius: 3px;
+    height: auto;
+}
+#calendarPanel.edit .action-area a{
+    margin-left:15px;
+    float:right;
 }
 #calendarPanel .action-area:hover {
 
@@ -267,6 +293,7 @@ li.done span.body a {
 }
 #calendarPanel .action-icon:hover {
     color:#6f6f6f;
+    text-decoration: none;
 }
 #calendarPanel .action-icon:first-child {
     margin-left:0px;
@@ -275,11 +302,21 @@ li.done span.body a {
     margin-right:2px;
 }
 #calendarPanel .delete-cal-task {
+    /*position : absolute;
+    right : 10px;*/
     float:right;
+}
+#calendarPanel .edit-cal-task {
+    float:left;
 }
 #calendarPanel .delete-cal-task span {
     font-size:11px;
 }
+#calendarPanel .btn {
+    font-size:9px;
+    padding:3px 10px 2px;
+}
+
 #calendarPanel .cal-panel-cancel {
     font-size:11px;
     color:#ccc;
@@ -300,4 +337,7 @@ li.done span.body a {
 }
 li.delete {
     background-color:#ccc;
+}
+#d-bar {
+    transition:2s;
 }

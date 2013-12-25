@@ -121,6 +121,7 @@
 		$('input.datepicker').Zebra_DatePicker({
 	        direction : [getFutureDate(0), false]
 	    });
+	    $('input.datepicker').val(getFutureDate(0));
 	});
 </script>
 <?php echo $this->Html->script('jquery-ui-1.10.3.custom.min'); ?>

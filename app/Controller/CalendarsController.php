@@ -24,7 +24,8 @@ class CalendarsController extends AppController {
 		$this->set('token', $token);
 
 		//SecurityComponentのCSRFチェックを無効
-		if ($this->params['action'] == 'status') {
+		if ($this->params['action'] == 'status' ||
+			$this->params['action'] == 'edit') {
              $this->Security->csrfCheck = false;
              $this->Security->validatePost = false;
 
@@ -116,4 +117,66 @@ class CalendarsController extends AppController {
         }
 	}
 
+	public function edit($status, $id) { //status -- 1:stauts,2:push
+		$this->Task->id = $id;
+		//Ajax or not
+        if (!$this->request->is('ajax')) {
+            throw new NotFoundException(__('Don\'t ajax!'));
+        }
+        $this->autoRender = false;   // 自動描画をさせない
+
+        if (!$this->Task->exists($id)) {
+            throw new NotFoundException(__('Non exist $id'));
+        }
+        switch($status) {
+        	case 'status':
+        		//syori
+        		$row = $this->Task->find('first',array(
+		        	'conditions' => array(
+		        		'Task.id' => $id,
+		        	),
+		        	'recursive' => 1,
+		        ));
+		        if($row) {
+		        	$result = $row['Task'];
+		        	$error = false;
+		            $res = array("error" => $error,"result" => $result);
+		            $this->response->type('json');
+		            echo json_encode($res);
+		            exit;
+		        } else  {
+		        	$error = true;
+		            $message = 'データ取得失敗';
+		            $res = $res = compact('error', 'message');
+		            $this->response->type('json');
+		            echo json_encode($res);
+		            exit;
+		        }
+        		break;
+
+        	case 'push':
+        		//syori
+        		if ($this->Task->save($this->request->data)) {
+					$options = array('conditions' => array('Task.' . $this->Task->primaryKey => $id));
+					$result = $this->Task->find('first', $options);
+		            $all_d = almostzero+array_sum($this->_getdparams());
+					$error = false;
+		        	$res = array("error" => $error,"result" => $result["Task"], 'all_d' =>$all_d);
+		        	$this->response->type('json');
+		        	echo json_encode($res);
+		        	exit;
+				//save NG
+				}else {
+					$error = true;
+		        	$message = $this->Task->validationErrors;
+		        	$res = $res = compact('error', 'message');
+		        	$this->response->type('json');
+		        	echo json_encode($res);
+					exit;
+				}
+        		break;
+        	default:
+        		throw new NotFoundException(__("Non exist $status"));
+        }
+	}
 }

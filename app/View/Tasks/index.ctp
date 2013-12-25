@@ -1,3 +1,7 @@
+<div class="actions">
+<h3><?php echo __('Actions'); ?></h3>
+	<?php echo $this->Html->link(__('カレンダー表示'), array('controller'=>'calendars', 'action' => 'viewcalendar')); ?>
+</div>
 <p id="clean-bomb" class="btn btn-danger">Bomb一括削除</p>
 <h2><?php echo __('User Name: '.h($username)); ?></h2>
 <div class="d-bar progress progress-striped">
@@ -11,8 +15,9 @@
 				<legend><?php echo __('Add Task'); ?></legend>
 				<?php
 					echo $this->Form->input('user_id', array('type'=>'hidden', 'default' => $author['id']));//$user_idから$authorに変更
-					echo $this->Form->input('body');
-					echo $this->Form->input('start_time', array('type'=>'text', 'class' => 'datepicker'));
+					echo $this->Form->input('body', array('placeholder'=>'タスクを入力して下さい'));
+					echo $this->Form->input('start_time', array('type'=>'text', 'class' => 'datepicker','readonly' => 'readonly'));
+					echo $this->Form->input('sequence',array('type' => 'hidden', 'class' => 'sequence', 'value' =>'0'));
 				?>
 				<?php
 					//ajax送信用設定
@@ -93,10 +98,7 @@
 			<li class="empty list-group-item clearfix">タスクがありません</li>
 		<?php endif; ?>
 		</ul>
-		<div class="actions">
-		<h3><?php echo __('Actions'); ?></h3>
-			<?php echo $this->Html->link(__('カレンダー表示'), array('controller'=>'calendars', 'action' => 'viewcalendar')); ?>
-		</div>
+
 	</div>
 	<div class="tasks side col-md-4 column">
 		<br>
