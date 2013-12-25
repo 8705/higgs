@@ -46,19 +46,9 @@ class TasksController extends AppController {
             ),
             'order' => array('Task.sequence'=>'asc'),
         );
-
-
-        $opt_bombs = array(
-            'conditions' => array(
-                'Task.user_id' => $this->Auth->user('id'),
-                'Task.status' => 'bomb',
-                'Task.bomb' => 1,
-            ),
-        );
 		$this->set('tasks_today', $this->Task->find('all', $opt_today));
         $this->set('tasks_tomorrow', $this->Task->find('all', $opt_tomorrow));
         $this->set('tasks_dayaftertomorrow', $this->Task->find('all', $opt_dayaftertomorrow));
-        $this->set('bombs', $this->Task->find('all', $opt_bombs));
 	}
 
 	public function view($id = null) {
@@ -73,6 +63,18 @@ class TasksController extends AppController {
         }
         $this->set('tasks', $allChildren);
 	}
+
+    public function bomb() {
+        $this->Task->recursive = -1;
+        $opt_bombs = array(
+            'conditions' => array(
+                'Task.user_id' => $this->Auth->user('id'),
+                'Task.status' => 'bomb',
+                'Task.bomb' => 1,
+            ),
+        );
+        $this->set('bombs', $this->Task->find('all', $opt_bombs));
+    }
 
 	public function add() {
 		//Ajax or not
@@ -93,24 +95,21 @@ class TasksController extends AppController {
             $result = $this->Task->find('first', array(
                 'conditions' => array('Task.id' => $saved_id)
             ));
-            $all_d = almostzero+array_sum($this->_getdparams());
+            $all_d = almostzero + array_sum($this->_getdparams());
 
             $error = false;
             $res = array("error" => $error,"result" => $result["Task"], 'all_d' => $all_d);
-            // $res = array_merge('error'=>$error, $result['Task']);
-            // debug($res);exit;
             $this->response->type('json');
             echo json_encode($res);
             exit;
-
         // save NG
         } else {
-        	$error = true;
-        	$message = $this->Task->validationErrors;
-        	$res = $res = compact('error', 'message');
-        	$this->response->type('json');
-        	echo json_encode($res);
-        	exit;
+            $error = true;
+            $message = $this->Task->validationErrors;
+            $res = $res = compact('error', 'message');
+            $this->response->type('json');
+            echo json_encode($res);
+            exit;
         }
 	}
 

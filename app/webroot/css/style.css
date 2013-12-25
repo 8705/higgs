@@ -61,7 +61,7 @@ img {
     全体
 **********************************/
 body {
-	background-color: #FFF67F;
+	background-color: #7BD0FF;
 }
 
 h2 {
@@ -69,7 +69,16 @@ h2 {
 }
 
 #main {
-	padding: 80px 0 100px;
+    padding: 80px 15px 100px;
+    background-color: #F7FDFF;
+}
+
+#side-menu {
+    border: solid 2px;
+    border-color: #7BD0FF;
+    border-radius: 4px;
+    background-color: #FFF;
+    padding: 15px;
 }
 
 #footer {
@@ -82,6 +91,7 @@ h2 {
 #top-img {
 	padding-top: 50px;
 }
+
 textarea {
     border-radius: 3px;
     border: 1px solid #CCC;
@@ -98,6 +108,20 @@ input:hover, textarea:hover {
 }
 .datepicker {
     width:120px;
+}
+
+/*********************************
+    ログインフォーム
+**********************************/
+.form-group {
+    margin-right: 15px;
+    margin-left: 15px;
+}
+/*********************************
+    バー
+**********************************/
+.progress {
+    height: 40px;
 }
 
 /*********************************

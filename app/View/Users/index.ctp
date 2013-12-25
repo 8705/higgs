@@ -52,26 +52,26 @@
 				array('action'=>'login', 'class'=>'form-horizontal', 'role'=>'form')
 			);?>
 				<div class="form-group">
-					 <label for="inputEmail3" class="col-sm-2 control-label">User Id</label>
-					<div class="col-sm-10">
-						<?php echo $this->Form->input('username', array('class'=>'form-control')); ?>
+					<!--<label for="inputEmail3" class="col-sm-2 control-label">User Id</label>-->
+					<div class="col-sm-7">
+						<?php echo $this->Form->input('username', array('class'=>'form-control', 'placeholder' => 'User ID')); ?>
 					</div>
 				</div>
 				<div class="form-group">
-					 <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
-					<div class="col-sm-10">
-						<?php echo $this->Form->input('password', array('type'=>'password', 'class'=>'form-control', 'id'=>'inputPassword3')); ?>
+					<!-- <label for="inputPassword3" class="col-sm-2 control-label">Password</label> -->
+					<div class="col-sm-7">
+						<?php echo $this->Form->input('password', array('type'=>'password', 'class'=>'form-control', 'id'=>'inputPassword3', 'placeholder' => 'Password')); ?>
 					</div>
 				</div>
 				<div class="form-group">
-					<div class="col-sm-offset-2 col-sm-10">
+					<div class="col-sm-7">
 						<div class="checkbox">
 							<label><?php echo $this->Form->checkbox('remember_me'); ?>Remember NAKAI!!!!!!!!!!!!!!!!!</label>
 						</div>
 					</div>
 				</div>
 				<div class="form-group">
-					<div class="col-sm-offset-2 col-sm-10">
+					<div class="col-sm-7">
 						<?php echo $this->Form->button('Sign in', array('class'=>'btn btn-default')); ?>
 					</div>
 				</div>
@@ -80,25 +80,25 @@
 				array('action'=>'register', 'class'=>'form-horizontal', 'role'=>'form')
 			);?>
 				<div class="form-group">
-					<label for="inputEmail3" class="col-sm-2 control-label">User Id</label>
-					<div class="col-sm-10">
-						<?php echo $this->Form->input('username', array('class'=>'form-control')); ?>
+					<!--<label for="inputEmail3" class="col-sm-2 control-label">User Id</label>-->
+					<div class="col-sm-7">
+						<?php echo $this->Form->input('username', array('class'=>'form-control', 'placeholder' => 'User ID')); ?>
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="inputEmail3" class="col-sm-2 control-label">Email</label>
-					<div class="col-sm-10">
-						<?php echo $this->Form->input('email', array('type'=>'email', 'class'=>'form-control', 'id'=>'inputEmail3')); ?>
+					<!--<label for="inputEmail3" class="col-sm-2 control-label">Email</label>-->
+					<div class="col-sm-7">
+						<?php echo $this->Form->input('email', array('type'=>'email', 'class'=>'form-control', 'id'=>'inputEmail3', 'placeholder' => 'E-mail')); ?>
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="inputPassword3" class="col-sm-2 control-label">Password</label>
-					<div class="col-sm-10">
-						<?php echo $this->Form->input('password', array('type'=>'password', 'class'=>'form-control', 'id'=>'inputPassword3')); ?>
+					<!--<label for="inputPassword3" class="col-sm-2 control-label">Password</label>-->
+					<div class="col-sm-7">
+						<?php echo $this->Form->input('password', array('type'=>'password', 'class'=>'form-control', 'id'=>'inputPassword3', 'placeholder' => 'Password')); ?>
 					</div>
 				</div>
 				<div class="form-group">
-					<div class="col-sm-offset-2 col-sm-10">
+					<div class="col-sm-7">
 						<?php echo $this->Form->button('Sign up', array('class'=>'btn btn-default')); ?>
 					</div>
 				</div>

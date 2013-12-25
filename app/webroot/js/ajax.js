@@ -154,12 +154,15 @@ function addTask(data, textStatus) {
 
         return;
     }
+
+    var elm = htmlAddElm(data);
+    $('#task-list-parents').append(elm);
     //正常時
     //トップページ
     if($('table.calendar').length == 0) {
-        var elm = htmlAddElm(data);
-
+        
         //日付によって描画する場所を変える
+        
         appendToDay(data.result.start_time, elm);
     //カレンダー
     } else {
