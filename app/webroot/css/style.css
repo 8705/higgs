@@ -159,7 +159,7 @@ input:hover, textarea:hover {
     display: inline-block;
 }
 .task-list li .body {
-    width:250px;
+    margin-right: 200px;
 }
 .task-list li span.btn {
     margin-left:10px;
@@ -170,6 +170,12 @@ input:hover, textarea:hover {
 .task-list li .status {
     width: 45px;
 }
+
+/***** アコーディオン *********/
+.close-ul {
+    border-bottom: 5px solid #CCC;
+}
+
 /****** ボタン *******************/
 /* ボタン全般 */
 .btn {

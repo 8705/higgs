@@ -1145,4 +1145,29 @@ $(function(){
             move_date = $(this).data('cal-date');
         },
     }).disableSelection();
+
+    //編集や削除ボタンを押した時のアコーディオンの反応を消す
+    $(document).on({
+        mouseenter : function(){
+            open_flg = true;
+        },
+        mouseleave : function(){
+            open_flg = false;
+        }
+    }, '.children-ul span');
+    //一族リストの折込
+    $(document).on('click','li',function(e){
+        // cancelEvent(e);
+        //子持ちししゃも判定
+        if($(this).next().hasClass('children-ul')) {
+            var id = $(this).data('task-id');
+            if(!open_flg) {
+                $('ul[data-children-ul-id='+id+']').animate({
+                    height: 'toggle'
+                },250);
+                $('#task_'+id).toggleClass('close-ul');
+                $('ul[data-children-ul-id='+id+']').toggleClass('close-ul');
+            }
+        }
+    })
 });
