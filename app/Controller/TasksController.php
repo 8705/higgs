@@ -96,15 +96,11 @@ class TasksController extends AppController {
 
         // save OK
         if ($this->Task->save($this->request->data)) {
-
-            //レンダリングのためにtaskIdを取得する
-            $saved_id = $this->Task->getLastInsertID();
-            /*
-                Userテーブルのレコードも取得してしまっている
-                ユーザー情報を返すのは良くない！
-            */
             $result = $this->Task->find('first', array(
-                'conditions' => array('Task.id' => $saved_id)
+                'conditions' => array(
+                    'Task.user_id' => $this->Auth->user('id')
+                ),
+                'order' => array('Task.id' => 'desc')
             ));
 
             $all_d = $this->getuseralld();
@@ -311,7 +307,7 @@ class TasksController extends AppController {
         $json = json_decode($this->request->data['json'], true);
 
         $res = $this->Task->updateAll(
-            array('Task.status' => 'notyet'),
+            array('Task.status' => '"notyet"'),
             //array('Task.bomb' => 1)
             array('Task.id' => $json)
         );
