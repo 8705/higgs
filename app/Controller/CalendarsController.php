@@ -52,7 +52,8 @@ class CalendarsController extends AppController {
 			'conditions' => array(
 				'Task.user_id' => $this->Auth->user('id'),
 				'Task.status !=' => 'delete',
-			)
+			),
+			'order' => array('Task.sequence' => 'asc')
 		);
 		$tasks = $this->Task->find('all', $options);
 		foreach($tasks as $task) {
