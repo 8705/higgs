@@ -100,67 +100,67 @@
 		</div>
 	<?php endif; ?>
 	<div id="noticePanel"></div>
-		<div id="main" class="row clearfix">
-	<?php if($this->params["controller"] != 'users'): ?>
-		<div id="side-menu" class="tasks col-md-4 column">
-			<p id="clean-bomb" class="btn btn-danger">Bomb一括削除</p>
-			<h2><?php echo __("Bombバー"); ?></h2>
-			<div class="d-bar progress progress-striped">
-				<div id="d-bar" class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="<?php echo 100*$bar/dcapacity; ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo 100*$bar/dcapacity; ?>%">
-					<?php echo round(100*$bar/dcapacity,-1)."%"; ?>
+	<div id="main" class="row clearfix">
+		<?php if($this->params["controller"] != 'users'): ?>
+				<div id="side-menu" class="tasks col-md-4 column">
+					<p id="clean-bomb" class="btn btn-danger">Bomb一括削除</p>
+					<div class="tasks">
+						<?php echo $this->Form->create('Task'); ?>
+						<fieldset>
+						<?php
+							echo $this->Form->input('user_id', array('type'=>'hidden', 'default' => $author['id']));
+							echo $this->Form->input('body', array('placeholder' => 'Add Project'));
+							echo $this->Form->input('start_time', array('type'=>'text', 'class' => 'datepicker','readonly' => 'readonly'));
+							//ajax送信用設定
+							echo $this->Js->submit('Submit', array(
+								'url'		=> '/tasks/add',
+								'type'		=> 'json',
+								'success'	=> 'addTask(data, textStatus)',
+								'error'		=> 'popUpPanel(true, "サーバーエラー")',
+								'async'		=> true,
+								'class' 	=> 'btn btn-primary',
+								'complete'  => '$("input.datepicker").val(getFutureDate(0))'
+							));
+						?>
+						</fieldset>
+						<?php echo $this->Form->end(); ?>
+					</div>
+					<div class="tasks parents">
+						<h2>Projects</h2>
+						<ul class="list-group" id="task-list-parents">
+							<?php if (count($parents)): ?>
+								<?php foreach ($parents as $parent): ?>
+									<li id="parent_<?php echo h($parent['Task']['id']); ?>" class="notyet list-group-item clearfix" data-task-id="<?php echo h($parent['Task']['id']); ?>">
+										<span class="body"><?php echo $this->Html->link(__(h($parent['Task']['body'])), array('controller'=>'tasks', 'action' => 'view', $parent['Task']['id'])); ?></span>
+										<span><?php echo $parent['Task']['complete'].'%'; ?></span>
+									</li>
+								<?php endforeach; ?>
+							<?php else: ?>
+								<li class="empty list-group-item clearfix">タスクがありません</li>
+							<?php endif; ?>
+						</ul>
+					</div>
+					<div class="actions">
+						<h3><?php echo __('Actions'); ?></h3>
+						<ul>
+							<li><?php echo $this->Html->link(__('List Tasks'), array('controller'=>'tasks', 'action' => 'index')); ?> </li>
+							<li><?php echo $this->Html->link(__('List Bombs'), array('controller'=>'tasks', 'action' => 'bomb')); ?> </li>
+							<li><?php echo $this->Html->link(__('カレンダー表示'), array('controller'=>'calendars', 'action' => 'viewcalendar')); ?></li>
+						</ul>
+					</div>
 				</div>
-			</div>
-			<div class="tasks">
-				<?php echo $this->Form->create('Task'); ?>
-			<fieldset>
-				<?php
-					echo $this->Form->input('user_id', array('type'=>'hidden', 'default' => $author['id']));
-					echo $this->Form->input('body', array('placeholder' => 'Add Project'));
-					echo $this->Form->input('start_time', array('type'=>'text', 'class' => 'datepicker','readonly' => 'readonly'));
-				?>
-				<?php
-					//ajax送信用設定
-					echo $this->Js->submit('Submit', array(
-						'url'		=> '/tasks/add',
-						'type'		=> 'json',
-						'success'	=> 'addTask(data, textStatus)',
-						'error'		=> 'popUpPanel(true, "サーバーエラー")',
-						'async'		=> true,
-						'class' 	=> 'btn btn-primary',
-						'complete'  => '$("input.datepicker").val(getFutureDate(0))'
-						)
-					);
-				?>
-			</fieldset>
-				<?php echo $this->Form->end(); ?>
-			</div>
-			<div class="tasks parents">
-				<h2>Projects</h2>
-				<ul class="list-group" id="task-list-parents">
-					<?php if (count($parents)): ?>
-						<?php foreach ($parents as $parent): ?>
-							<li id="parent_<?php echo h($parent['Task']['id']); ?>" class="<?php echo h($parent['Task']['status']);?> list-group-item clearfix" data-task-id="<?php echo h($parent['Task']['id']); ?>">
-							<span class="body"><?php echo $this->Html->link(__(h($parent['Task']['body'])), array('controller'=>'tasks', 'action' => 'view', $parent['Task']['id'])); ?></span>
-							<span><?php echo $parent['Task']['complete'].'%'; ?></span>
-							</li>
-						<?php endforeach; ?>
-					<?php else: ?>
-						<li class="empty list-group-item clearfix">タスクがありません</li>
-					<?php endif; ?>
-				</ul>
-			</div>
-			<div class="actions">
-				<h3><?php echo __('Actions'); ?></h3>
-				<ul>
-					<li><?php echo $this->Html->link(__('List Tasks'), array('controller'=>'tasks', 'action' => 'index')); ?> </li>
-					<li><?php echo $this->Html->link(__('List Bombs'), array('controller'=>'tasks', 'action' => 'bomb')); ?> </li>
-					<li><?php echo $this->Html->link(__('カレンダー表示'), array('controller'=>'calendars', 'action' => 'viewcalendar')); ?></li>
-				</ul>
-			</div>
-			</div>
-	<?php endif; ?>
+		<?php endif; ?>
 		<div id="tasks" class="index col-md-8 column">
 			<?php echo $this->fetch('content'); ?>
+		</div>
+	</div>
+	<div id="d-bar">
+		<div class="progress progress-striped">
+			<?php foreach($bar as $val): ?>
+				<div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="<?php echo $val; ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $val; ?>%">
+					<?php echo round($val)."%"; ?>
+				</div>
+			<?php endforeach; ?>
 		</div>
 	</div>
 	<div id="footer" class="row clearfix">

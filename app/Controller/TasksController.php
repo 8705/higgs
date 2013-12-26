@@ -106,8 +106,8 @@ class TasksController extends AppController {
             $result = $this->Task->find('first', array(
                 'conditions' => array('Task.id' => $saved_id)
             ));
-            $all_d = almostzero + array_sum($this->_getdparams());
 
+            $all_d = $this->getuseralld();
             $error = false;
             $res = array("error" => $error,"result" => $result["Task"], 'all_d' => $all_d);
             $this->response->type('json');
@@ -139,7 +139,8 @@ class TasksController extends AppController {
 		if ($this->Task->save($this->request->data)) {
 			$options = array('conditions' => array('Task.' . $this->Task->primaryKey => $id));
 			$result = $this->Task->find('first', $options);
-            $all_d = almostzero+array_sum($this->_getdparams());
+
+            $all_d = $this->getuseralld();
 			$error = false;
         	$res = array("error" => $error,"result" => $result["Task"], 'all_d' =>$all_d);
         	$this->response->type('json');
@@ -193,7 +194,7 @@ class TasksController extends AppController {
 
         //save OK
         if(!in_array(false, $errorArray)) {
-            $all_d = almostzero+array_sum($this->_getdparams());
+            $all_d = $this->getuseralld();
             $error = false;
             $res = array("error" => $error,"result" => $resultArray, 'all_d' => $all_d);
             $this->response->type('json');
@@ -237,7 +238,7 @@ class TasksController extends AppController {
                 $bomb->_modifyinfluence($parent['Task']['id']);
             }
 
-            $all_d = almostzero + array_sum($this->_getdparams());
+            $all_d = $this->getuseralld();
             $error = false;
             $res = array("error" => $error,"result" => $result,"all_d" => $all_d);
             $this->response->type('json');
@@ -284,7 +285,7 @@ class TasksController extends AppController {
         if ($this->Task->save($this->request->data)) {
             $options = array('conditions' => array('Task.' . $this->Task->primaryKey => $id));
             $result = $this->Task->find('first', $options);
-            $all_d = almostzero + array_sum($this->_getdparams());
+            $all_d = $this->getuseralld();
             $error = false;
             $res = array("error" => $error,"result" => $result["Task"],"all_d" => $all_d);
             $this->response->type('json');
@@ -299,18 +300,6 @@ class TasksController extends AppController {
             echo json_encode($res);
             exit;
         }
-    }
-
-    public function _getdparams() {
-        $options = array(
-            'conditions' => array(
-                'Task.user_id' => $this->Auth->user('id'),
-                'Task.status' => 'notyet',
-                '(Task.rght - Task.lft)' => 1
-            ),
-            'fields' => array('Task.d_param')
-        );
-        return $this->Task->find('list', $options);
     }
 
     public function clean() {
@@ -397,7 +386,7 @@ class TasksController extends AppController {
                     $resultArray[] = $result['Task'];
                 }
                 if(!in_array(false, $errorArray)){
-                    $all_d = almostzero+array_sum($this->_getdparams());
+                    $all_d = $this->getuseralld();
                     $error = false;
                     $res = array("error" => $error, "result" => $resultArray, 'all_d' => $all_d);
                     $this->response->type('json');
@@ -435,6 +424,5 @@ class TasksController extends AppController {
             echo json_encode($res);
             exit;
         }
-
     }
 }
