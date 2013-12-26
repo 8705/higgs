@@ -143,6 +143,14 @@ input:hover, textarea:hover {
 /*********************************
     タスクリスト
 **********************************/
+
+/* タスクヘッダー　[今日:明日:明後日] */
+
+.sort-link {
+    padding: 3px 8px 2px;
+    font-size: 11px;
+}
+
 /* タスクラベル */
 .data-label span {
     display: inline-block;
@@ -159,7 +167,7 @@ input:hover, textarea:hover {
     display: inline-block;
 }
 .task-list li .body {
-    width:250px;
+    margin-right: 130px;
 }
 .task-list li span.btn {
     margin-left:10px;
@@ -170,6 +178,17 @@ input:hover, textarea:hover {
 .task-list li .status {
     width: 45px;
 }
+
+/* 爆発したけどリストにいるタスク */
+.task-list .bomb {
+    opacity: 0.4;
+}
+
+/***** アコーディオン *********/
+.close-ul {
+    border-bottom: 5px solid #CCC;
+}
+
 /****** ボタン *******************/
 /* ボタン全般 */
 .btn {

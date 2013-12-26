@@ -38,8 +38,8 @@ function htmlDivideUl(parentId){
             '<input class="parent_id" type="hidden" name="parent_id" value="'+parentId+'" />'+
         '</li>\n'+
         '<li class="divide-btn-area list-group-item clearfix">'+
-            '<span class="divide-more btn btn-success no-empty-submit" disabled="diabled">＋</span>\n'+
-            '<span class="divide-push btn btn-primary no-empty-submit" disabled="diabled">OK</span>\n'+
+            '<span class="divide-more btn btn-success no-empty-submit">＋</span>\n'+
+            '<span class="divide-push btn btn-primary no-empty-submit">OK</span>\n'+
         '</li>\n'+
         '</ul>'
     );
@@ -160,9 +160,9 @@ function addTask(data, textStatus) {
     //正常時
     //トップページ
     if($('table.calendar').length == 0) {
-        
+
         //日付によって描画する場所を変える
-        
+
         appendToDay(data.result.start_time, elm);
     //カレンダー
     } else {
@@ -753,7 +753,6 @@ $(function(){
             })
         }
     });
-
     $('.sort-link').click(function(e){
         cancelEvent(e);
         var day = $(this).attr('href').substr(14);
@@ -1100,21 +1099,27 @@ $(function(){
         });
     })
 
-    //test
+    //カレンダーDnD
+    var count = 1;
     $('#taskcalendar td').sortable({
         connectWith : '.connected',
         opacity : 0.6,
-        receive : function() {
+        update : function() {
+            if(count == 1) {
+                date = start_date;
+            } else if(count == 2) {
+                date = move_date;
+            }
             $.ajax({
                 url : '/calendars/sort',
                 type : 'POST',
                 timeout : 5000,
                 data : {
                     date : date,
-                    sequence : $(this).sortable('serialize')
+                    sequence : $(this).sortable('serialize'),
                 },
                 beforeSend : function() {
-                    //全ての編集中のタスクを元に戻す。
+
                 },
                 success : function() {
 
@@ -1126,9 +1131,41 @@ $(function(){
 
                 }
             })
+            if(count == 1) {
+                count++;
+            }
+        },
+        start : function() {
+            count = 1;
+            start_date = $(this).data('cal-date');
         },
         over : function() {
-            date = $(this).data('cal-date');
+            move_date = $(this).data('cal-date');
         },
     }).disableSelection();
+
+    //編集や削除ボタンを押した時のアコーディオンの反応を消す
+    $(document).on({
+        mouseenter : function(){
+            open_flg = true;
+        },
+        mouseleave : function(){
+            open_flg = false;
+        }
+    }, '.children-ul span');
+    //一族リストの折込
+    $(document).on('click','li',function(e){
+        // cancelEvent(e);
+        //子持ちししゃも判定
+        if($(this).next().hasClass('children-ul')) {
+            var id = $(this).data('task-id');
+            if(!open_flg) {
+                $('ul[data-children-ul-id='+id+']').animate({
+                    height: 'toggle'
+                },250);
+                $('#task_'+id).toggleClass('close-ul');
+                $('ul[data-children-ul-id='+id+']').toggleClass('close-ul');
+            }
+        }
+    })
 });
