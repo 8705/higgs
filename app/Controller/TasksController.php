@@ -220,7 +220,19 @@ class TasksController extends AppController {
             ));
             $result = $row['Task'];
 
+            $children = $this->Task->children($id);
+            foreach($children as $child) {
+                $child_id[] = $child['Task']['id'];
+                $this->Task->removeFromTree($child['Task']['id']);
+            }
+
+            $this->Task->updateAll(
+                array('Task.status' => "'delete'"),
+                array('Task.id' => $child_id)
+            );
+
             $this->Task->removeFromTree($id);
+
             $parent = $this->Task->getParentNode($id);
             if($parent) {
                 $bomb = new BombController;
