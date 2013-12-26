@@ -37,7 +37,7 @@ class BombController extends AppController {
         foreach($gods as $god) {
             $allChildren = $this->Task->children($god['Task']['id'], null, null, $order='lft');
             array_unshift($allChildren, $god);
-            foreach($allChildren as $child) { 
+            foreach($allChildren as $child) {
                 $influence = $this->_myinfluence($child['Task']['id']);
                 $this->Task->id = $child['Task']['id'];
                 $this->Task->saveField('influence', $influence);

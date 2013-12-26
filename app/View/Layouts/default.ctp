@@ -104,15 +104,9 @@
 	<?php if($this->params["controller"] != 'users'): ?>
 		<div id="side-menu" class="tasks col-md-4 column">
 			<p id="clean-bomb" class="btn btn-danger">Bomb一括削除</p>
-			<h2><?php echo __("Bombバー"); ?></h2>
-			<div class="d-bar progress progress-striped">
-				<div id="d-bar" class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="<?php echo 100*$bar/dcapacity; ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo 100*$bar/dcapacity; ?>%">
-					<?php echo round(100*$bar/dcapacity,-1)."%"; ?>
-				</div>
-			</div>
 			<div class="tasks">
 				<?php echo $this->Form->create('Task'); ?>
-			<fieldset>
+				<fieldset>
 				<?php
 					echo $this->Form->input('user_id', array('type'=>'hidden', 'default' => $author['id']));
 					echo $this->Form->input('body', array('placeholder' => 'Add Project'));
@@ -131,7 +125,7 @@
 						)
 					);
 				?>
-			</fieldset>
+				</fieldset>
 				<?php echo $this->Form->end(); ?>
 			</div>
 			<div class="tasks parents">
@@ -162,6 +156,15 @@
 		<div id="tasks" class="index col-md-8 column">
 			<?php echo $this->fetch('content'); ?>
 		</div>
+	</div>
+	<div id="d-bar">
+	<div class="progress progress-striped">
+		<?php foreach($bar as $val): ?>
+			<div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="<?php echo $val; ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $val; ?>%">
+					<?php echo round($val)."%"; ?>
+			</div>
+		<?php endforeach; ?>
+</div>
 	</div>
 	<div id="footer" class="row clearfix">
 		<div class="col-md-12 column">

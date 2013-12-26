@@ -36,14 +36,17 @@ class AppController extends Controller {
             $children = $this->Task->children($parent['Task']['id']);
             $sum_dparam = 0;
             foreach($children as $child) {
-                if($child['Task']['status'] == 'done' and $child['Task']['rght']-$child['Task']['lft'] == 1) {
+                if(
+                    $child['Task']['status'] == 'done' and 
+                    $child['Task']['rght'] - $child['Task']['lft'] == 1
+                ) {
                     $sum_dparam += $child['Task']['influence'];
                 }
             }
             $parents[$key]['Task']['complete'] = round(100*$sum_dparam);
+            $bar[$key] = 100*$parent['Task']['d_param']*(1-$sum_dparam)/dcapacity;
         }
-
-        $this->set('bar', $this->getuseralld());
+        $this->set('bar', $bar);
         $this->set('parents', $parents);
         //CSRF対策用にSecurityComponentが生成したトークンを取得
         $token = $this->Session->read('_Token.key');
