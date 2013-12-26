@@ -154,25 +154,28 @@ function addTask(data, textStatus) {
 
         return;
     }
-
-    var elm = htmlAddElm(data);
+    var elm =$(
+        '<li id="parent_'+data.result.id+'" class="notyet list-group-item clearfix" data-task-id="'+data.result.id+'">'+
+        '<span class="body"><a href="/tasks/view/' + data.result.id + '">'+data.result.body +'</a></span>\n'+
+        '<span>0%</span></li>'
+    );
     $('#task-list-parents').append(elm);
     //正常時
     //トップページ
     if($('table.calendar').length == 0) {
-
         //日付によって描画する場所を変える
-
+        var elm = htmlAddElm(data);
         appendToDay(data.result.start_time, elm);
     //カレンダー
     } else {
         $('td[data-cal-date='+data.result.start_time+']').append(
-            '<p class="calendartask notyet id="task_'+data.result.id+'" data-cal-task-id="'+data.result.id+'">'+data.result.body+'</p>'
+            '<p class="calendartask notyet id="task_'+data.result.id+
+            '" data-cal-task-id="'+data.result.id+'">'+data.result.body+'</p>'
         );
     }
 
-
     $('#task_'+data.result.id).fadeIn('slow');
+    $('#parent_'+data.result.id).fadeIn('slow');
 
     //通知ポップ
     popUpPanel(false, '送信されました');

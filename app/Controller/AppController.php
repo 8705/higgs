@@ -58,9 +58,10 @@ class AppController extends Controller {
             $this->params['action'] == 'check' ||
             $this->params['action'] == 'divide' ||
             $this->params['action'] == 'clean' ||
-            $this->params['action'] == 'sort') {
-             $this->Security->csrfCheck = false;
-             $this->Security->validatePost = false;
+            $this->params['action'] == 'sort'
+        ) {
+            $this->Security->csrfCheck = false;
+            $this->Security->validatePost = false;
 
             //token確認
             if ( !isset($_SERVER['HTTP_X_CSRF_TOKEN'])
