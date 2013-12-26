@@ -17,6 +17,14 @@ class TasksController extends AppController {
 	//Jsヘルパー追加
 	public $helper = array('Js');
 
+    private function isAuthorized($post) {
+        if ($this->Task->isOwnedBy($post, $this->Auth->user('id'))) {
+            return true;
+        }
+
+        return false;
+    }
+
 	public function index() {
 		$this->Task->recursive = -1;
 		$opt_today = array(
@@ -52,6 +60,9 @@ class TasksController extends AppController {
 	}
 
 	public function view($id = null) {
+        if(!$this->isAuthorized($id)) {
+            throw new BadRequestException('他人のタスクを見ようなんざ、まさに「ゲスの極み」！！');
+        }
 		if (!$this->Task->exists($id)) {
 			throw new NotFoundException(__('Invalid task'));
 		}

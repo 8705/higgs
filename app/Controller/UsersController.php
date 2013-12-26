@@ -83,7 +83,7 @@ class UsersController extends AppController {
 			}
 		}
 	}
-
+	/* とりあえず消しとく
 	public function view($id = null) {
 		if (!$this->User->exists($id)) {
 			throw new NotFoundException(__('Invalid user'));
@@ -91,6 +91,7 @@ class UsersController extends AppController {
 		$options = array('conditions' => array('User.' . $this->User->primaryKey => $id));
 		$this->set('user', $this->User->find('first', $options));
 	}
+	*/
 
 	public function edit($id = null) {
 		if (!$this->User->exists($id)) {
@@ -109,6 +110,7 @@ class UsersController extends AppController {
 		}
 	}
 
+	/*とりあえず消す
 	public function delete($id = null) {
 		$this->User->id = $id;
 		if (!$this->User->exists()) {
@@ -122,6 +124,7 @@ class UsersController extends AppController {
 		}
 		return $this->redirect(array('action' => 'index'));
 	}
+	*/
 
 	public function __passportWrite($user){
 		$passport = array();

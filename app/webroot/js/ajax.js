@@ -206,7 +206,7 @@ $(function(){
     });
 
     //タスク追加inputに自動フォーカス
-    $('#TaskBody').focus();
+    //$('#TaskBody').focus();
     //初期でサブミットボタンを使用禁止
     $('#TaskIndexForm .submit input').attr({disabled : "disabled"});
     if ($('#TaskBody').val() != '' && $('#TaskStartTime') != '') {

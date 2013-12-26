@@ -63,4 +63,8 @@ class Task extends AppModel {
 	);
 
 	public $actsAs = array('Tree');
+
+	public function isOwnedBy($post, $user_id) {
+		return $this->field('id',array('id'=>$post, 'user_id'=>$user_id)) === $post;
+	}
 }

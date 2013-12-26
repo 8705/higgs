@@ -7,5 +7,5 @@
     <span class="d_param"><?php echo h($task['Task']['d_param']); ?></span>
     <span class="<?php echo h($task['Task']['status']=='notyet'?'edit-task':'disable-edit btn-disabled');?> btn btn-default">編集</span>
     <span class="delete-task"><span class="glyphicon glyphicon-trash"></span><b>削除</b></span>
-    <span class="sequence"><?php echo h($task['Task']['sequence']); ?></span>
+    <span class="sequence" style="display:none;"><?php echo h($task['Task']['sequence']); ?></span>
 </li>
