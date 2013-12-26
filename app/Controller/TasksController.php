@@ -31,8 +31,16 @@ class TasksController extends AppController {
 			'conditions' => array(
                 'Task.user_id' => $this->Auth->user('id'),
                 'Task.bomb' => 0,
-                'Task.status !=' => 'delete',
-                'Task.start_time <=' => date('Y-m-d'),
+                'AND' => array(
+                    array(
+                        'Task.status !=' => 'delete',
+                        'Task.start_time <=' => date('Y-m-d')
+                    ),
+                    array(
+                        'Task.status !=' => 'done',
+                        'Task.start_time <' => date('Y-m-d')
+                    )
+                )
             ),
 			'order' => array('Task.sequence'=>'asc'),
 		);
@@ -227,7 +235,19 @@ class TasksController extends AppController {
             ));
             $result = $row['Task'];
 
+            $children = $this->Task->children($id);
+            foreach($children as $child) {
+                $child_id[] = $child['Task']['id'];
+                $this->Task->removeFromTree($child['Task']['id']);
+            }
+
+            $this->Task->updateAll(
+                array('Task.status' => "'delete'"),
+                array('Task.id' => $child_id)
+            );
+
             $this->Task->removeFromTree($id);
+
             $parent = $this->Task->getParentNode($id);
             if($parent) {
                 $bomb = new BombController;
