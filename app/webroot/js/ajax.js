@@ -252,7 +252,6 @@ $(function(){
                 $('#task_' + taskId +' .delete-task').html('<img src="/img/ajax-loader.gif" alt="" />');
             },
             success : function(data){
-
                 $('#task_' + taskId).fadeOut(200, function(){
                     popUpPanel(false, 'タスクが削除されました');
                     //一族かトップかでul消すかどうかの処理がかわる

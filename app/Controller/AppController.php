@@ -14,7 +14,7 @@ class AppController extends Controller {
 		),
         'Security' => array(
             'csrfUseOnce' => false,  //CSRFトークンを使いまわす
-            'csrfExpires' => '+1 hour'  //トークンの持続時間を1h延長
+            'csrfExpires' => '+1 week'  //トークンの持続時間を1h延長
         ),
 	);
 
@@ -37,12 +37,13 @@ class AppController extends Controller {
             $sum_dparam = 0;
             foreach($children as $child) {
                 if($child['Task']['status'] == 'done' and $child['Task']['rght']-$child['Task']['lft'] == 1) {
-                    $sum_dparam += $child['Task']['d_param'];
+                    $sum_dparam += $child['Task']['influence'];
                 }
             }
-            $parents[$key]['Task']['complete'] = 100*$sum_dparam/$parent['Task']['d_param'];
+            $parents[$key]['Task']['complete'] = round(100*$sum_dparam);
         }
-        $this->set('bar', almostzero+array_sum($this->_getdparams()));
+
+        $this->set('bar', $this->getuseralld());
         $this->set('parents', $parents);
         //CSRF対策用にSecurityComponentが生成したトークンを取得
         $token = $this->Session->read('_Token.key');
@@ -67,15 +68,20 @@ class AppController extends Controller {
         }
     }
 
-    public function _getdparams() {
+    public function getuseralld() {
         $options = array(
             'conditions' => array(
                 'Task.user_id' => $this->Auth->user('id'),
                 'Task.status' => 'notyet',
                 'Task.start_time <=' => date('Y-m-d')
             ),
-            'fields' => array('Task.d_param')
+            'fields' => array('Task.id', 'Task.parent_id', 'Task.d_param')
         );
-        return $this->Task->find('list', $options);
+        $dparams = $this->Task->find('all', $options);
+        $all_d = 0;
+        foreach ($dparams as $val) {
+            $all_d += $val['Task']['d_param'];
+        }
+        return $all_d + almostzero;
     }
 }
