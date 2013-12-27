@@ -46,7 +46,7 @@ class AppController extends Controller {
                 }
             }
             $parents[$key]['Task']['complete'] = round(100*$sum_dparam);
-            $bar[$key] = 100*$parent['Task']['d_param']*(1-$sum_dparam)/dcapacity;
+            $bar[$parent['Task']['id']] = 100*$parent['Task']['d_param']*(1-$sum_dparam)/dcapacity;
         }
         $this->set('bar', $bar);
         $this->set('parents', $parents);
@@ -74,21 +74,66 @@ class AppController extends Controller {
         }
     }
 
-    public function getuseralld() {
+    public function getalldbar() {
         $options = array(
             'conditions' => array(
                 'Task.user_id' => $this->Auth->user('id'),
                 'Task.status' => 'notyet',
-                'Task.start_time <=' => date('Y-m-d')
-            ),
-            'fields' => array('Task.id', 'Task.parent_id', 'Task.d_param')
+                'Task.parent_id' => null
+            )
         );
-        $dparams = $this->Task->find('all', $options);
+        $gods = $this->Task->find('all', $options);
         $all_d = 0;
-        foreach ($dparams as $val) {
-            $all_d += $val['Task']['d_param'];
+        foreach($gods as $key=>$god) {
+            $children = $this->Task->children($god['Task']['id']);
+            array_unshift($children, $god);
+            $sum_dparam = 0;
+            foreach($children as $child) {
+                if(
+                    $child['Task']['status'] == 'notyet' and 
+                    $child['Task']['rght'] - $child['Task']['lft'] == 1
+                ) {
+                    $sum_dparam += $child['Task']['influence'];
+                }
+            }
+            $alldbar[$god['Task']['id']] = 100*$god['Task']['d_param']*$sum_dparam/dcapacity;
         }
-        return $all_d + almostzero;
+
+        return $alldbar;
+    }
+
+    public function getdbar($id) {
+        $parents = $this->Task->getPath($id);
+        $children = $this->Task->children($parents[0]['Task']['id']);
+        array_unshift($children, $parents[0]);
+        $sum_dparam = 0;
+        foreach($children as $child) {
+            if(
+                $child['Task']['status'] == 'notyet' and 
+                $child['Task']['rght'] - $child['Task']['lft'] == 1
+            ) {
+                $sum_dparam += $child['Task']['influence'];
+            }
+        }
+        $dbar[$parents[0]['Task']['id']] = 100*$parents[0]['Task']['d_param']*$sum_dparam/dcapacity;
+        return $dbar;
+    }
+
+    public function getattainment($id) {
+        $god = $this->Task->getPath($id);
+        $children = $this->Task->children($god[0]['Task']['id']);
+        array_unshift($children, $god[0]);
+        $sum_dparam = 0;
+        foreach($children as $child) {
+            if(
+                $child['Task']['status'] == 'done' and 
+                $child['Task']['rght'] - $child['Task']['lft'] == 1
+            ) {
+                $sum_dparam += $child['Task']['influence'];
+            }
+        }
+        $attainment[$god[0]['Task']['id']] = round(100*$sum_dparam);
+        return $attainment;
     }
 
     public function makepankuzu($id) {

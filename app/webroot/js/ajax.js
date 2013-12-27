@@ -272,7 +272,8 @@ $(function(){
                         $.when($(this).remove()).then(createEmpty());
                     }
                 });
-                ajastDBar(data.all_d);
+                adjustDBar(data.all_d);
+                adjustattainment(data.attainment)
             },
             error : function() {
                 popUpPanel(true, 'サーバーエラーでタスクを消去できませんでした');
@@ -834,16 +835,26 @@ $(function(){
 
                     checked = 'checked';
                 }
-                ajastDBar(data.all_d);
+                adjustDBar(data.all_d);
+                adjustattainment(data.attainment);
             },
             complete : function() {
                 $('#task_' + taskId +' .check-task').html('<input type="checkbox" '+ checked +'/>');
             },
         });
     });
-    function ajastDBar(amount) {
-        var d = (100 * amount) / 1000;
-        $('#d-bar .progress-bar').css({'width':d+'%'});
+
+    function adjustDBar(dbar) {
+        for(var id in dbar) {
+            $('#d-bar .parent_'+id).css({'width':dbar[id]+'%'});
+            $('#d-bar .parent_'+id).html(Math.round(dbar[id])+'%');
+        }
+    }
+
+    function adjustattainment(attainment) {
+        for(var id in attainment) {
+            $('#parent_'+id+' .complete').html(Math.round(attainment[id])+'%');
+        }
     }
 
     //Edit input Enter-Btn to sumit
