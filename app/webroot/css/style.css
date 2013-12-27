@@ -195,6 +195,13 @@ input:hover, textarea:hover {
     opacity: 0.4;
 }
 
+/* タスクの達成度 */
+.complete {
+    position: absolute;
+    right: 60px;
+    bottom: 10px;
+}
+
 /***** アコーディオン *********/
 .close-ul {
     border-bottom: 5px solid #CCC;

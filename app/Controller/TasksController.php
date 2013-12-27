@@ -34,11 +34,13 @@ class TasksController extends AppController {
                 'OR' => array(
                     array(
                         'Task.status ' => 'notyet',
-                        'Task.start_time <=' => date('Y-m-d')
+                        'Task.start_time <=' => date('Y-m-d'),
+                        '(Task.rght - Task.lft)' => 1
                     ),
                     array(
                         'Task.status' => 'done',
-                        'Task.start_time' => date('Y-m-d')
+                        'Task.start_time' => date('Y-m-d'),
+                        '(Task.rght - Task.lft)' => 1
                     )
                 )
             ),
@@ -50,6 +52,7 @@ class TasksController extends AppController {
                 'Task.bomb' => 0,
                 'Task.status !=' => 'delete',
                 'Task.start_time' => date('Y-m-d', strtotime('+1 day')),
+                '(Task.rght - Task.lft)' => 1
             ),
             'order' => array('Task.sequence'=>'asc'),
         );
@@ -59,6 +62,7 @@ class TasksController extends AppController {
                 'Task.bomb' => 0,
                 'Task.status !=' => 'delete',
                 'Task.start_time' => date('Y-m-d', strtotime('+2 day')),
+                '(Task.rght - Task.lft)' => 1
             ),
             'order' => array('Task.sequence'=>'asc'),
         );

@@ -19,7 +19,7 @@ class UsersController extends AppController {
 		$this->Auth->autoRedirect = false;
 		$this->Auth->allow('index', 'register');
 		$this->Cookie->name = 'remember_me';
-		$this->Cookie->time = 3600;  // または '1 hour'
+		$this->Cookie->time = '1 weeks';  // または '1 hour'
 		$this->Cookie->path = '/todo/';
 		$this->Cookie->domain = 'todo.pyns.jp';
 		$this->Cookie->secure = false;  // セキュアな HTTPS で接続している時のみ発行されます
