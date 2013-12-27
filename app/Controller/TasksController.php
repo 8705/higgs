@@ -115,7 +115,7 @@ class TasksController extends AppController {
                 'order' => array('Task.id' => 'desc')
             ));
 
-            $all_d = $this->getuseralld();
+            $all_d = $this->getalldbar();
             $error = false;
             $res = array("error" => $error,"result" => $result["Task"], 'all_d' => $all_d);
             $this->response->type('json');
@@ -148,7 +148,7 @@ class TasksController extends AppController {
 			$options = array('conditions' => array('Task.' . $this->Task->primaryKey => $id));
 			$result = $this->Task->find('first', $options);
 
-            $all_d = $this->getuseralld();
+            $all_d = $this->getdbar();
 			$error = false;
         	$res = array("error" => $error,"result" => $result["Task"], 'all_d' =>$all_d);
         	$this->response->type('json');
@@ -190,19 +190,20 @@ class TasksController extends AppController {
                 'start_time'    => $row['start_time'],
             );
             $errorArray[]       = $this->Task->save($data);
-            $row                = $this->Task->find('first',array(
-                'conditions'    => array('Task.user_id' =>$this->Auth->user('id')),
-                'order'         => array('Task.id' => 'desc'),
-            ));
-            $resultArray[]      = $row['Task'];
         }
 
         $bomb = new BombController;
         $bomb->_modifyinfluence($id);
 
+        $resultArray = $this->Task->find('all',array(
+            'conditions' => array('Task.user_id' =>$this->Auth->user('id')),
+            'limit' => count($json),
+            'order' => array('Task.id' => 'desc'),
+        ));
+
         //save OK
         if(!in_array(false, $errorArray)) {
-            $all_d = $this->getuseralld();
+            $all_d = $this->getdbar($id);
             $error = false;
             $res = array("error" => $error,"result" => $resultArray, 'all_d' => $all_d);
             $this->response->type('json');
@@ -238,8 +239,9 @@ class TasksController extends AppController {
                 'conditions'    => array('Task.id' =>$id),
             ));
             $result = $row['Task'];
-
+            $parent = $this ->Task->getParentNode($id);
             $children = $this->Task->children($id);
+            $child_id = array();
             foreach($children as $child) {
                 $child_id[] = $child['Task']['id'];
                 $this->Task->removeFromTree($child['Task']['id']);
@@ -252,13 +254,12 @@ class TasksController extends AppController {
 
             $this->Task->removeFromTree($id);
 
-            $parent = $this->Task->getParentNode($id);
             if($parent) {
                 $bomb = new BombController;
                 $bomb->_modifyinfluence($parent['Task']['id']);
             }
 
-            $all_d = $this->getuseralld();
+            $all_d = $this->getdbar($id);
             $error = false;
             $res = array("error" => $error,"result" => $result,"all_d" => $all_d);
             $this->response->type('json');
@@ -294,7 +295,6 @@ class TasksController extends AppController {
             'recursive' => -1,
         ));
         $status = $res['Task']['status'];
-        // echo 'ステ:'.$status;
         if($status == 'done'){
             $status = 'notyet';
         } else {
@@ -305,9 +305,15 @@ class TasksController extends AppController {
         if ($this->Task->save($this->request->data)) {
             $options = array('conditions' => array('Task.' . $this->Task->primaryKey => $id));
             $result = $this->Task->find('first', $options);
-            $all_d = $this->getuseralld();
+            $all_d = $this->getdbar($id);
+            $attainment = $this->getattainment($id);
             $error = false;
-            $res = array("error" => $error,"result" => $result["Task"],"all_d" => $all_d);
+            $res = array(
+                "error" => $error,
+                "result" => $result["Task"],
+                "all_d" => $all_d,
+                "attainment" => $attainment
+            );
             $this->response->type('json');
             echo json_encode($res);
             exit;
@@ -406,7 +412,7 @@ class TasksController extends AppController {
                     $resultArray[] = $result['Task'];
                 }
                 if(!in_array(false, $errorArray)){
-                    $all_d = $this->getuseralld();
+                    $all_d = $this->getdbar($id);
                     $error = false;
                     $res = array("error" => $error, "result" => $resultArray, 'all_d' => $all_d);
                     $this->response->type('json');

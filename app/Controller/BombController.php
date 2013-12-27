@@ -19,7 +19,7 @@ class BombController extends AppController {
     public function _modifyinfluence($id) {
         $parents = $this->Task->getPath($id);
         $dparam = $parents[0]['Task']['d_param'];
-        $children = $this->Task->children($id, false, null, 'lft');
+        $children = $this->Task->children($parents[0]['Task']['id'], false, null, 'lft');
         foreach($children as $i) {
             $influence = $this->_myinfluence($i['Task']['id']);
             $this->Task->updateAll(
