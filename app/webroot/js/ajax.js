@@ -256,6 +256,9 @@ $(function(){
             },
             success : function(data){
                 $('#task_' + taskId).fadeOut(200, function(){
+                    if($('#task_' + taskId).next().is('ul')) {
+                         $('#task_' + taskId).next().fadeOut(200);
+                    }
                     popUpPanel(false, 'タスクが削除されました');
                     //一族かトップかでul消すかどうかの処理がかわる
 
