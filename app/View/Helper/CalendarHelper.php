@@ -33,10 +33,16 @@ class CalendarHelper extends AppHelper {
 			$cal .= "<tr>";
 			for ($j = 0; $j <= 6; $j++) {
 				$d = $i * 7 + $j - $wd1 + 1;
+				$isToday = '';
+				$active_day = h($yyyy)."-".h($mm)."-".$d;
+				$today = date('Y-n-j');
+				if($j == 0) $isToday = 'sunday';
+				if($j == 6) $isToday = 'saturday';
+				if($today == $active_day)$isToday= 'today';
 				if ($d > $lastd or $d  < 1) {
-					$cal .= "<td data-cal-date=\"".h($yyyy)."-".h($mm)."-".$d."\"></td>";
+					$cal .= "<td class=\"" .$isToday. "\" data-cal-date=\"".h($active_day)."\"></td>";
 				} else {
-					$cal .= "<td class=\"connected\" data-cal-date=\"".h($yyyy)."-".h($mm)."-".$d."\">$d";
+					$cal .= "<td class=\"connected ".$isToday."\" data-cal-date=\"".h($active_day)."\">$d";
 					if(array_key_exists((int)$yyyy, $task)) {
 						if(array_key_exists((int)$mm, $task[(int)$yyyy])) {
 							if(array_key_exists($d, $task[(int)$yyyy][(int)$mm])) {

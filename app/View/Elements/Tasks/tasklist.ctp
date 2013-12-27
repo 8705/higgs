@@ -5,7 +5,7 @@
     <span class="start_time"><?php echo h($task['Task']['start_time']); ?></span>
     <span class="status"><?php echo h($task['Task']['status']); ?></span>
     <span class="d_param"><?php echo h($task['Task']['d_param']); ?></span>
-    <span class="<?php echo h($task['Task']['status']=='notyet'?'edit-task':'disable-edit btn-disabled');?> btn btn-default">編集</span>
-    <span class="delete-task"><span class="glyphicon glyphicon-trash"></span><b>削除</b></span>
+    <span class="<?php echo h($task['Task']['status']=='notyet'?'edit-task':'disable-edit btn-disabled');?>"><span class="glyphicon glyphicon-edit"></span>編集</span>
+    <span class="delete-task"><span class="glyphicon glyphicon-trash"></span>削除</span>
     <span class="sequence" style="display:none;"><?php echo h($task['Task']['sequence']); ?></span>
 </li>

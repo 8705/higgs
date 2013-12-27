@@ -11,7 +11,23 @@ function cancelEvent(e) {
         window.event.returnValue = false;
     }
 }
-//分割用タスクのhtml部品
+//タスクのhtml部品
+function htmlAddElm(data) {
+    var elm =$(
+        '<li id="task_'+data.result.id+'" class="list-group-item notyet" style="display:none;background-color:'+getHsl(data.result.d_param, data.all_d)+'" data-task-id="'+ data.result.id +'">\n' +
+        '<span class="check-task"><input type="checkbox"></span>\n'+
+        '<span class="body"><a href="/tasks/view/' + data.result.id + '">'+ data.result.body +'</a></span>\n' +
+        '<span class="start_time">'+ data.result.start_time +'</span>\n'+
+        '<span class="status">'+ data.result.status +'</span>\n'+
+        '<span class="d_param">'+ data.result.d_param +'</span>\n'+
+        '<span class="edit-task btn btn-default">編集</span>\n' +
+        // '<span class="divide-task btn btn-default">分割</span>\n' +
+        '<span class="delete-task"><span class="glyphicon glyphicon-trash"></span><b>削除</b></span>\n' +
+        '<span class="sequence" style="display:none;">0</span>\n' +
+        '</li>'
+    );
+    return elm;
+}
 function htmlAddElm(data) {
     var elm =$(
         '<li id="task_'+data.result.id+'" class="list-group-item notyet" style="display:none;background-color:'+getHsl(data.result.d_param, data.all_d)+'" data-task-id="'+ data.result.id +'">\n' +
@@ -71,7 +87,8 @@ function getHsl(d_param, all_d) {
 
 function makeDatePicker() {
     $('input.datepicker').Zebra_DatePicker({
-        direction : [getFutureDate(0), false]
+        direction : [getFutureDate(0), false],
+        first_day_of_week : 0
     });
 }
 
@@ -160,6 +177,9 @@ function addTask(data, textStatus) {
         '<span>0%</span>'+
         '<span class="delete-task"><span class="glyphicon glyphicon-trash"></span><b>削除</b></span></li>'
     );
+    if($('#task-list-parents .empty').length == 1 ) {
+        $('#task-list-parents .empty').html('');
+    }
     $('#task-list-parents').append(elm);
 
     var elm2 =$('<div class="add-bar progress-bar progress-bar-danger" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width: 10%; display:none;">10%</div>');
@@ -226,13 +246,6 @@ $(function(){
             $('#TaskIndexForm .submit input').removeAttr('disabled');
         }
     });
-    // $(document).on('keyup', '.no-empty-body',function(){
-    //     if('' === $('.no-empty-body').val() || '' === $('.no-empty-cal').val()) {
-    //         $('.no-empty-submit').attr({disabled : "disabled"});
-    //     }else {
-    //         $('.no-empty-submit').removeAttr('disabled');
-    //     }
-    // })
 
     //タスク新規追加時にトップ画面のタスクリストから適切なシーケンスを取得
     $('#TaskIndexForm .submit').mouseover(function(){
@@ -340,8 +353,8 @@ $(function(){
             '<span class="start_time">'+ start_time +'</span>\n'+
             '<span class="status">'+ status +'</span>\n'+
             '<span class="d_param">'+ d_param +'</span>\n'+
-            '<span class="edit-task btn btn-default">編集</span>\n' +
             divideSpan +
+            '<span class="edit-task"><span class="glyphicon glyphicon-edit"></span>編集</span>\n' +
             '<span class="delete-task"><span class="glyphicon glyphicon-trash"></span><b>削除</b></span>'
         );
 
@@ -645,8 +658,8 @@ $(function(){
                         '<span class="start_time">'+ data.result[i].start_time +'</span>\n'+
                         '<span class="status">notyet</span>\n'+
                         '<span class="d_param">'+ data.result[i].d_param +'</span>\n'+
-                        '<span class="edit-task btn btn-default">編集</span>\n' +
                         '<span class="divide-task btn btn-default">分割</span>\n' +
+                        '<span class="edit-task"><span class="glyphicon glyphicon-edit"></span>編集</span>\n' +
                         '<span class="delete-task"><span class="glyphicon glyphicon-trash"></span><b>削除</b></span>\n' +
                         '</li>'
                     );
@@ -941,6 +954,7 @@ $(function(){
             },
         });
     })
+    $('#calendarPanel').draggable();
 
     //Cal Delete Task
     $(document).on('click', '.cal-panel-cancel',function(e){
@@ -1157,6 +1171,7 @@ $(function(){
     }).disableSelection();
 
     //編集や削除ボタンを押した時のアコーディオンの反応を消す
+    var open_flg = false;
     $(document).on({
         mouseenter : function(){
             open_flg = true;
