@@ -281,7 +281,6 @@ $(function(){
                 $('#task_' + taskId +' .delete-task').html('削除');
             }
         })
-
     });
 
     //Edit Task
