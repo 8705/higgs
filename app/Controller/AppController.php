@@ -14,7 +14,7 @@ class AppController extends Controller {
 		),
         'Security' => array(
             'csrfUseOnce' => false,  //CSRFトークンを使いまわす
-            'csrfExpires' => '+1 week'  //トークンの持続時間を1h延長
+            'csrfExpires' => '+1 hour'  //トークンの持続時間を1h延長
         ),
 	);
 
@@ -32,8 +32,10 @@ class AppController extends Controller {
             ),
         );
         $parents = $this->Task->find('all', $opt_parents);
+        $bar = array();
         foreach($parents as $key=>$parent) {
             $children = $this->Task->children($parent['Task']['id']);
+            array_unshift($children, $parent);
             $sum_dparam = 0;
             foreach($children as $child) {
                 if(
@@ -87,5 +89,15 @@ class AppController extends Controller {
             $all_d += $val['Task']['d_param'];
         }
         return $all_d + almostzero;
+    }
+
+    public function makepankuzu($id) {
+        $parents = $this->Task->getPath($id,array('Task.body'));
+        $elm = '<a href="/tasks/view/'.$parents[0].'">';
+        foreach ($parents as $id => $body) {
+            $elm .= '>>'.$body ;
+        }
+        $elm .= '</a>';
+        echo $elm;
     }
 }

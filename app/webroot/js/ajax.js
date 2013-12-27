@@ -154,8 +154,8 @@ function addTask(data, textStatus) {
     var elm =$(
         '<li id="parent_'+data.result.id+'" class="notyet list-group-item clearfix" data-task-id="'+data.result.id+'">'+
         '<span class="body"><a href="/tasks/view/' + data.result.id + '">'+data.result.body +'</a></span>\n'+
-        '<span>0%</span></li>'+
-        '<span class="delete-task"><span class="glyphicon glyphicon-trash"></span><b>削除</b></span>'
+        '<span>0%</span>'+
+        '<span class="delete-task"><span class="glyphicon glyphicon-trash"></span><b>削除</b></span></li>'
     );
     if ($('#task-list-parents .empty').length == 1 ) {
         $('#task-list-parents .empty').html('');
@@ -164,7 +164,7 @@ function addTask(data, textStatus) {
 
     var elm2 =$('<div class="add-bar progress-bar progress-bar-danger" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width: 10%; display:none;">10%</div>');
 
-    $('#d-bar .progress').append(elm2);
+    $('#d-bar').append(elm2);
     $('.add-bar').fadeIn('slow');
     //正常時
     //トップページ
