@@ -78,7 +78,8 @@ class TasksController extends AppController {
 		$allChildren = $this->Task->children($parents[0]['Task']['id'], null, null, $order='lft');
 		array_unshift($allChildren, $parents[0]);
         foreach ($allChildren as $key => $val) {
-            $allChildren[$key]['Task']['indent'] = count($this->Task->getPath($val['Task']['id']))-1;
+            $allChildren[$key]['Task']['indent']    = count($this->Task->getPath($val['Task']['id']))-1;
+            $allChildren[$key]['Task']['childCount']  = $this->Task->childCount($val['Task']['id']);
         }
         $this->set('tasks', $allChildren);
 	}
@@ -128,7 +129,7 @@ class TasksController extends AppController {
         }
 	}
 
-	public function edit($id = null) {
+	public function edit($status, $id = null) {
 		//Ajax or not
         if (!$this->request->is('ajax')) {
             throw new NotFoundException(__('Invalid post'));
@@ -138,6 +139,83 @@ class TasksController extends AppController {
 		if (!$this->Task->exists($id)) {
 			throw new NotFoundException(__('Invalid task'));
 		}
+        switch($status) {
+            case 'status':
+                //syori
+                $row = $this->Task->find('first',array(
+                    'conditions' => array(
+                        'Task.id' => $id,
+                    ),
+                    'recursive' => 1,
+                ));
+                if($row) {
+                    $result = $row['Task'];
+                    $error = false;
+                    $res = array("error" => $error,"result" => $result);
+                    $this->response->type('json');
+                    echo json_encode($res);
+                    exit;
+                } else  {
+                    $error = true;
+                    $message = 'データ取得失敗';
+                    $res = $res = compact('error', 'message');
+                    $this->response->type('json');
+                    echo json_encode($res);
+                    exit;
+                }
+                break;
+            case 'cancel':
+                //syori
+                $row = $this->Task->find('first',array(
+                    'conditions' => array(
+                        'Task.id' => $id,
+                    ),
+                    'recursive' => 1,
+                ));
+                if($row) {
+                    $result = $row['Task'];
+                    $error = false;
+                    $res = array("error" => $error,"result" => $result);
+                    $this->response->type('json');
+                    echo json_encode($res);
+                    exit;
+                } else  {
+                    $error = true;
+                    $message = 'データ取得失敗';
+                    $res = $res = compact('error', 'message');
+                    $this->response->type('json');
+                    echo json_encode($res);
+                    exit;
+                }
+                break;
+
+            case 'push':
+                //syori
+                $this->Task->id = $id;
+                if ($this->Task->save($this->request->data)) {
+                    $options = array('conditions' => array('Task.' . $this->Task->primaryKey => $id));
+                    $result = $this->Task->find('first', $options);
+                    $all_d = $this->getuseralld();
+                    $error = false;
+                    $res = array("error" => $error,"result" => $result["Task"], 'all_d' =>$all_d);
+                    $this->response->type('json');
+                    echo json_encode($res);
+                    exit;
+                //save NG
+                }else {
+                    $error = true;
+                    $message = $this->Task->validationErrors;
+                    $res = $res = compact('error', 'message');
+                    $this->response->type('json');
+                    echo json_encode($res);
+                    exit;
+                }
+                break;
+            default:
+                throw new NotFoundException(__("Non exist $status"));
+        }
+
+        //過去
 		$this->Task->id = $id;
 		//save OK
 		if ($this->Task->save($this->request->data)) {
