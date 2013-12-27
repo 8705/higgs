@@ -38,7 +38,7 @@ class TasksController extends AppController {
                     ),
                     array(
                         'Task.status !=' => 'done',
-                        'Task.start_time <' => date('Y-m-d')
+                        'Task.start_time <=' => date('Y-m-d')
                     )
                 )
             ),
