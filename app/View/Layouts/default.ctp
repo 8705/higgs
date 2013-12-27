@@ -103,7 +103,7 @@
 	<div id="main" class="row clearfix">
 		<?php if($this->params["controller"] != 'users'): ?>
 				<div id="side-menu" class="tasks col-md-4 column">
-					<p id="clean-bomb" class="btn btn-danger">Bomb一括削除</p>
+					<p id="clean-bomb" class="btn btn-danger">Bomb->Notyet ボタン</p>
 					<div class="tasks">
 						<?php echo $this->Form->create('Task'); ?>
 						<fieldset>
@@ -179,7 +179,8 @@
 <script>
 	$(document).ready(function() {
 		$('input.datepicker').Zebra_DatePicker({
-	        direction : [getFutureDate(0), false]
+	        direction : [getFutureDate(0), false],
+	        first_day_of_week : 0
 	    });
 	    $('input.datepicker').val(getFutureDate(0));
 	});
