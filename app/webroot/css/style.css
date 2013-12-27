@@ -178,7 +178,7 @@ input:hover, textarea:hover {
     display: inline-block;
 }
 .task-list li .body {
-    margin-right: 130px;
+
 }
 .task-list li span.btn {
     margin-left:10px;
@@ -217,9 +217,9 @@ input:hover, textarea:hover {
     font-size: 12px;
     color: #CCC;
     cursor: pointer;
-    position: absolute;
+    /*position: absolute;
     right: 10px;
-    bottom: 5px;
+    bottom: 5px;*/
 }
 .delete-task:hover, .edit-task:hover {
     color: #979797;
@@ -232,17 +232,17 @@ input:hover, textarea:hover {
     font-size: 12px;
     color: #CCC;
     cursor: pointer;
-    position: absolute;
+    /*position: absolute;
     right: 60px;
-    bottom: 5px;
+    bottom: 5px;*/
 }
 .divide-task {
     font-size: 12px;
     color: #CCC;
     cursor: pointer;
-    position: absolute;
+    /*position: absolute;
     right: 110px;
-    bottom: 5px;
+    bottom: 5px;*/
 }
 .delete-task, .edit-task, .divide-task {
     /*display: none !important;*/
@@ -440,4 +440,13 @@ li.delete {
 }
 #d-bar {
     transition:2s;
+}
+.divide-task {
+    display: none !important;
+}
+.d_param {
+    display: none !important;
+}
+.status {
+    display: none !important;
 }
