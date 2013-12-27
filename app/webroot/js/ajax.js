@@ -166,7 +166,6 @@ function addTask(data, textStatus) {
 
     $('#d-bar .progress').append(elm2);
     $('.add-bar').fadeIn('slow');
-    //$('#d-bar');
     //正常時
     //トップページ
     if($('table.calendar').length == 0) {
@@ -491,7 +490,7 @@ $(function(){
     });
     function ajastDBar(amount) {
         var d = (100 * amount) / 1000;
-        $('#d-bar').css({'width':d+'%'});
+        $('#d-bar .progress-bar').css({'width':d+'%'});
     }
 
     //Divide Task
