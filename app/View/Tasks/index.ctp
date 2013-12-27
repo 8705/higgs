@@ -1,5 +1,6 @@
 <h2>今日</h2><a class="btn btn-success sort-link" href="/tasks/sort/d/today">D値並べ替え</a>
 <ul class="list-group task-list sort-list" id="task-list-today">
+	<?php echo count($tasks_today); ?>
 <?php if (count($tasks_today)): ?>
 	<?php foreach ($tasks_today as $task): ?>
 		<?php if($task['Task']['status'] == 'bomb'): ?>

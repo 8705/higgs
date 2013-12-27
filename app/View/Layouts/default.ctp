@@ -133,6 +133,7 @@
 									<li id="parent_<?php echo h($parent['Task']['id']); ?>" class="notyet list-group-item clearfix" data-task-id="<?php echo h($parent['Task']['id']); ?>">
 										<span class="body"><?php echo $this->Html->link(__(h($parent['Task']['body'])), array('controller'=>'tasks', 'action' => 'view', $parent['Task']['id'])); ?></span>
 										<span><?php echo $parent['Task']['complete'].'%'; ?></span>
+										<span class="delete-task"><span class="glyphicon glyphicon-trash"></span><b>削除</b></span>
 									</li>
 								<?php endforeach; ?>
 							<?php else: ?>

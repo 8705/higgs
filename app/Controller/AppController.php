@@ -28,7 +28,7 @@ class AppController extends Controller {
             'conditions' => array(
                 'Task.user_id' => $this->Auth->user('id'),
                 'Task.parent_id' => null,
-                'Task.status' => 'notyet',
+                'Task.status !=' => 'delete',
             ),
         );
         $parents = $this->Task->find('all', $opt_parents);

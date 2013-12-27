@@ -157,7 +157,8 @@ function addTask(data, textStatus) {
     var elm =$(
         '<li id="parent_'+data.result.id+'" class="notyet list-group-item clearfix" data-task-id="'+data.result.id+'">'+
         '<span class="body"><a href="/tasks/view/' + data.result.id + '">'+data.result.body +'</a></span>\n'+
-        '<span>0%</span></li>'
+        '<span>0%</span></li>'+
+        '<span class="delete-task"><span class="glyphicon glyphicon-trash"></span><b>削除</b></span>'
     );
     $('#task-list-parents').append(elm);
     //正常時
