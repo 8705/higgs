@@ -161,6 +161,12 @@ function addTask(data, textStatus) {
         '<span class="delete-task"><span class="glyphicon glyphicon-trash"></span><b>削除</b></span>'
     );
     $('#task-list-parents').append(elm);
+
+    var elm2 =$('<div class="add-bar progress-bar progress-bar-danger" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width: 10%; display:none;">10%</div>');
+
+    $('#d-bar .progress').append(elm2);
+    $('.add-bar').fadeIn('slow');
+    //$('#d-bar');
     //正常時
     //トップページ
     if($('table.calendar').length == 0) {
