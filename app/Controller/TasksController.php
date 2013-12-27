@@ -279,7 +279,6 @@ class TasksController extends AppController {
             'order' => array('Task.id' => 'desc'),
             'recursive' => -1,
         ));
-
         //save OK
         if(!in_array(false, $errorArray)) {
             $all_d = $this->getdbar($id);
