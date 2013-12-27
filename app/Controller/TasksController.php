@@ -199,7 +199,7 @@ class TasksController extends AppController {
                 if ($this->Task->save($this->request->data)) {
                     $options = array('conditions' => array('Task.' . $this->Task->primaryKey => $id));
                     $result = $this->Task->find('first', $options);
-                    $all_d = $this->getuseralld();
+                    $all_d = $this->getdbar($id);
                     $error = false;
                     $res = array("error" => $error,"result" => $result["Task"], 'all_d' =>$all_d);
                     $this->response->type('json');
@@ -277,6 +277,7 @@ class TasksController extends AppController {
             'conditions' => array('Task.user_id' =>$this->Auth->user('id')),
             'limit' => count($json),
             'order' => array('Task.id' => 'desc'),
+            'recursive' => -1,
         ));
 
         //save OK

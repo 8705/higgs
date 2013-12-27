@@ -616,6 +616,7 @@ $(function(){
             },
             success : function(data, textStatus){
                 data = $.parseJSON(data);
+                console.log(data);
                 //バリデーションエラー
                 if (data.error === true ) {
                     //エラー内容取り出し $ エラーポップ
@@ -696,6 +697,7 @@ $(function(){
                         }
                     },
                     success : function(data) {
+                        console.log(data);
                         //バリデーションエラー
                         if (data.error === true ) {
                             //エラー内容取り出し $ エラーポップ
@@ -708,49 +710,50 @@ $(function(){
                         }
 
                         //view表示の場合
-                        if ($('#task_' + data.result[0].parent_id).parent().hasClass('children-ul')) {
+                        console.log(data.result[0].Task.parent_id);
+                        if ($('#task_' + data.result[0].Task.parent_id).parent().hasClass('children-ul')) {
                             console.log('taskId:'+taskId);
-                            console.log('parent_id:'+data.result[0].parent_id);
+                            console.log('parent_id:'+data.result[0].Task.parent_id);
                             //分割を追加するタスクがすでに子持ちかどうか判別
                             //持ってない場合children-ulを作る
-                            if (!$('#task_'+ data.result[0].parent_id).next().next().hasClass('children-ul')) {
-                                $('#task_'+ data.result[0].parent_id).after(
-                                    '<ul class="children-ul" data-children-ul-id="'+data.result[0].parent_id+'"></ul>'
+                            if (!$('#task_'+ data.result[0].Task.parent_id).next().next().hasClass('children-ul')) {
+                                $('#task_'+ data.result[0].Task.parent_id).after(
+                                    '<ul class="children-ul" data-children-ul-id="'+data.result[0].Task.parent_id+'"></ul>'
                                 );
                             }
                             for(var i in data.result) {
-                                $('ul[data-children-ul-id='+data.result[0].parent_id+']')
+                                $('ul[data-children-ul-id='+data.result[0].Task.parent_id+']')
                                 .append(
-                                    '<li id="task_'+data.result[i].id+'" class="list-group-item notyet" style="display:none;" data-task-id="'+ data.result[i].id +'">\n' +
+                                    '<li id="task_'+data.result[i].Task.id+'" class="list-group-item notyet" style="display:none;" data-task-id="'+ data.result[i].Task.id +'">\n' +
                                     '<span class="check-task"><input type="checkbox"></span>\n'+
-                                    '<span class="body edit-task"><a href="/tasks/view/' + data.result[i].id + '">'+ data.result[i].body +'</a></span>\n' +
-                                    '<span class="start_time">'+ data.result[i].start_time +'</span>\n'+
+                                    '<span class="body edit-task"><a href="/tasks/view/' + data.result[i].Task.id + '">'+ data.result[i].Task.body +'</a></span>\n' +
+                                    '<span class="start_time">'+ data.result[i].Task.start_time +'</span>\n'+
                                     '<span class="status">notyet</span>\n'+
-                                    '<span class="d_param">'+ data.result[i].d_param +'</span>\n'+
+                                    '<span class="d_param">'+ data.result[i].Task.d_param +'</span>\n'+
                                     '<span class="delete-task"><span class="glyphicon glyphicon-trash"></span><b>削除</b></span>\n' +
                                     '</li>'
                                 );
-                                $('#task_'+data.result[i].id).fadeIn(100);
+                                $('#task_'+data.result[i].Task.id).fadeIn(100);
                             }
                             //分割生成元が教祖出ない場合、アイコンを開閉に置き換え
-                            if(!$('#task_'+ data.result[0].parent_id).hasClass('origin')) {
-                                $('#task_'+data.result[0].parent_id).find('.check-task').replaceWith('<span class="accordion opne glyphicon glyphicon-expand"></span>');
+                            if(!$('#task_'+ data.result[0].Task.parent_id).hasClass('origin')) {
+                                $('#task_'+data.result[0].Task.parent_id).find('.check-task').replaceWith('<span class="accordion opne glyphicon glyphicon-expand"></span>');
                             }
                         //トップページの場合
                         }else {
                             $('#task_'+taskId).hide();
                             for(var i in data.result) {
                                 $('#task_'+taskId).after(
-                                    '<li id="task_'+data.result[i].id+'" class="list-group-item notyet" style="display:none;" data-task-id="'+ data.result[i].id +'">\n' +
+                                    '<li id="task_'+data.result[i].Task.id+'" class="list-group-item notyet" style="display:none;" data-task-id="'+ data.result[i].Task.id +'">\n' +
                                     '<span class="check-task"><input type="checkbox"></span>\n'+
-                                    '<span class="body edit-task"><a href="/tasks/view/' + data.result[i].id + '">'+ data.result[i].body +'</a></span>\n' +
-                                    '<span class="start_time">'+ data.result[i].start_time +'</span>\n'+
+                                    '<span class="body edit-task"><a href="/tasks/view/' + data.result[i].Task.id + '">'+ data.result[i].Task.body +'</a></span>\n' +
+                                    '<span class="start_time">'+ data.result[i].Task.start_time +'</span>\n'+
                                     '<span class="status">notyet</span>\n'+
-                                    '<span class="d_param">'+ data.result[i].d_param +'</span>\n'+
+                                    '<span class="d_param">'+ data.result[i].Task.d_param +'</span>\n'+
                                     '<span class="delete-task"><span class="glyphicon glyphicon-trash"></span><b>削除</b></span>\n' +
                                     '</li>'
                                 );
-                                $('#task_'+data.result[i].id).fadeIn(10);
+                                $('#task_'+data.result[i].Task.id).fadeIn(10);
                             }
                             $('#task_'+taskId).remove();
                         }

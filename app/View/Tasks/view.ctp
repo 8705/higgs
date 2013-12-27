@@ -7,7 +7,7 @@
 			<?php $indent = $task['Task']['indent']-$prev ?>
 			<?php if($indent == 0): ?>
 				<li id="task_<?php echo h($task['Task']['id']); ?>" class="<?php if($task['Task']['parent_id'] == null){echo 'origin';} ?> <?php echo h($task['Task']['status']);?> list-group-item clearfix" data-task-id="<?php echo h($task['Task']['id']); ?>">
-					<?php if($task['Task']['parent_id'] == null): ?>
+					<?php if($task['Task']['parent_id'] == null && $task['Task']['childCount'] != 0): ?>
 					<span class="origin">神</span>
 					<?php elseif($task['Task']['childCount'] != 0): ?>
 					<span class="accordion opne glyphicon glyphicon-expand"></span>
@@ -23,7 +23,7 @@
 				</li>
 			<?php elseif($indent == 1): ?>
 				<ul class="children-ul" data-children-ul-id="<?php echo h($task['Task']['parent_id']); ?>">
-				<li id="task_<?php echo h($task['Task']['id']); ?>" class="<?php echo h($task['Task']['status']);?> list-group-item clearfix" data-task-id="<?php echo h($task['Task']['id']); ?>">
+				<li id="task_<?php echo h($task['Task']['id']); ?>" class="<?php if($task['Task']['parent_id'] == null){echo 'origin';} ?> <?php echo h($task['Task']['status']);?> list-group-item clearfix" data-task-id="<?php echo h($task['Task']['id']); ?>">
 					<?php if($task['Task']['parent_id'] == null): ?>
 					<span class="origin">神</span>
 					<?php elseif($task['Task']['childCount'] != 0): ?>
@@ -40,7 +40,7 @@
 				</li>
 			<?php elseif($indent < 0): ?>
 				<?php echo str_repeat('</ul>', -$indent) ?>
-				<li id="task_<?php echo h($task['Task']['id']); ?>" class="<?php echo h($task['Task']['status']);?> list-group-item clearfix" data-task-id="<?php echo h($task['Task']['id']); ?>">
+				<li id="task_<?php echo h($task['Task']['id']); ?>" class="<?php if($task['Task']['parent_id'] == null){echo 'origin';} ?> <?php echo h($task['Task']['status']);?> list-group-item clearfix" data-task-id="<?php echo h($task['Task']['id']); ?>">
 					<?php if($task['Task']['parent_id'] == null): ?>
 					<span class="origin">神</span>
 					<?php elseif($task['Task']['childCount'] != 0): ?>
