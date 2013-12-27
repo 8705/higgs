@@ -116,7 +116,7 @@ class TasksController extends AppController {
                 'order' => array('Task.id' => 'desc')
             ));
 
-            $all_d = $this->getdbar();
+            $all_d = $this->getalldbar();
             $error = false;
             $res = array("error" => $error,"result" => $result["Task"], 'all_d' => $all_d);
             $this->response->type('json');
@@ -199,7 +199,7 @@ class TasksController extends AppController {
                 if ($this->Task->save($this->request->data)) {
                     $options = array('conditions' => array('Task.' . $this->Task->primaryKey => $id));
                     $result = $this->Task->find('first', $options);
-                    $all_d = $this->getdbar();
+                    $all_d = $this->getdbar($id);
                     $error = false;
                     $res = array("error" => $error,"result" => $result["Task"], 'all_d' =>$all_d);
                     $this->response->type('json');
@@ -278,7 +278,6 @@ class TasksController extends AppController {
             'limit' => count($json),
             'order' => array('Task.id' => 'desc'),
         ));
-
         //save OK
         if(!in_array(false, $errorArray)) {
             $all_d = $this->getdbar($id);
