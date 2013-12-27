@@ -31,14 +31,14 @@ class TasksController extends AppController {
 			'conditions' => array(
                 'Task.user_id' => $this->Auth->user('id'),
                 'Task.bomb' => 0,
-                'AND' => array(
+                'OR' => array(
                     array(
-                        'Task.status !=' => 'delete',
+                        'Task.status ' => 'notyet',
                         'Task.start_time <=' => date('Y-m-d')
                     ),
                     array(
-                        'Task.status !=' => 'done',
-                        'Task.start_time <=' => date('Y-m-d')
+                        'Task.status' => 'done',
+                        'Task.start_time' => date('Y-m-d')
                     )
                 )
             ),
