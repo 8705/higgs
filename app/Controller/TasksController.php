@@ -122,11 +122,12 @@ class TasksController extends AppController {
                 'conditions' => array(
                     'Task.user_id' => $this->Auth->user('id')
                 ),
-                'order' => array('Task.id' => 'desc')
+                'order' => array('Task.id' => 'desc'),
+                'recursive' => -1
             ));
 
             $error = false;
-            $res = array("error" => $error,"result" => $result["Task"]);
+            $res = array("error" => $error,"result" => $result, 'all_d' => $all_d);
             $this->response->type('json');
             echo json_encode($res);
             exit;
@@ -154,14 +155,13 @@ class TasksController extends AppController {
         switch($status) {
             case 'status':
                 //syori
-                $row = $this->Task->find('first',array(
+                $result = $this->Task->find('first',array(
                     'conditions' => array(
                         'Task.id' => $id,
                     ),
-                    'recursive' => 1,
+                    'recursive' => -1,
                 ));
-                if($row) {
-                    $result = $row['Task'];
+                if($result) {
                     $error = false;
                     $res = array("error" => $error,"result" => $result);
                     $this->response->type('json');
@@ -178,14 +178,13 @@ class TasksController extends AppController {
                 break;
             case 'cancel':
                 //syori
-                $row = $this->Task->find('first',array(
+                $result = $this->Task->find('first',array(
                     'conditions' => array(
                         'Task.id' => $id,
                     ),
                     'recursive' => 1,
                 ));
-                if($row) {
-                    $result = $row['Task'];
+                if($result) {
                     $error = false;
                     $res = array("error" => $error,"result" => $result);
                     $this->response->type('json');
@@ -209,7 +208,7 @@ class TasksController extends AppController {
                     $result = $this->Task->find('first', $options);
                     $all_d = $this->getdbar($id);
                     $error = false;
-                    $res = array("error" => $error,"result" => $result["Task"], 'all_d' =>$all_d);
+                    $res = array("error" => $error,"result" => $result, 'all_d' =>$all_d);
                     $this->response->type('json');
                     echo json_encode($res);
                     exit;
@@ -287,6 +286,7 @@ class TasksController extends AppController {
             'order' => array('Task.id' => 'desc'),
             'recursive' => -1,
         ));
+        $resultArray = array_reverse($resultArray);
         //save OK
         if(!in_array(false, $errorArray)) {
             $all_d = $this->getdbar($id);
@@ -389,6 +389,26 @@ class TasksController extends AppController {
         $this->Task->set('status', $status);
         //save OK
         if ($this->Task->save($this->request->data)) {
+
+            $parentArr = array_reverse($this->Task->getPath($id));
+            foreach($parentArr as $row) {
+                if($this->Task->childCount($row['Task']['id']) == 0) {
+                    continue;
+                }
+                $childArr = $this->Task->children($row['Task']['id'],true,null,'lft',null,1,-1);
+                $resultArr = array();
+                foreach ($childArr as $subrow) {
+                    $resultArr[] = $subrow['Task']['status'] == 'notyet';
+                }
+                if (!in_array(true, $resultArr)) {
+                    $this->Task->id = $row['Task']['id'];
+                    $this->Task->save(array('status' => 'done'));
+                } else {
+                    $this->Task->id = $row['Task']['id'];
+                    $this->Task->save(array('status' => 'notyet'));
+                }
+            }
+
             $options = array('conditions' => array('Task.' . $this->Task->primaryKey => $id));
             $result = $this->Task->find('first', $options);
             $all_d = $this->getdbar($id);
@@ -396,7 +416,7 @@ class TasksController extends AppController {
             $error = false;
             $res = array(
                 "error" => $error,
-                "result" => $result["Task"],
+                "result" => $result,
                 "all_d" => $all_d,
                 "attainment" => $attainment
             );
