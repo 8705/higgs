@@ -710,10 +710,7 @@ $(function(){
                         }
 
                         //view表示の場合
-                        console.log(data.result[0].Task.parent_id);
                         if ($('#task_' + data.result[0].Task.parent_id).parent().hasClass('children-ul')) {
-                            console.log('taskId:'+taskId);
-                            console.log('parent_id:'+data.result[0].Task.parent_id);
                             //分割を追加するタスクがすでに子持ちかどうか判別
                             //持ってない場合children-ulを作る
                             if (!$('#task_'+ data.result[0].Task.parent_id).next().next().hasClass('children-ul')) {
