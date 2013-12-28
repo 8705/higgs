@@ -32,7 +32,7 @@
 					<span class="check-task"><input type="checkbox" <?php if($task['Task']['status'] == 'done'){echo h('checked');} ?>></span>
 					<?php endif; ?>
 					<span class="body edit-task"><?php echo $this->Html->link(__(h($task['Task']['body'])), array('action' => 'view', $task['Task']['id']));?></span>
-					<span class="start_time"><?php echo h($task['Task']['start_time']); ?></span>
+					<span class="start_time"><?php echo h(str_replace('-','/',substr($task['Task']['start_time'],5))); ?></span>
 					<span class="status"><?php echo h($task['Task']['status']); ?></span>
 					<span class="d_param"><?php echo h($task['Task']['d_param']); ?></span>
 					<span class="<?php echo h($task['Task']['status']=='notyet'?'divide-task':'disable-divide btn-disabled');?>"><span class="glyphicon glyphicon-plus-sign"></span>分割</span>
@@ -49,7 +49,7 @@
 					<span class="check-task"><input type="checkbox" <?php if($task['Task']['status'] == 'done'){echo h('checked');} ?>></span>
 					<?php endif; ?>
 					<span class="body edit-task"><?php echo $this->Html->link(__(h($task['Task']['body'])), array('action' => 'view', $task['Task']['id']));?></span>
-					<span class="start_time"><?php echo h($task['Task']['start_time']); ?></span>
+					<span class="start_time"><?php echo h(str_replace('-','/',substr($task['Task']['start_time'],5))); ?></span>
 					<span class="status"><?php echo h($task['Task']['status']); ?></span>
 					<span class="d_param"><?php echo h($task['Task']['d_param']); ?></span>
 					<span class="<?php echo h($task['Task']['status']=='notyet'?'divide-task':'disable-divide btn-disabled');?>"><span class="glyphicon glyphicon-plus-sign"></span>分割</span>
