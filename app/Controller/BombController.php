@@ -63,7 +63,7 @@ class BombController extends AppController {
         $this->dparamall();
     }
 
-    public function _add() {
+    public function add() {
         $options = array(
             'conditions'=>array(
                 'Task.status' => 'notyet',
@@ -93,7 +93,7 @@ class BombController extends AppController {
         exit;
     }
 
-    public function _bomb() {
+    public function bomb() {
         $max = 100; //maxは100%
         $users_id = $this->User->find('list',array('fields' => array('User.id')));
         foreach($users_id as $userid) {

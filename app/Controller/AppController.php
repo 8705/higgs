@@ -28,6 +28,7 @@ class AppController extends Controller {
             'conditions' => array(
                 'Task.user_id' => $this->Auth->user('id'),
                 'Task.parent_id' => null,
+                'Task.bomb' => 0,
                 'Task.status !=' => 'delete',
             ),
         );

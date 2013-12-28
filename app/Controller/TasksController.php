@@ -94,6 +94,7 @@ class TasksController extends AppController {
             'conditions' => array(
                 'Task.user_id' => $this->Auth->user('id'),
                 'Task.status' => 'bomb',
+                'Task.parent_id' => null,
                 'Task.bomb' => 1,
             ),
         );
@@ -413,10 +414,9 @@ class TasksController extends AppController {
         $this->autoRender = false;   // 自動描画をさせない
 
         $json = json_decode($this->request->data['json'], true);
-
         $res = $this->Task->updateAll(
-            array('Task.status' => '"notyet"'),
-            //array('Task.bomb' => 1)
+            //array('Task.status' => '"notyet"'),
+            array('Task.bomb' => 1),
             array('Task.id' => $json)
         );
         //save OK

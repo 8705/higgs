@@ -873,8 +873,9 @@ $(function(){
         cancelEvent(e);
         var cleanArr = new Array();
 
-        $('#tasks li.bomb').each(function(){
+        $('.parents li.bomb').each(function(){
             cleanArr.push($(this).data('task-id'));
+            console.log('OK');
         });
 
         var json = JSON.stringify(cleanArr);
@@ -891,7 +892,7 @@ $(function(){
             },
             success : function(data){
                 for(i in data.result) {
-                    $('#task_'+data.result[i]).fadeOut('slow',function(){
+                    $('#parent_'+data.result[i]).fadeOut('slow',function(){
                         $.when($(this).remove()).then(createEmpty());
                     })
                     deleteEmpty('bombs');
@@ -902,7 +903,7 @@ $(function(){
                         +data.result[i]+'">'
                         +'<span class="body"><a href="/tasks/view/'
                         + data.result[i]+ '">'
-                        +$('#task_'+ data.result[i]).find('.body').text()
+                        +$('#parent_'+ data.result[i]).find('.body').text()
                         +'</a></span></li>\n'
                     );
                 }

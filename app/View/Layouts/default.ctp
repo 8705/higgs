@@ -61,7 +61,7 @@
 	<div id="main" class="row clearfix">
 		<?php if($this->params["controller"] != 'users'): ?>
 				<div id="side-menu" class="tasks col-md-4 column">
-					<p id="clean-bomb" class="btn btn-danger">Bomb->Notyet ボタン</p>
+					<p id="clean-bomb" class="btn btn-danger">Bomb一掃</p>
 					<div class="tasks">
 						<?php echo $this->Form->create('Task'); ?>
 						<fieldset>
@@ -88,9 +88,9 @@
 						<ul class="list-group" id="task-list-parents">
 							<?php if (count($parents)): ?>
 								<?php foreach ($parents as $parent): ?>
-									<li id="parent_<?php echo h($parent['Task']['id']); ?>" class="notyet list-group-item clearfix" data-task-id="<?php echo h($parent['Task']['id']); ?>">
+									<li id="parent_<?php echo h($parent['Task']['id']); ?>" class="<?php echo $parent['Task']['status'];?> list-group-item clearfix" data-task-id="<?php echo h($parent['Task']['id']); ?>">
 										<span class="body"><?php echo $this->Html->link(__(h($parent['Task']['body'])), array('controller'=>'tasks', 'action' => 'view', $parent['Task']['id'])); ?></span>
-										<span class="complete"><?php echo $parent['Task']['complete'].'%'; ?></span>
+										<span class="attainment <?php if($parent['Task']['complete'] == 100)echo 'complete'; ?>"><?php echo $parent['Task']['complete'].'%'; ?></span>
 										<span class="delete-task"><span class="glyphicon glyphicon-trash"></span><b>削除</b></span>
 									</li>
 								<?php endforeach; ?>
