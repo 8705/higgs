@@ -67,6 +67,7 @@
 						<fieldset>
 						<?php
 							echo $this->Form->input('user_id', array('type'=>'hidden', 'default' => $author['id']));
+							echo $this->Form->input('dbar', array('type'=>'hidden', 'default' => array_sum($bar)));
 							echo $this->Form->input('body', array('placeholder' => 'Add Project'));
 							echo $this->Form->input('start_time', array('type'=>'text', 'class' => 'datepicker','readonly' => 'readonly'));
 							//ajax送信用設定
@@ -90,7 +91,7 @@
 								<?php foreach ($parents as $parent): ?>
 									<li id="parent_<?php echo h($parent['Task']['id']); ?>" class="<?php echo $parent['Task']['status'];?> list-group-item clearfix" data-task-id="<?php echo h($parent['Task']['id']); ?>">
 										<span class="body"><?php echo $this->Html->link(__(h($parent['Task']['body'])), array('controller'=>'tasks', 'action' => 'view', $parent['Task']['id'])); ?></span>
-										<span class="attainment <?php if($parent['Task']['complete'] == 100)echo 'complete'; ?>"><?php echo $parent['Task']['complete'].'%'; ?></span>
+										<span class="attainment <?php if($parent['Task']['complete'] == 100)echo 'complete'; ?>"><?php if($parent['Task']['complete'] == 100) {echo 'Complete!!';} else{echo $parent['Task']['complete'].'%';} ?></span>
 										<span class="delete-task"><span class="glyphicon glyphicon-trash"></span><b>削除</b></span>
 									</li>
 								<?php endforeach; ?>

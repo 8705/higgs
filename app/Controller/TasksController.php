@@ -107,7 +107,15 @@ class TasksController extends AppController {
             throw new NotFoundException(__('Invalid post'));
         }
         $this->autoRender = false;   // 自動描画をさせない
-
+        $data = $this->request->data;
+        if($data['Task']['dbar'] > 90) {
+            $error = true;
+            $message['body'][] = 'タスクが多すぎます。';
+            $res = compact('error', 'message');
+            $this->response->type('json');
+            echo json_encode($res);
+            exit;
+        }
         // save OK
         if ($this->Task->save($this->request->data)) {
             $result = $this->Task->find('first', array(
@@ -127,7 +135,7 @@ class TasksController extends AppController {
         } else {
             $error = true;
             $message = $this->Task->validationErrors;
-            $res = $res = compact('error', 'message');
+            $res = compact('error', 'message');
             $this->response->type('json');
             echo json_encode($res);
             exit;
@@ -554,7 +562,16 @@ class TasksController extends AppController {
         if (!$this->request->is('ajax')) {
             throw new NotFoundException(__('Invalid post'));
         }
-        $this->autoRender = false;   // 自動描画をさせない
+        $this->autoRender = false;
+        $all_d = $this->getalldbar($this->Auth->user('id'));
+        if(array_sum($all_d) > 90) {
+            $error = true;
+            $message['body'][] = 'タスクが多すぎます。';
+            $res = compact('error', 'message');
+            $this->response->type('json');
+            echo json_encode($res);
+            exit;
+        }  // 自動描画をさせない
 
         $res = $this->Task->updateAll(
             array('Task.bomb' => 0, 'Task.status' => "'notyet'", 'Task.d_param' => 100),
@@ -563,7 +580,6 @@ class TasksController extends AppController {
 
         if($res) {
             $error = false;
-            $all_d = $this->getalldbar($this->Auth->user('id'));
             $res = array("error" => $error, "all_d" => $all_d);
             $this->response->type('json');
             echo json_encode($res);
