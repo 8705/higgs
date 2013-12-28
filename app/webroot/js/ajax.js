@@ -1128,8 +1128,8 @@ $(function(){
                 $('.delete-cal-task').html('<img src="/img/ajax-loader.gif" alt="" />');
             },
             success : function(data) {
-                popUpPanel(false, '「'+data.result.body+'」を削除しました');
-                $('#task_'+data.result.id).fadeOut(200,function(){
+                popUpPanel(false, '「'+data.result.Task.body+'」を削除しました');
+                $('#task_'+data.result.Task.id).fadeOut(200,function(){
                     $(this).remove();
                 })
             },
