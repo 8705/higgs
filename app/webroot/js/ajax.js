@@ -92,7 +92,7 @@ function deleteEmpty(addDay) {
 }
 //ulの中身が空になると空タスクを挿入する
 function createEmpty() {
-    var arr = new Array('today', 'tomorrow', 'dayaftertomorrow');
+    var arr = new Array('today', 'tomorrow', 'dayaftertomorrow', 'projects', 'bombs');
     for(i in arr) {
         if ($('#task-list-'+arr[i]).find('li').length == 0) {
             $('#task-list-'+arr[i]).append(htmlEmptyElm());
@@ -154,7 +154,7 @@ function addTask(data, textStatus) {
     var elm =$(
         '<li id="parent_'+data.result.id+'" class="notyet list-group-item clearfix" data-task-id="'+data.result.id+'">'+
         '<span class="body"><a href="/tasks/view/' + data.result.id + '">'+data.result.body +'</a></span>\n'+
-        '<span>0%</span>'+
+        '<span class="attainment">0%</span>'+
         '<span class="delete-task"><span class="glyphicon glyphicon-trash"></span><b>削除</b></span></li>'
     );
     if ($('#task-list-parents .empty').length == 1 ) {
@@ -873,9 +873,8 @@ $(function(){
         cancelEvent(e);
         var cleanArr = new Array();
 
-        $('.parents li.bomb').each(function(){
+        $('#task-list-parents li.bomb').each(function(){
             cleanArr.push($(this).data('task-id'));
-            console.log('OK');
         });
 
         var json = JSON.stringify(cleanArr);
@@ -904,7 +903,8 @@ $(function(){
                         +'<span class="body"><a href="/tasks/view/'
                         + data.result[i]+ '">'
                         +$('#parent_'+ data.result[i]).find('.body').text()
-                        +'</a></span></li>\n'
+                        +'</a></span>'
+                        +'<span class="delete-task"><span class="glyphicon glyphicon-trash"></span><b>削除</b></span></li>'
                     );
                 }
                 $('#task-list-bombs').children().fadeIn('slow');
@@ -1364,4 +1364,40 @@ $(function(){
             }
         }
     })
+
+    $(document).on('click','#tryagain', function(e){
+        cancelEvent(e);
+        var taskId      = $(this).parent().data('task-id');
+        $.ajax({
+            url : '/tasks/tryagain/' + taskId,
+            type : 'POST',
+
+            beforeSend : function() {
+                $('#tryagain').html('<img src="/img/ajax-loader.gif" alt="" />');
+            },
+            success : function(data){
+                $('#bomb_'+taskId).fadeOut('slow',function(){
+                    $.when($(this).remove()).then(createEmpty());
+                })
+                deleteEmpty('bombs');
+                $('.parents ul').append(
+                    '<li id="parent_'+taskId+'" class="notyet list-group-item clearfix" data-task-id="'+taskId+'">'+
+                    '<span class="body"><a href="/tasks/view/' + taskId + '">'+$('#bomb_'+taskId).find('.body').text() +'</a></span>\n'+
+                    '<span class="attainment">0%</span>'+
+                    '<span class="delete-task"><span class="glyphicon glyphicon-trash"></span><b>削除</b></span></li>'
+                );
+                $('.parents ul').children().fadeIn('slow');
+                var elm2 =$('<div class="add-bar progress-bar progress-bar-danger" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width: 10%; display:none;">10%</div>');
+
+                $('#d-bar').append(elm2);
+                $('.add-bar').fadeIn('slow');
+            },
+            error : function() {
+                popUpPanel(true, 'サーバーエラーでタスクを消去できませんでした');
+            },
+            complete : function() {
+                $('#task_' + taskId +' .delete-task').html('削除');
+            }
+        })
+    });
 });

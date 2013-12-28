@@ -85,7 +85,9 @@ h2 {
 	background-color: #222;
 	color: #FFF;
 	vertical-align: center;
-	margin: 0 -125px;
+	left: 0;
+    right: 0;
+
 }
 
 #top-img {

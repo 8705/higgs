@@ -61,7 +61,8 @@ class AppController extends Controller {
             $this->params['action'] == 'check' ||
             $this->params['action'] == 'divide' ||
             $this->params['action'] == 'clean' ||
-            $this->params['action'] == 'sort'
+            $this->params['action'] == 'sort' ||
+            $this->params['action'] == 'tryagain'
         ) {
             $this->Security->csrfCheck = false;
             $this->Security->validatePost = false;

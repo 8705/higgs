@@ -63,6 +63,13 @@ class BombController extends AppController {
         $this->dparamall();
     }
 
+    public function resetstatus() {
+        $this->Task->updateAll(array('Task.status' => "'notyet'",'Task.bomb' => 0));
+        $this->influenceall();
+        $this->dparamall();
+
+    }
+
     public function add() {
         $options = array(
             'conditions'=>array(
