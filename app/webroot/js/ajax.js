@@ -856,7 +856,7 @@ $(function(){
 
     function adjustattainment(attainment) {
         for(var id in attainment) {
-            $('#parent_'+id+' .complete').html(Math.round(attainment[id])+'%');
+            $('#parent_'+id+' .attainment').html(Math.round(attainment[id])+'%');
         }
     }
 
