@@ -17,6 +17,7 @@
 	<?php echo $this->Html->script('jquery.min'); ?>
 	<?php echo $this->Html->script('bootstrap.min'); ?>
 	<?php echo $this->Html->script('zebra_datepicker'); ?>
+	<?php echo $this->Html->script('script'); ?>
 </head>
 <body>
 <div class="container">
@@ -30,7 +31,7 @@
 						</div>
 						<div id="d-bar" class="col-md-10 column progress progress-striped">
 							<?php foreach($bar as $id => $val): ?>
-								<div class="parent_<?php echo $id; ?> progress-bar progress-bar-danger" role="progressbar" aria-valuenow="<?php echo $val; ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $val; ?>%;<?php if($val == 0)echo 'border-right: none;' ?>">
+								<div class="parent_<?php echo $id; ?> jshover progress-bar progress-bar-danger" role="progressbar" aria-valuenow="<?php echo $val; ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $val; ?>%;<?php if($val == 0)echo 'border-right: none;' ?>">
 									<?php echo round($val)."%"; ?>
 								</div>
 							<?php endforeach; ?>
@@ -89,7 +90,7 @@
 						<ul class="list-group" id="task-list-parents">
 							<?php if (count($parents)): ?>
 								<?php foreach ($parents as $parent): ?>
-									<li id="parent_<?php echo h($parent['Task']['id']); ?>" class="<?php echo $parent['Task']['status'];?> list-group-item clearfix" data-task-id="<?php echo h($parent['Task']['id']); ?>">
+									<li class="parent_<?php echo h($parent['Task']['id']); ?> jshover <?php echo $parent['Task']['status'];?> list-group-item clearfix" data-task-id="<?php echo h($parent['Task']['id']); ?>">
 										<span class="body"><?php echo $this->Html->link(__(h($parent['Task']['body'])), array('controller'=>'tasks', 'action' => 'view', $parent['Task']['id'])); ?></span>
 										<span class="attainment <?php if($parent['Task']['complete'] == 100)echo 'complete'; ?>"><?php if($parent['Task']['complete'] == 100) {echo 'Complete!!';} else{echo $parent['Task']['complete'].'%';} ?></span>
 										<span class="delete-task"><span class="glyphicon glyphicon-trash"></span><b>削除</b></span>
@@ -127,14 +128,6 @@
 <?php echo isset($token)?"<script>var token = '{$token}'</script>":"";?>
 <?php echo $this->Html->script('ajax'); ?>
 <?php echo $this->Js->writeBuffer(array( 'inline' => 'true')); ?>
-<script>
-	$(document).ready(function() {
-		$('input.datepicker').Zebra_DatePicker({
-	        first_day_of_week : 0
-	    });
-	    $('input.datepicker').val(getFutureDate(0));
-	});
-</script>
 <?php echo $this->Html->script('jquery-ui-1.10.3.custom.min'); ?>
 </body>
 </html>
