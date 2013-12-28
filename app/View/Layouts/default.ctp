@@ -129,7 +129,6 @@
 <script>
 	$(document).ready(function() {
 		$('input.datepicker').Zebra_DatePicker({
-	        direction : [getFutureDate(0), false],
 	        first_day_of_week : 0
 	    });
 	    $('input.datepicker').val(getFutureDate(0));

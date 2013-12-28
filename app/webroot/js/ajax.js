@@ -14,10 +14,10 @@ function cancelEvent(e) {
 //タスクのhtml部品
 function htmlAddElm(data) {
     var elm =$(
-        '<li id="task_'+data.result.id+'" class="list-group-item notyet" style="display:none;" data-task-id="'+ data.result.id +'">\n' +
+        '<li id="task_'+data.result.Task.id+'" class="list-group-item notyet" style="display:none;" data-task-id="'+ data.result.Task.id +'">\n' +
         '<span class="check-task"><input type="checkbox"></span>\n'+
-        '<span class="body edit-task"><a href="/tasks/view/' + data.result.id + '">'+ data.result.body +'</a></span>\n' +
-        '<span class="start_time">'+ data.result.start_time +'</span>\n'+
+        '<span class="body edit-task"><a href="/tasks/view/' + data.result.Task.id + '">'+ data.result.Task.body +'</a></span>\n' +
+        '<span class="start_time">'+ data.result.Task.start_time +'</span>\n'+
         '<span class="delete-task"><span class="glyphicon glyphicon-trash"></span><b>削除</b></span>\n' +
         '<span class="sequence" style="display:none;">0</span>\n' +
         '</li>'
@@ -152,8 +152,8 @@ function addTask(data, textStatus) {
         return;
     }
     var elm =$(
-        '<li id="parent_'+data.result.id+'" class="notyet list-group-item clearfix" data-task-id="'+data.result.id+'">'+
-        '<span class="body"><a href="/tasks/view/' + data.result.id + '">'+data.result.body +'</a></span>\n'+
+        '<li id="parent_'+data.result.Task.id+'" class="notyet list-group-item clearfix" data-task-id="'+data.result.Task.id+'">'+
+        '<span class="body"><a href="/tasks/view/' + data.result.Task.id + '">'+data.result.Task.body +'</a></span>\n'+
         '<span>0%</span>'+
         '<span class="delete-task"><span class="glyphicon glyphicon-trash"></span><b>削除</b></span></li>'
     );
@@ -171,17 +171,17 @@ function addTask(data, textStatus) {
     if ($('table.calendar').length == 0) {
         //日付によって描画する場所を変える
         var elm = htmlAddElm(data);
-        appendToDay(data.result.start_time, elm);
+        appendToDay(data.result.Task.start_time, elm);
     //カレンダー
     } else {
-        $('td[data-cal-date='+data.result.start_time+']').append(
-            '<p class="calendartask notyet id="task_'+data.result.id+
-            '" data-cal-task-id="'+data.result.id+'">'+data.result.body+'</p>'
+        $('td[data-cal-date='+data.result.Task.start_time+']').append(
+            '<p class="calendartask notyet id="task_'+data.result.Task.id+
+            '" data-cal-task-id="'+data.result.Task.id+'">'+data.result.Task.body+'</p>'
         );
     }
 
-    $('#task_'+data.result.id).fadeIn('slow');
-    $('#parent_'+data.result.id).fadeIn('slow');
+    $('#task_'+data.result.Task.id).fadeIn('slow');
+    $('#parent_'+data.result.Task.id).fadeIn('slow');
 
     //通知ポップ
     popUpPanel(false, '送信されました');
@@ -284,152 +284,6 @@ $(function(){
         })
     });
 
-    //Edit Task
-    // $(document).on('click','.edit-task', function(e){
-    //     cancelEvent(e);
-
-    //     var taskId      = $(this).parent().data('task-id');
-    //     var body        = $('#task_' + taskId).find('.body').text();
-    //     var start_time  = $('#task_' + taskId).find('.start_time').text();
-    //     var status      = $('#task_' + taskId).find('.status').text();
-    //     var d_param     = $('#task_' + taskId).find('.d_param').text();
-
-    //     //現在編集中のタスクかどうかを判別
-    //     $('#task_' + taskId).addClass('edit');
-
-    //     var elm = $(
-    //         '<span><input class="body edit-input" type="text" value="'+body+'"/></span>\n'+
-    //         '<span><input class="start_time edit-input datepicker" type="text" value="'+start_time+'"/></span>\n'+
-    //         '<span class="edit-push btn btn-default">変更</span>\n'+
-    //         '<span class="edit-cancel btn btn-default">キャンセル</span>\n'+
-    //         '<input class="status" type="hidden" name="status" value="'+status+'" />'+
-    //         '<input class="d_param" type="hidden" name="d_param" value="'+d_param+'" />'
-    //     );
-
-    //     $('#task_' + taskId).empty().append(elm);
-    //     $('#task_' + taskId +' input:eq(0)').focus();
-
-    //     makeDatePicker();
-    // })
-
-    //Cancel Edit Task
-    // $(document).on('click','.edit-cancel', function(e){
-    //     cancelEvent(e);
-    //     var taskId      = $(this).parent().data('task-id');
-    //     var body = $('#task_'+taskId).find('.body').val();
-    //     var start_time = $('#task_'+taskId).find('.start_time').val();
-    //     var status = $('#task_'+taskId).find('.status').val();
-    //     var d_param = $('#task_'+taskId).find('.d_param').val();
-
-    //     $('#task_' + taskId).removeClass('edit');
-    //     if ($('#task_' + taskId).parent().hasClass('children-ul')) {
-    //         var divideSpan = '<span class="divide-task btn btn-default">分割</span>\n';
-    //     } else {
-    //         var divideSpan = '';
-    //     }
-    //     var elm = $(
-    //         '<span class="check-task"><input type="checkbox"></span>\n'+
-    //         '<span class="body"><a href="/tasks/view/' + taskId + '">'+ body +'</a></span>\n' +
-    //         '<span class="start_time">'+ start_time +'</span>\n'+
-    //         '<span class="status">'+ status +'</span>\n'+
-    //         '<span class="d_param">'+ d_param +'</span>\n'+
-    //         divideSpan +
-    //         '<span class="edit-task"><span class="glyphicon glyphicon-edit"></span>編集</span>\n' +
-    //         '<span class="delete-task"><span class="glyphicon glyphicon-trash"></span><b>削除</b></span>'
-    //     );
-
-    //     $('#task_' + taskId).empty().append(elm);
-    // })
-
-    //Edit Push Task
-    // $(document).on('click','.edit-push', function(e){
-    //     cancelEvent(e);
-    //     var taskId      = $(this).parent().data('task-id');
-    //     var body        = $('#task_'+taskId).find('.body').val();
-    //     var start_time  = $('#task_'+taskId).find('.start_time').val();
-    //     // var status      = $('#task_'+taskId).find('.status').val();
-    //     var status      = 'notyet';
-    //     var d_param     = $('#task_'+taskId).find('.d_param').val();
-
-    //     $.ajax({
-    //         url: '/tasks/edit/push'+ taskId,
-    //         type : 'POST',
-    //         // dateType : 'json',
-    //         timeout: 5000,
-    //         data:{
-    //             body : body,
-    //             start_time : start_time,
-    //         },
-    //         beforeSend : function() {
-    //             $('#task_' + taskId +' .edit-push').html('<img src="/img/ajax-loader.gif" alt="" />');
-    //         },
-    //         success : function(data, textStatus){
-    //             data = $.parseJSON(data);
-    //             //バリデーションエラー
-    //             if (data.error === true ) {
-    //                 //エラー内容取り出し $ エラーポップ
-    //                 for (i in data.message.body) {
-    //                     //ポップアップ通知
-    //                     popUpPanel(200, data.error, data.message.body[i]);
-    //                 }
-
-    //                 return;
-    //             }
-    //             //正常時
-    //             //dom生成
-    //             var elm = htmlAddElm(data);
-
-    //             //トップページか、viewページかで挿入場所場合分け
-    //             //viewページの場合
-    //             if ( $('#task_' + data.result.id).parent().hasClass('children-ul')) {
-    //                 $('#task_' + data.result.id).hide().after(elm);
-    //                 $('#task_' + data.result.id).remove();
-    //                 $('#task_' + data.result.id).fadeIn('slow');
-    //             //トップページの場合
-    //             } else {
-    //                 //編集前のリストがいた日にちの場所
-    //                 oldDay = $('#task_' + data.result.id).parent().attr('id').substr(10);
-    //                 addDay = getAddDay(data.result.start_time);
-    //                 //日付が変更されないならその場で挿入、されるなら適切な場所に挿入
-    //                 if (oldDay == addDay) {
-    //                     $('#task_' + data.result.id).hide().after(elm);
-    //                     $('#task_' + data.result.id).remove();
-    //                     $('#task_' + data.result.id).fadeIn('slow');
-    //                 } else {
-    //                     $('#task_' + data.result.id).remove();
-    //                     //start_timeによって適切な場所に
-    //                     appendToDay(data.result.start_time, elm);
-    //                     $('#task_' + data.result.id).fadeIn('slow');
-    //                 }
-    //             }
-
-    //             //通知
-    //             popUpPanel(false, 'タスクを変更しました');
-
-    //             $('#task_'+data.result.id).removeClass('edit');
-
-    //         },
-    //         error : function() {
-    //             //dom生成
-    //             var elm =$(
-    //                 '<span class="check-task"><input type="checkbox"></span>\n'+
-    //                 '<span class="body"><a href="/tasks/view/' + taskId + '">'+ body +'</a></span>\n' +
-    //                 '<span class="start_time">'+ start_time +'</span>\n'+
-    //                 '<span class="status">'+ status +'</span>\n'+
-    //                 '<span class="d_param">'+ d_param +'</span>\n'+
-    //                 '<span class="edit-task btn btn-default">編集</span>\n' +
-    //                 '<span class="divide-task btn btn-default">分割</span>\n' +
-    //                 '<span class="delete-task"><span class="glyphicon glyphicon-trash"></span><b>削除</b></span>'
-    //             );
-    //             $('#task_'+taskId).empty().append(elm);
-    //             popUpPanel(true, 'サーバーエラーでタスクを変更出来ませんでした。');
-    //         },
-    //         complete : function() {
-    //             $('#task_' + taskId +' .edit-push').html('変更');
-    //         }
-    //     })
-    // });
-
     //Edit & Divide Task
     $(document).on('click', '.edit-task', function(e){
         cancelEvent(e);
@@ -459,8 +313,8 @@ $(function(){
                 $('#task_' + taskId).addClass('edit');
 
                 var elm = $(
-                    '<span><input class="body edit-input" type="text" value="'+data.result.body+'"/></span>\n'+
-                    '<span><input class="start_time edit-input datepicker" type="text" value="'+data.result.start_time+'"/></span>\n'+
+                    '<span><input class="body edit-input" type="text" value="'+data.result.Task.body+'"/></span>\n'+
+                    '<span><input class="start_time edit-input datepicker" type="text" value="'+data.result.Task.start_time+'"/></span>\n'+
                     '<span class="edit-push btn btn-default">OK</span>\n'+
                     '<span class="edit-cancel btn btn-default">キャンセル</span>\n'
                 );
@@ -514,12 +368,6 @@ $(function(){
         //今日の日付をプリセット
         $("input.datepicker").val(getFutureDate(0));
 
-        // //分割ボタンを分割キャンセルボタンにする
-        // $('#task_'+taskId).find('.divide-task').replaceWith('<span class="divide-cancel btn btn-default">キャンセル</span>');
-
-        // //親タスクのbtnを止める
-        // $('#task_'+taskId).find('.edit-task').replaceWith('<span class="disable-edit btn btn-default btn-disabled">編集</span>');
-        // $('#task_'+taskId).find('.delete-task').replaceWith('<span class="disable-delete btn btn-default btn-disabled">削除</span>');
         makeDatePicker();
     })
 
@@ -561,8 +409,8 @@ $(function(){
 
                 var elm = $(
                     '<span class="check-task"><input type="checkbox"></span>\n'+
-                    '<span class="body edit-task"><a href="/tasks/view/' + data.result.id + '">'+ data.result.body +'</a></span>\n' +
-                    '<span class="start_time">'+ data.result.start_time +'</span>\n'+
+                    '<span class="body edit-task"><a href="/tasks/view/' + data.result.Task.id + '">'+ data.result.Task.body +'</a></span>\n' +
+                    '<span class="start_time">'+ data.result.Task.start_time +'</span>\n'+
                     '<span class="delete-task"><span class="glyphicon glyphicon-trash"></span>削除</span>'
                 );
 
@@ -616,7 +464,6 @@ $(function(){
             },
             success : function(data, textStatus){
                 data = $.parseJSON(data);
-                console.log(data);
                 //バリデーションエラー
                 if (data.error === true ) {
                     //エラー内容取り出し $ エラーポップ
@@ -631,36 +478,36 @@ $(function(){
                 var elm = htmlAddElm(data);
                 //トップページか、viewページかで挿入場所場合分け
                 //viewページの場合
-                if ( $('#task_' + data.result.id).parent().hasClass('children-ul')) {
-                    $('#task_' + data.result.id).hide().after(elm);
-                    $('#task_' + data.result.id).remove();
-                    $('#task_' + data.result.id).fadeIn(50);
+                if ( $('#task_' + data.result.Task.id).parent().hasClass('children-ul')) {
+                    $('#task_' + data.result.Task.id).hide().after(elm);
+                    $('#task_' + data.result.Task.id).remove();
+                    $('#task_' + data.result.Task.id).fadeIn(50);
                     if(isOrigin) {
-                        $('#task_' + data.result.id).addClass('origin');
+                        $('#task_' + data.result.Task.id).addClass('origin');
                     }
                 //トップページの場合
                 } else {
                     //編集前のリストがいた日にちの場所
-                    oldDay = $('#task_' + data.result.id).parent().attr('id').substr(10);
-                    addDay = getAddDay(data.result.start_time);
+                    oldDay = $('#task_' + data.result.Task.id).parent().attr('id').substr(10);
+                    addDay = getAddDay(data.result.Task.start_time);
                     //日付が変更されないならその場で挿入、されるなら適切な場所に挿入
                     if (oldDay == addDay) {
-                        $('#task_' + data.result.id).hide().after(elm);
-                        $('#task_' + data.result.id).remove();
-                        $('#task_' + data.result.id).fadeIn('slow');
+                        $('#task_' + data.result.Task.id).hide().after(elm);
+                        $('#task_' + data.result.Task.id).remove();
+                        $('#task_' + data.result.Task.id).fadeIn('slow');
                     } else {
-                        $('#task_' + data.result.id).remove();
+                        $('#task_' + data.result.Task.id).remove();
                         //start_timeによって適切な場所に
-                        appendToDay(data.result.start_time, elm);
-                        $('#task_' + data.result.id).fadeIn('slow');
+                        appendToDay(data.result.Task.start_time, elm);
+                        $('#task_' + data.result.Task.id).fadeIn('slow');
                     }
                 }
 
                 //通知：内容が変更されていれば通知だす
-                if (body != data.result.body || start_time != data.result.start_time) {
+                if (body != data.result.Task.body || start_time != data.result.Task.start_time) {
                     popUpPanel(false, 'タスクを変更しました');
                 }
-                $('#task_'+data.result.id).removeClass('edit');
+                $('#task_'+data.result.Task.id).removeClass('edit');
 
                 //<<Divide Push Ajax Start>>
                 var divideArr   = [];
@@ -697,7 +544,6 @@ $(function(){
                         }
                     },
                     success : function(data) {
-                        console.log(data);
                         //バリデーションエラー
                         if (data.error === true ) {
                             //エラー内容取り出し $ エラーポップ
@@ -708,16 +554,16 @@ $(function(){
 
                             return;
                         }
-
                         //view表示の場合
                         if ($('#task_' + data.result[0].Task.parent_id).parent().hasClass('children-ul')) {
                             //分割を追加するタスクがすでに子持ちかどうか判別
                             //持ってない場合children-ulを作る
-                            if (!$('#task_'+ data.result[0].Task.parent_id).next().next().hasClass('children-ul')) {
+                            if (!$('#task_'+ data.result[0].Task.parent_id).next().hasClass('children-ul')) {
                                 $('#task_'+ data.result[0].Task.parent_id).after(
                                     '<ul class="children-ul" data-children-ul-id="'+data.result[0].Task.parent_id+'"></ul>'
                                 );
                             }
+                            console.log(data.result);
                             for(var i in data.result) {
                                 $('ul[data-children-ul-id='+data.result[0].Task.parent_id+']')
                                 .append(
@@ -733,7 +579,9 @@ $(function(){
                                 $('#task_'+data.result[i].Task.id).fadeIn(100);
                             }
                             //分割生成元が教祖出ない場合、アイコンを開閉に置き換え
-                            if(!$('#task_'+ data.result[0].Task.parent_id).hasClass('origin')) {
+                            if($('#task_'+ data.result[0].Task.parent_id).hasClass('origin')) {
+                                $('#task_'+data.result[0].Task.parent_id).find('.check-task').replaceWith('<span class="origin">神</span>');
+                            } else {
                                 $('#task_'+data.result[0].Task.parent_id).find('.check-task').replaceWith('<span class="accordion opne glyphicon glyphicon-expand"></span>');
                             }
                         //トップページの場合
@@ -756,7 +604,7 @@ $(function(){
                         }
 
 
-                        $('#task_'+data.result.id).fadeIn('slow');
+                        // $('#task_'+ data.result.Task.id).fadeIn('slow');
 
                         //通知ポップ
                         popUpPanel(false, 'タスクを追加ました');
@@ -769,7 +617,7 @@ $(function(){
                     }
                 });
 
-                $('ul[data-parent-id='+data.result.id+']').fadeOut(150, function(){
+                $('ul[data-parent-id='+data.result.Task.id+']').fadeOut(150, function(){
                     $(this).remove();
                 })
 
@@ -797,10 +645,6 @@ $(function(){
     $(document).on('click','.check-task', function(e){
         cancelEvent(e);
         var taskId      = $(this).parent().data('task-id');
-        // var body        = $('#task_' + taskId).find('.body').text();
-        // var start_time  = $('#task_' + taskId).find('.start_time').text();
-        // var status      = $('#task_' + taskId).find('.status').text();
-        // var d_param     = $('#task_' + taskId).find('.d_param').text();
         var checked = '';
 
         $.ajax({
@@ -821,7 +665,7 @@ $(function(){
                     $('#task_'+taskId).find('.status').text(data.result.status);
 
                     //親タスクのbtnを元に戻す
-                    $('#task_'+taskId).find('.disable-edit').replaceWith('<span class="edit-task btn btn-default">編集</span>');
+                    // $('#task_'+taskId).find('.disable-edit').replaceWith('<span class="edit-task btn btn-default">編集</span>');
                     $('#task_'+taskId).find('.disable-divide').replaceWith('<span class="divide-task btn btn-default">分割</span>');
                 //チェックを入れた時
                 } else if (data.result.status == 'done'){
@@ -830,13 +674,40 @@ $(function(){
                     $('#task_'+taskId).find('.status').text(data.result.status);
 
                     //親タスクのbtnを止める
-                    $('#task_'+taskId).find('.edit-task').replaceWith('<span class="disable-edit btn btn-default btn-disabled">編集</span>');
-                    $('#task_'+taskId).find('.divide-task').replaceWith('<span class="disable-divide btn btn-default btn-disabled">分割</span>');
+                    // $('#task_'+taskId).find('.edit-task').replaceWith('<span class="disable-edit btn btn-default btn-disabled">編集</span>');
+                    // $('#task_'+taskId).find('.divide-task').replaceWith('<span class="disable-divide btn btn-default btn-disabled">分割</span>');
 
                     checked = 'checked';
                 }
                 adjustDBar(data.all_d);
                 adjustattainment(data.attainment);
+                adjustCheckBtn(data.result.id);
+
+                function adjustCheckBtn(id) {
+                    //兄弟に未完了タスクがある場合
+                    if($('#task_'+id).hasClass('origin')) {
+                        return;
+                    }
+                    var parentId = $('#task_'+id).parent().data('children-ul-id');
+                    //兄弟に未完了タスクがある場合
+                    if($('ul[data-children-ul-id='+parentId+']').find('li.notyet').length > 0) {
+                        if($('#task_'+parentId).hasClass('done')) {
+                            $('#task_'+parentId)
+                            .removeClass('done')
+                            .addClass('notyet')
+                            .find('.body').addClass('edit-task');
+                            adjustCheckBtn(parentId);
+                        }
+                        return;
+                    } else {
+                        $('#task_'+parentId)
+                        .removeClass('notyet')
+                        .addClass('done')
+                        .find('.body').removeClass('edit-task');
+
+                        adjustCheckBtn(parentId);
+                    }
+                }
             },
             complete : function() {
                 $('#task_' + taskId +' .check-task').html('<input type="checkbox" '+ checked +'/>');
