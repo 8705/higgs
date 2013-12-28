@@ -26,11 +26,11 @@
 				<nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
 					<div class="row clearfix">
 						<div class="col-md-1 column navbar-header">
-					 		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="/">ホーム</a>
+							<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="/">ホーム</a>
 						</div>
 						<div id="d-bar" class="col-md-10 column progress progress-striped">
 							<?php foreach($bar as $id => $val): ?>
-								<div class="parent_<?php echo $id; ?> progress-bar progress-bar-danger" role="progressbar" aria-valuenow="<?php echo $val; ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $val; ?>%">
+								<div class="parent_<?php echo $id; ?> progress-bar progress-bar-danger" role="progressbar" aria-valuenow="<?php echo $val; ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $val; ?>%;<?php if($val == 0)echo 'border-right: none;' ?>">
 									<?php echo round($val)."%"; ?>
 								</div>
 							<?php endforeach; ?>
@@ -61,7 +61,7 @@
 	<div id="main" class="row clearfix">
 		<?php if($this->params["controller"] != 'users'): ?>
 				<div id="side-menu" class="tasks col-md-4 column">
-					<p id="clean-bomb" class="btn btn-danger">Bomb->Notyet ボタン</p>
+					<p id="clean-bomb" class="btn btn-danger">Bomb一掃</p>
 					<div class="tasks">
 						<?php echo $this->Form->create('Task'); ?>
 						<fieldset>
@@ -88,9 +88,9 @@
 						<ul class="list-group" id="task-list-parents">
 							<?php if (count($parents)): ?>
 								<?php foreach ($parents as $parent): ?>
-									<li id="parent_<?php echo h($parent['Task']['id']); ?>" class="notyet list-group-item clearfix" data-task-id="<?php echo h($parent['Task']['id']); ?>">
+									<li id="parent_<?php echo h($parent['Task']['id']); ?>" class="<?php echo $parent['Task']['status'];?> list-group-item clearfix" data-task-id="<?php echo h($parent['Task']['id']); ?>">
 										<span class="body"><?php echo $this->Html->link(__(h($parent['Task']['body'])), array('controller'=>'tasks', 'action' => 'view', $parent['Task']['id'])); ?></span>
-										<span class="complete"><?php echo $parent['Task']['complete'].'%'; ?></span>
+										<span class="attainment <?php if($parent['Task']['complete'] == 100)echo 'complete'; ?>"><?php echo $parent['Task']['complete'].'%'; ?></span>
 										<span class="delete-task"><span class="glyphicon glyphicon-trash"></span><b>削除</b></span>
 									</li>
 								<?php endforeach; ?>

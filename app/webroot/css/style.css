@@ -191,15 +191,23 @@ input:hover, textarea:hover {
 }
 
 /* 爆発したけどリストにいるタスク */
+.parents li.bomb {
+    background-color: red;
+}
+
 .task-list .bomb {
-    opacity: 0.4;
+    background-color: red;
 }
 
 /* タスクの達成度 */
-.complete {
+.attainment {
     position: absolute;
     right: 60px;
     bottom: 10px;
+}
+
+.complete {
+    color: red;
 }
 
 /***** アコーディオン *********/
@@ -445,7 +453,7 @@ li.delete {
     display: none !important;
 }
 .d_param {
-    display: none !important;
+    display: !important;
 }
 .status {
     display: none !important;

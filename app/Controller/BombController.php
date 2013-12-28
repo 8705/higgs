@@ -44,7 +44,6 @@ class BombController extends AppController {
             }
         }
         echo 'Success!';
-        exit;
     }
 
     public function dparamall() {
@@ -56,54 +55,52 @@ class BombController extends AppController {
             $this->Task->saveField('d_param', round($dparam*$task['Task']['influence']));
         }
         echo 'Success!';
-        exit;
+    }
+
+    public function resetdparam() {
+        $this->Task->updateAll(array('Task.d_param' => 100));
+        $this->influenceall();
+        $this->dparamall();
     }
 
     public function add() {
         $options = array(
             'conditions'=>array(
                 'Task.status' => 'notyet',
-                'Task.start_time <' => date("Y-m-d")
+                'Task.start_time <' => date("Y-m-d"),
+                '(Task.rght - Task.lft)' => 1
             ),
             'fields'=>'id'
         );
         $warning = $this->Task->find('list',$options);
-        foreach ($warning as $id) {
-            $parent = $this->Task->getPath($id);
+        foreach ($warning as $val) {
+            $parent = $this->Task->getPath($val);
             $gods_id[] = $parent[0]['Task']['id'];
         }
         $gods_id = array_unique($gods_id);
-        $id = array();
         foreach ($gods_id as $god_id) {
+            $id = array();
             $id[]= $god_id;
             $allChildren = $this->Task->children($god_id);
             foreach($allChildren as $children) {
                 $id[] = $children['Task']['id'];
             }
-            
             $this->Task->updateAll(
                 array('Task.d_param' => 'Task.d_param * 2'),
                 array('Task.id' => $id)
             );
         }
+        exit;
     }
 
     public function bomb() {
-        $max = dcapacity;
+        $max = 100; //maxは100%
         $users_id = $this->User->find('list',array('fields' => array('User.id')));
-        foreach($users_id as $user_id) {
-            $options = array(
-                'conditions' => array(
-                    'Task.user_id' => $user_id,
-                    'Task.status' => 'notyet',
-                    'Task.parent_id' => null
-                ),
-                'fields' => array('Task.d_param')
-            );
-            $dparams = $this->Task->find('list', $options);
-            arsort($dparams);
-            $diff = array_sum($dparams) - $max;
-            foreach ($dparams as $task_id => $dparam) {
+        foreach($users_id as $userid) {
+            $dbar = $this->getalldbar($userid);
+            arsort($dbar);
+            $diff = array_sum($dbar) - $max;
+            foreach ($dbar as $task_id => $dparam) {
                 if ($diff > 0) {
                     $this->Task->id = $task_id;
                     $this->Task->saveField('status', 'bomb');
@@ -116,5 +113,6 @@ class BombController extends AppController {
                 }
             }
         }
+        exit;
     }
 }
