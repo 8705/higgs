@@ -100,8 +100,14 @@ function createEmpty() {
 }
 function removeChildUl(id) {
     //タスクを消去した結果children-ulの中身がからっぽなら、ulも消去
-    if ( $('ul[data-children-ul-id='+id+']').find('li').length == 0) {
-        $('ul[data-children-ul-id='+id+']').remove();
+    if ( $('ul[data-children-ul-id='+id+']').find('li:not(.delete)').length == 0) {
+        $('ul[data-children-ul-id='+id+']').addClass('delete').hide();
+        if($('#task_'+id).hasClass('notyet')){
+            var checked = '';
+        } else if ($('#task_'+id).hasClass('done')) {
+            var checked = 'checked';
+        }
+        $('#task_'+id).find('.accordion').replaceWith('<span class="check-task"><input type="checkbox" '+ checked +'></span>');
     }
 }
 
@@ -136,6 +142,39 @@ function appendToDay(start_time, elm) {
             break;
     }
     addDay = '';
+}
+function adjustCheckBtn(id) {
+    if($('#task_'+id).hasClass('origin')) {
+        return;
+    }
+    var parentId = $('#task_'+id).parent().data('children-ul-id');
+    //兄弟に未完了タスクがある場合
+    if($('ul[data-children-ul-id='+parentId+']').find('li.notyet').length > 0) {
+        if($('#task_'+parentId).hasClass('done')) {
+            $('#task_'+parentId)
+            .removeClass('done')
+            .addClass('notyet')
+            .find('.body').addClass('edit-task');
+            adjustCheckBtn(parentId);
+        }
+        return;
+    } else if($('ul[data-children-ul-id='+parentId+']').find('li.done').length > 0){
+        console.log('else');
+        console.log(parentId);
+        $('#task_'+parentId)
+        .removeClass('notyet')
+        .addClass('done')
+        .find('.body').removeClass('edit-task');
+
+        adjustCheckBtn(parentId);
+    } else {    //.deleteしかない場合
+        return;
+    }
+}
+function adjustCheckBtnForDel(parentId) {
+    if ($('ul[data-children-ul-id='+parentId+']').find('li.notyet').length > 0) {
+
+    }
 }
 
 //タスク描画処理 in success
@@ -261,11 +300,18 @@ $(function(){
                     //一族かトップかでul消すかどうかの処理がかわる
 
                     //view表示時
-                    if ($('#task_'+data.result.id).parent().hasClass('children-ul')) {
+                    if ($('#task_'+data.result.Task.id).parent().hasClass('children-ul')) {
                         //子タスク内
-                        if ($('ul[data-children-ul-id=' + data.result.parent_id + ']').hasClass('children-ul')) {
-                            $.when($('#task_'+data.result.id).remove()).then(removeChildUl(data.result.parent_id));
+                        if ($('ul[data-children-ul-id=' + data.result.Task.parent_id + ']').hasClass('children-ul')) {
+
+                            $.when(
+                                $('#task_'+data.result.Task.id).removeClass('notyet').removeClass('done').addClass('delete').hide()
+                            ).then(
+                                removeChildUl(data.result.Task.parent_id)
+                            );
                         }
+                        adjustCheckBtn(data.result.Task.id);
+                        $('.delete').remove();
                     //トップページ表示時
                     } else {
                         $.when($(this).remove()).then(createEmpty());
@@ -329,7 +375,7 @@ $(function(){
                 }, 200);
 
                 //今日の日付をプリセット
-                // $("input.datepicker").val(getFutureDate(0));
+                $("input.datepicker").val(getFutureDate(0));
                 $('ul[data-parent-id='+taskId+']').find('.body').focus();
 
                 //分割ボタンを分割キャンセルボタンにする
@@ -684,31 +730,6 @@ $(function(){
                     adjustCheckBtn(data.result.Task.id);
                 }
 
-                function adjustCheckBtn(id) {
-                    //兄弟に未完了タスクがある場合
-                    if($('#task_'+id).hasClass('origin')) {
-                        return;
-                    }
-                    var parentId = $('#task_'+id).parent().data('children-ul-id');
-                    //兄弟に未完了タスクがある場合
-                    if($('ul[data-children-ul-id='+parentId+']').find('li.notyet').length > 0) {
-                        if($('#task_'+parentId).hasClass('done')) {
-                            $('#task_'+parentId)
-                            .removeClass('done')
-                            .addClass('notyet')
-                            .find('.body').addClass('edit-task');
-                            adjustCheckBtn(parentId);
-                        }
-                        return;
-                    } else {
-                        $('#task_'+parentId)
-                        .removeClass('notyet')
-                        .addClass('done')
-                        .find('.body').removeClass('edit-task');
-
-                        adjustCheckBtn(parentId);
-                    }
-                }
             },
             complete : function() {
                 $('#task_' + taskId +' .check-task').html('<input type="checkbox" '+ checked +'/>');

@@ -313,10 +313,11 @@ class TasksController extends AppController {
         //save OK
         $this->Task->id = $id;
         if($this->Task->saveField('status','delete')) {
-            $row = $this->Task->find('first',array(
+            $this->adjustStatus($id);
+            $result = $this->Task->find('first',array(
                 'conditions'    => array('Task.id' =>$id),
+                'recursive' => -1
             ));
-            $result = $row['Task'];
             $parent = $this ->Task->getParentNode($id);
             $children = $this->Task->children($id);
             $child_id = array();
@@ -339,7 +340,7 @@ class TasksController extends AppController {
 
             $all_d = $this->getdbar($id);
             $error = false;
-            $res = array("error" => $error,"result" => $result,"all_d" => $all_d);
+            $res = array("error" => $error, "result" => $result, "all_d" => $all_d);
             $this->response->type('json');
             echo json_encode($res);
         //save NG
@@ -382,24 +383,25 @@ class TasksController extends AppController {
         //save OK
         if ($this->Task->save($this->request->data)) {
 
-            $parentArr = array_reverse($this->Task->getPath($id));
-            foreach($parentArr as $row) {
-                if($this->Task->childCount($row['Task']['id']) == 0) {
-                    continue;
-                }
-                $childArr = $this->Task->children($row['Task']['id'],true,null,'lft',null,1,-1);
-                $resultArr = array();
-                foreach ($childArr as $subrow) {
-                    $resultArr[] = $subrow['Task']['status'] == 'notyet';
-                }
-                if (!in_array(true, $resultArr)) {
-                    $this->Task->id = $row['Task']['id'];
-                    $this->Task->save(array('status' => 'done'));
-                } else {
-                    $this->Task->id = $row['Task']['id'];
-                    $this->Task->save(array('status' => 'notyet'));
-                }
-            }
+            $this->adjustStatus($id);
+            // $parentArr = array_reverse($this->Task->getPath($id));
+            // foreach($parentArr as $row) {
+            //     if($this->Task->childCount($row['Task']['id']) == 0) {
+            //         continue;
+            //     }
+            //     $childArr = $this->Task->children($row['Task']['id'],true,null,'lft',null,1,-1);
+            //     $resultArr = array();
+            //     foreach ($childArr as $subrow) {
+            //         $resultArr[] = $subrow['Task']['status'] == 'notyet';
+            //     }
+            //     if (!in_array(true, $resultArr)) {
+            //         $this->Task->id = $row['Task']['id'];
+            //         $this->Task->save(array('status' => 'done'));
+            //     } else {
+            //         $this->Task->id = $row['Task']['id'];
+            //         $this->Task->save(array('status' => 'notyet'));
+            //     }
+            // }
 
             $options = array('conditions' => array('Task.' . $this->Task->primaryKey => $id));
             $result = $this->Task->find('first', $options);
@@ -574,6 +576,35 @@ class TasksController extends AppController {
             $this->response->type('json');
             echo json_encode($res);
             exit;
+        }
+    }
+
+    private function adjustStatus($id) {
+        $parentArr = array_reverse($this->Task->getPath($id));
+        // var_dump($parentArr);
+        foreach($parentArr as $row) {
+            if($this->Task->childCount($row['Task']['id']) == 0) {
+                continue;
+            }
+            $childArr = $this->Task->children($row['Task']['id'],true,null,'lft',null,1,-1);
+
+            $statusArr = array();
+            foreach ($childArr as $subrow) {
+                if($subrow['Task']['status'] == 'delete' ) {
+                    $statusArr[] = 'delete';
+                } else if($subrow['Task']['status'] == 'notyet'){
+                    $statusArr[] = 'notyet';
+                } else if($subrow['Task']['status'] == 'done') {
+                    $statusArr[] = 'done';
+                }
+            }
+            if (!in_array('notyet', $statusArr)) {
+                $this->Task->id = $row['Task']['id'];
+                $this->Task->save(array('status' => 'done'));
+            } else {
+                $this->Task->id = $row['Task']['id'];
+                $this->Task->save(array('status' => 'notyet'));
+            }
         }
     }
 }
