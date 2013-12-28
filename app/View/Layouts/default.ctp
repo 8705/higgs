@@ -26,11 +26,11 @@
 				<nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
 					<div class="row clearfix">
 						<div class="col-md-1 column navbar-header">
-					 		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="/">ホーム</a>
+							<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="/">ホーム</a>
 						</div>
 						<div id="d-bar" class="col-md-10 column progress progress-striped">
 							<?php foreach($bar as $id => $val): ?>
-								<div class="parent_<?php echo $id; ?> progress-bar progress-bar-danger" role="progressbar" aria-valuenow="<?php echo $val; ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $val; ?>%">
+								<div class="parent_<?php echo $id; ?> progress-bar progress-bar-danger" role="progressbar" aria-valuenow="<?php echo $val; ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $val; ?>%;<?php if($val == 0)echo 'border-right: none;' ?>">
 									<?php echo round($val)."%"; ?>
 								</div>
 							<?php endforeach; ?>

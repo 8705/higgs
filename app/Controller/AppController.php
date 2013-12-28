@@ -39,14 +39,14 @@ class AppController extends Controller {
             $sum_dparam = 0;
             foreach($children as $child) {
                 if(
-                    $child['Task']['status'] == 'done' and 
+                    $child['Task']['status'] == 'notyet' and 
                     $child['Task']['rght'] - $child['Task']['lft'] == 1
                 ) {
                     $sum_dparam += $child['Task']['influence'];
                 }
             }
-            $parents[$key]['Task']['complete'] = round(100*$sum_dparam);
-            $bar[$parent['Task']['id']] = 100*$parent['Task']['d_param']*(1-$sum_dparam)/dcapacity;
+            $parents[$key]['Task']['complete'] = round(100*(1-$sum_dparam));
+            $bar[$parent['Task']['id']] = 100*$parent['Task']['d_param']*$sum_dparam/dcapacity;
         }
         $this->set('bar', $bar);
         $this->set('parents', $parents);
@@ -74,29 +74,29 @@ class AppController extends Controller {
         }
     }
 
-    public function getalldbar() {
+    public function getalldbar($userid) {
         $options = array(
             'conditions' => array(
-                'Task.user_id' => $this->Auth->user('id'),
+                'Task.user_id' => $userid,
                 'Task.status' => 'notyet',
                 'Task.parent_id' => null
             )
         );
         $gods = $this->Task->find('all', $options);
-        $all_d = 0;
+        $alldbar = array();
         foreach($gods as $key=>$god) {
             $children = $this->Task->children($god['Task']['id']);
             array_unshift($children, $god);
-            $sum_dparam = 0;
+            $sum_influence = 0;
             foreach($children as $child) {
                 if(
                     $child['Task']['status'] == 'notyet' and 
                     $child['Task']['rght'] - $child['Task']['lft'] == 1
                 ) {
-                    $sum_dparam += $child['Task']['influence'];
+                    $sum_influence += $child['Task']['influence'];
                 }
             }
-            $alldbar[$god['Task']['id']] = 100*$god['Task']['d_param']*$sum_dparam/dcapacity;
+            $alldbar[$god['Task']['id']] = 100*$god['Task']['d_param']*$sum_influence/dcapacity;
         }
 
         return $alldbar;

@@ -116,7 +116,7 @@ class TasksController extends AppController {
                 'order' => array('Task.id' => 'desc')
             ));
 
-            $all_d = $this->getalldbar();
+            $all_d = $this->getalldbar($this->Auth->user('id'));
             $error = false;
             $res = array("error" => $error,"result" => $result["Task"], 'all_d' => $all_d);
             $this->response->type('json');

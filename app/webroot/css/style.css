@@ -445,7 +445,7 @@ li.delete {
     display: none !important;
 }
 .d_param {
-    display: none !important;
+    display: !important;
 }
 .status {
     display: none !important;
