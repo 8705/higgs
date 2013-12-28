@@ -329,7 +329,7 @@ $(function(){
                 }, 200);
 
                 //今日の日付をプリセット
-                $("input.datepicker").val(getFutureDate(0));
+                // $("input.datepicker").val(getFutureDate(0));
                 $('ul[data-parent-id='+taskId+']').find('.body').focus();
 
                 //分割ボタンを分割キャンセルボタンにする
@@ -365,7 +365,7 @@ $(function(){
         }, 200);
 
         //今日の日付をプリセット
-        $("input.datepicker").val(getFutureDate(0));
+        // $("input.datepicker").val(getFutureDate(0));
 
         makeDatePicker();
     })
