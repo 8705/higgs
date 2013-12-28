@@ -67,7 +67,6 @@ function getHsl(d_param, all_d) {
 
 function makeDatePicker() {
     $('input.datepicker').Zebra_DatePicker({
-        direction : [getFutureDate(0), false],
         first_day_of_week : 0
     });
 }
@@ -659,19 +658,19 @@ $(function(){
             success:function(data){
                 data = $.parseJSON(data);
                 //チェックを外した時
-                if (data.result.status == 'notyet') {
+                if (data.result.Task.status == 'notyet') {
                     $('#task_'+taskId).removeClass('done').addClass('notyet');
                     //最終的に消す
-                    $('#task_'+taskId).find('.status').text(data.result.status);
+                    $('#task_'+taskId).find('.status').text(data.result.Task.status);
 
                     //親タスクのbtnを元に戻す
                     // $('#task_'+taskId).find('.disable-edit').replaceWith('<span class="edit-task btn btn-default">編集</span>');
                     $('#task_'+taskId).find('.disable-divide').replaceWith('<span class="divide-task btn btn-default">分割</span>');
                 //チェックを入れた時
-                } else if (data.result.status == 'done'){
+                } else if (data.result.Task.status == 'done'){
                     $('#task_'+taskId).removeClass('notyet').addClass('done');
                     //最終的に消す
-                    $('#task_'+taskId).find('.status').text(data.result.status);
+                    $('#task_'+taskId).find('.status').text(data.result.Task.status);
 
                     //親タスクのbtnを止める
                     // $('#task_'+taskId).find('.edit-task').replaceWith('<span class="disable-edit btn btn-default btn-disabled">編集</span>');
@@ -681,7 +680,9 @@ $(function(){
                 }
                 adjustDBar(data.all_d);
                 adjustattainment(data.attainment);
-                adjustCheckBtn(data.result.id);
+                if($('#task_'+data.result.Task.id).parent().hasClass('children-ul')){
+                    adjustCheckBtn(data.result.Task.id);
+                }
 
                 function adjustCheckBtn(id) {
                     //兄弟に未完了タスクがある場合

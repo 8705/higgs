@@ -408,7 +408,7 @@ class TasksController extends AppController {
             $error = false;
             $res = array(
                 "error" => $error,
-                "result" => $result["Task"],
+                "result" => $result,
                 "all_d" => $all_d,
                 "attainment" => $attainment
             );
