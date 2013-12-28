@@ -118,7 +118,6 @@ class TasksController extends AppController {
                 'recursive' => -1
             ));
 
-            $all_d = $this->getalldbar($this->Auth->user('id'));
             $error = false;
             $res = array("error" => $error,"result" => $result, 'all_d' => $all_d);
             $this->response->type('json');
@@ -435,8 +434,7 @@ class TasksController extends AppController {
 
         $json = json_decode($this->request->data['json'], true);
         $res = $this->Task->updateAll(
-            //array('Task.status' => '"notyet"'),
-            array('Task.bomb' => 1),
+            array('Task.bomb' => 1, 'Task.num_bomb' => 'Task.num_bomb + 1'),
             array('Task.id' => $json)
         );
         //save OK
@@ -543,6 +541,35 @@ class TasksController extends AppController {
         if(in_array(false, $errorArray)) {
             $error = true;
             $message = '並べ替えがうまく行きませんでした';
+            $res = $res = compact('error', 'message');
+            $this->response->type('json');
+            echo json_encode($res);
+            exit;
+        }
+    }
+
+    public function tryagain($id = null) {
+        if (!$this->request->is('ajax')) {
+            throw new NotFoundException(__('Invalid post'));
+        }
+        $this->autoRender = false;   // 自動描画をさせない
+
+        $res = $this->Task->updateAll(
+            array('Task.bomb' => 0, 'Task.status' => "'notyet'", 'Task.d_param' => 100),
+            array('Task.id' => $id)
+        );
+
+        if($res) {
+            $error = false;
+            $all_d = $this->getalldbar($this->Auth->user('id'));
+            $res = array("error" => $error, "all_d" => $all_d);
+            $this->response->type('json');
+            echo json_encode($res);
+            exit;
+        //save NG
+        } else {
+            $error = true;
+            $message = $this->Task->validationErrors;
             $res = $res = compact('error', 'message');
             $this->response->type('json');
             echo json_encode($res);

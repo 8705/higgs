@@ -7,6 +7,10 @@
                     <span class="body">
                         <?php echo $this->Html->link(__(h($bomb['Task']['body'])), array('action' => 'view', $bomb['Task']['id'])); ?>
                     </span>
+                    <span class="num_bomb">
+                        <?php echo __(h($bomb['Task']['num_bomb'])); ?>
+                    </span>
+                    <p id="tryagain" class="btn btn-danger">今度こそ！</p>
                 </li>
             <?php endforeach; ?>
         <?php else: ?>
