@@ -164,6 +164,12 @@ input:hover, textarea:hover {
     font-size: 11px;
 }
 
+/* start_time */
+.start_time {
+    position: absolute;
+    right: 65px;
+}
+
 /* タスクラベル */
 .data-label span {
     display: inline-block;
@@ -227,9 +233,9 @@ input:hover, textarea:hover {
     font-size: 12px;
     color: #CCC;
     cursor: pointer;
-    /*position: absolute;
+    position: absolute;
     right: 10px;
-    bottom: 5px;*/
+    bottom: 11px;
 }
 .delete-task:hover, .edit-task:hover {
     color: #979797;
@@ -455,7 +461,7 @@ li.delete {
     display: none !important;
 }
 .d_param {
-    display: !important;
+    display: none !important;
 }
 .status {
     display: none !important;
