@@ -127,7 +127,7 @@ class TasksController extends AppController {
             ));
 
             $error = false;
-            $res = array("error" => $error,"result" => $result, 'all_d' => $all_d);
+            $res = array("error" => $error,"result" => $result);
             $this->response->type('json');
             echo json_encode($res);
             exit;
