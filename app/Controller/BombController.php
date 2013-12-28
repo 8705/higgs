@@ -97,7 +97,6 @@ class BombController extends AppController {
                 array('Task.id' => $id)
             );
         }
-        exit;
     }
 
     public function bomb() {
@@ -120,6 +119,5 @@ class BombController extends AppController {
                 }
             }
         }
-        exit;
     }
 }

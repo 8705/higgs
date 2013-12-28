@@ -67,6 +67,7 @@
 						<fieldset>
 						<?php
 							echo $this->Form->input('user_id', array('type'=>'hidden', 'default' => $author['id']));
+							echo $this->Form->input('dbar', array('type'=>'hidden', 'default' => array_sum($bar)));
 							echo $this->Form->input('body', array('placeholder' => 'Add Project'));
 							echo $this->Form->input('start_time', array('type'=>'text', 'class' => 'datepicker','readonly' => 'readonly'));
 							//ajax送信用設定

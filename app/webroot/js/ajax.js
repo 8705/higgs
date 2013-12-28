@@ -148,7 +148,6 @@ function addTask(data, textStatus) {
             //ポップアップ通知
             popUpPanel(data.error, data.message.body[i]);
         }
-
         return;
     }
     var elm =$(
@@ -1371,32 +1370,38 @@ $(function(){
         $.ajax({
             url : '/tasks/tryagain/' + taskId,
             type : 'POST',
+            dataType : 'json',
 
             beforeSend : function() {
-                $('#tryagain').html('<img src="/img/ajax-loader.gif" alt="" />');
+                $('#bomb_'+taskId+' #tryagain').html('<img src="/img/ajax-loader.gif" alt="" />');
             },
             success : function(data){
-                $('#bomb_'+taskId).fadeOut('slow',function(){
-                    $.when($(this).remove()).then(createEmpty());
-                })
-                deleteEmpty('bombs');
-                $('.parents ul').append(
-                    '<li id="parent_'+taskId+'" class="notyet list-group-item clearfix" data-task-id="'+taskId+'">'+
-                    '<span class="body"><a href="/tasks/view/' + taskId + '">'+$('#bomb_'+taskId).find('.body').text() +'</a></span>\n'+
-                    '<span class="attainment">0%</span>'+
-                    '<span class="delete-task"><span class="glyphicon glyphicon-trash"></span><b>削除</b></span></li>'
-                );
-                $('.parents ul').children().fadeIn('slow');
-                var elm2 =$('<div class="add-bar progress-bar progress-bar-danger" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width: 10%; display:none;">10%</div>');
+                console.log(data);
+                if(data.error) {
+                    popUpPanel(true, data.message.body);
+                } else {
+                    $('#bomb_'+taskId).fadeOut('slow',function(){
+                        $.when($(this).remove()).then(createEmpty());
+                    })
+                    deleteEmpty('bombs');
+                    $('.parents ul').append(
+                        '<li id="parent_'+taskId+'" class="notyet list-group-item clearfix" data-task-id="'+taskId+'">'+
+                        '<span class="body"><a href="/tasks/view/' + taskId + '">'+$('#bomb_'+taskId).find('.body').text() +'</a></span>\n'+
+                        '<span class="attainment">0%</span>'+
+                        '<span class="delete-task"><span class="glyphicon glyphicon-trash"></span><b>削除</b></span></li>'
+                    );
+                    $('.parents ul').children().fadeIn('slow');
+                    var elm2 =$('<div class="add-bar progress-bar progress-bar-danger" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width: 10%; display:none;">10%</div>');
 
-                $('#d-bar').append(elm2);
-                $('.add-bar').fadeIn('slow');
+                    $('#d-bar').append(elm2);
+                    $('.add-bar').fadeIn('slow');
+                }
             },
             error : function() {
                 popUpPanel(true, 'サーバーエラーでタスクを消去できませんでした');
             },
             complete : function() {
-                $('#task_' + taskId +' .delete-task').html('削除');
+                $('#bomb_'+taskId+' #tryagain').html('今度こそ！');
             }
         })
     });
