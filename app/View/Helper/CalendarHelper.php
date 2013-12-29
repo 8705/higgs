@@ -47,7 +47,10 @@ class CalendarHelper extends AppHelper {
 						if(array_key_exists((int)$mm, $task[(int)$yyyy])) {
 							if(array_key_exists($d, $task[(int)$yyyy][(int)$mm])) {
 								foreach($task[(int)$yyyy][(int)$mm][$d] as $t) {
-									$cal .= "<p class=\"calendartask ".h($t['status'])."\" id=\"task_".h($t['id'])."\" data-task-id=\"".h($t['id'])."\">".h($t['body'])."</p>";
+									if(mb_strwidth($body = $t['body']) > 14) {
+										$body = mb_strimwidth($t['body'],0,14,"...");
+									}
+									$cal .= "<p class=\"calendartask ".h($t['status'])."\" id=\"task_".h($t['id'])."\" data-task-id=\"".h($t['id'])."\">".h($body)."</p>";
 								}
 							}
 						}

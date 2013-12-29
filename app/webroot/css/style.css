@@ -331,6 +331,9 @@ li.done span.body a {
 /********************************
     カレンダー
 *********************************/
+.table.calendar {
+    font-size:11px;
+}
 .calendar th {
     background-color: #eee;
     border: 1px solid #ccc;
@@ -355,7 +358,7 @@ li.done span.body a {
     background-color: #A8EE79;;
     border-radius: 2px;
     padding: 2px 5px 1px;
-    margin-bottom: 1px;
+    margin-bottom: 2px;
     cursor: pointer;
 }
 .calendartask:hover {
