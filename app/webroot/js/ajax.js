@@ -14,7 +14,7 @@ function cancelEvent(e) {
 //タスクのhtml部品
 function htmlAddElm(data) {
     var elm =$(
-        '<li id="task_'+data.result.Task.id+'" class="list-group-item notyet" style="display:none;" data-task-id="'+ data.result.Task.id +'">\n' +
+        '<li id="task_'+data.result.Task.id+'" class="list-group-item notyet clearfix" style="display:none;" data-task-id="'+ data.result.Task.id +'">\n' +
         '<span class="check-task"><input type="checkbox"></span>\n'+
         '<span class="body edit-task"><a href="/tasks/view/' + data.result.Task.id + '">'+ data.result.Task.body +'</a></span>\n' +
         '<span class="start_time">'+ roundStartTime(data.result.Task.start_time) +'</span>\n'+
@@ -616,7 +616,7 @@ $(function(){
                             for(var i in data.result) {
                                 $('ul[data-children-ul-id='+data.result[0].Task.parent_id+']')
                                 .append(
-                                    '<li id="task_'+data.result[i].Task.id+'" class="list-group-item notyet" style="display:none;" data-task-id="'+ data.result[i].Task.id +'">\n' +
+                                    '<li id="task_'+data.result[i].Task.id+'" class="list-group-item notyet clearfix" style="display:none;" data-task-id="'+ data.result[i].Task.id +'">\n' +
                                     '<span class="check-task"><input type="checkbox"></span>\n'+
                                     '<span class="body edit-task"><a href="/tasks/view/' + data.result[i].Task.id + '">'+ data.result[i].Task.body +'</a></span>\n' +
                                     '<span class="start_time">'+ data.result[i].Task.start_time +'</span>\n'+

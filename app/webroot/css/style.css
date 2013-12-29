@@ -228,6 +228,13 @@ input:hover, textarea:hover {
 .children-ul .list-group-item:hover {
     background-color: #f5f5f5;
 }
+/** view表示リスト全体 **/
+#viewWrapper {
+    overflow-y : hidden;
+}
+#viewWrapper .list-group-item {
+    width:720px;
+}
 /** アコーディオン **/
 /*.close-ul {
     border-bottom: 5px solid #CCC;
