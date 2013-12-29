@@ -17,7 +17,7 @@ function htmlAddElm(data) {
         '<li id="task_'+data.result.Task.id+'" class="list-group-item notyet" style="display:none;" data-task-id="'+ data.result.Task.id +'">\n' +
         '<span class="check-task"><input type="checkbox"></span>\n'+
         '<span class="body edit-task"><a href="/tasks/view/' + data.result.Task.id + '">'+ data.result.Task.body +'</a></span>\n' +
-        '<span class="start_time">'+ data.result.Task.start_time +'</span>\n'+
+        '<span class="start_time">'+ roundStartTime(data.result.Task.start_time) +'</span>\n'+
         '<span class="delete-task"><span class="glyphicon glyphicon-trash"></span><b>削除</b></span>\n' +
         '<span class="sequence" style="display:none;">0</span>\n' +
         '</li>'
@@ -170,10 +170,9 @@ function adjustCheckBtn(id) {
         return;
     }
 }
-function adjustCheckBtnForDel(parentId) {
-    if ($('ul[data-children-ul-id='+parentId+']').find('li.notyet').length > 0) {
-
-    }
+function roundStartTime(start_time) { //2013-12-29
+    var t = start_time.substring(5,10).replace('-','/');
+    return t;
 }
 
 //タスク描画処理 in success
@@ -450,11 +449,18 @@ $(function(){
                 }
                 $('#task_' + taskId).removeClass('edit');
 
+                if(data.result.Task.parent_id == null){
+                    var checkElm = '<span class="origin">神</span>';
+                } else if($('ul[data-children-ul-id='+data.result.Task.id+']').hasClass('children-ul')) {
+                    var checkElm = '<span class="accordion open glyphicon glyphicon-expand"></span>\n';
+                } else {
+                    var checkElm = '<span class="check-task"><input type="checkbox"></span>\n';
+                }
                 var elm = $(
-                    '<span class="check-task"><input type="checkbox"></span>\n'+
+                    checkElm +
                     '<span class="body edit-task"><a href="/tasks/view/' + data.result.Task.id + '">'+ data.result.Task.body +'</a></span>\n' +
-                    '<span class="start_time">'+ data.result.Task.start_time +'</span>\n'+
-                    '<span class="delete-task"><span class="glyphicon glyphicon-trash"></span>削除</span>'
+                    '<span class="delete-task"><span class="glyphicon glyphicon-trash"></span>削除</span>\n' +
+                    '<span class="start_time">'+ roundStartTime(data.result.Task.start_time) +'</span>\n'
                 );
 
                 $('#task_' + taskId).empty().append(elm);
@@ -705,20 +711,13 @@ $(function(){
                 if (data.result.Task.status == 'notyet') {
                     $('#task_'+taskId).removeClass('done').addClass('notyet');
                     //最終的に消す
-                    $('#task_'+taskId).find('.status').text(data.result.Task.status);
+                    $('#task_'+taskId).find('.body').addClass('edit-task');
 
-                    //親タスクのbtnを元に戻す
-                    // $('#task_'+taskId).find('.disable-edit').replaceWith('<span class="edit-task btn btn-default">編集</span>');
-                    $('#task_'+taskId).find('.disable-divide').replaceWith('<span class="divide-task btn btn-default">分割</span>');
                 //チェックを入れた時
                 } else if (data.result.Task.status == 'done'){
                     $('#task_'+taskId).removeClass('notyet').addClass('done');
                     //最終的に消す
-                    $('#task_'+taskId).find('.status').text(data.result.Task.status);
-
-                    //親タスクのbtnを止める
-                    // $('#task_'+taskId).find('.edit-task').replaceWith('<span class="disable-edit btn btn-default btn-disabled">編集</span>');
-                    // $('#task_'+taskId).find('.divide-task').replaceWith('<span class="disable-divide btn btn-default btn-disabled">分割</span>');
+                    $('#task_'+taskId).find('.body').removeClass('edit-task');
 
                     checked = 'checked';
                 }

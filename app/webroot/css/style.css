@@ -166,38 +166,36 @@ input:hover, textarea:hover {
     font-size: 11px;
 }
 
-/* start_time */
-.start_time {
-    position: absolute;
-    right: 65px;
+.task-list li {
 }
-
-/* タスクラベル */
-.data-label span {
-    display: inline-block;
-}
-.data-label .head-body {
-    width:300px;
-    margin: 0 0px 0 35px;
-}
-.data-label .head-deadLine {
-    width: 82px;
-}
-
 .task-list li span {
     display: inline-block;
+    float:left;
+}
+.task-list input {
+    margin-right: 10px;
 }
 .task-list li .body {
-
+    /*float:left;*/
 }
 .task-list li span.btn {
     margin-left:10px;
 }
+.task-list li .origin {
+    width:12px;
+    margin-right: 10px;
+    /*float:left;*/
+}
 .task-list li .check-task {
     width:12px;
+    margin-right: 5px;
+    margin-top: -3px;
 }
-.task-list li .status {
-    width: 45px;
+/* start_time */
+.task-list li span.start_time {
+    font-size:12px;
+    margin-right: 10px;
+    float: right;
 }
 
 /* 爆発したけどリストにいるタスク */
@@ -220,7 +218,17 @@ input:hover, textarea:hover {
     color: red;
 }
 
-/***** アコーディオン *********/
+/***** view表示 タスクリスト ******************/
+.task-list ul {
+    margin-left : 25px;
+}
+.children-ul .list-group-item {
+    border:none;
+}
+.children-ul .list-group-item:hover {
+    background-color: #f5f5f5;
+}
+/** アコーディオン **/
 /*.close-ul {
     border-bottom: 5px solid #CCC;
 }*/
@@ -233,6 +241,8 @@ input:hover, textarea:hover {
     -moz-transform: rotate(0deg);
     -o-transform: rotate(0deg);
     -ms-transform: rotate(0deg);
+    /*float:left;*/
+    margin-right: 5px;
 }
 .open {
     transform: rotate(90deg);
@@ -251,13 +261,14 @@ input:hover, textarea:hover {
     font-size:12px;
 }
 /* deleteボタン */
-.delete-task {
+.task-list li span.delete-task {
     font-size: 12px;
     color: #CCC;
     cursor: pointer;
-    position: absolute;
+    /*position: absolute;
     right: 10px;
-    bottom: 11px;
+    bottom: 11px;*/
+    float: right;
 }
 .delete-task:hover, .edit-task:hover {
     color: #979797;
@@ -278,23 +289,13 @@ input:hover, textarea:hover {
     font-size: 12px;
     color: #CCC;
     cursor: pointer;
-    /*position: absolute;
-    right: 60px;
-    bottom: 5px;*/
 }
-.divide-task {
-    font-size: 12px;
-    color: #CCC;
-    cursor: pointer;
-    /*position: absolute;
-    right: 110px;
-    bottom: 5px;*/
-}
-.delete-task, .edit-task, .divide-task {
+
+.delete-task, .edit-task {
     /*display: none !important;*/
     color:#f0f0f0;
 }
-li:hover .delete-task, li:hover .edit-task, li:hover .divide-task {
+li:hover .delete-task, li:hover .edit-task {
     /*display:inline-block !important;*/
     color: #979797;
 }
@@ -311,9 +312,7 @@ li.done span.btn {
     background-color: #ccc;
 }
 li.done span.delete-task {
-    background-color: #fff;
-    color: #000;
-    text-decoration: none;
+
 }
 li.done span.body a {
     color:#ccc;
@@ -482,7 +481,7 @@ li.done span.body a {
     [tmp] 開発中一時的に
 ****************************/
 .task-list ul {
-    margin-left : 50px;
+
 }
 li.delete {
     background-color:#ccc;
