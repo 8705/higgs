@@ -108,6 +108,7 @@ function removeChildUl(id) {
             var checked = 'checked';
         }
         $('#task_'+id).find('.accordion').replaceWith('<span class="check-task"><input type="checkbox" '+ checked +'></span>');
+        $('#task_'+id).find('.origin').replaceWith('<span class="check-task"><input type="checkbox" '+ checked +'></span>');
     }
 }
 
@@ -159,8 +160,6 @@ function adjustCheckBtn(id) {
         }
         return;
     } else if($('ul[data-children-ul-id='+parentId+']').find('li.done').length > 0){
-        console.log('else');
-        console.log(parentId);
         $('#task_'+parentId)
         .removeClass('notyet')
         .addClass('done')
@@ -302,7 +301,7 @@ $(function(){
                     if ($('#task_'+data.result.Task.id).parent().hasClass('children-ul')) {
                         //子タスク内
                         if ($('ul[data-children-ul-id=' + data.result.Task.parent_id + ']').hasClass('children-ul')) {
-
+                            $('ul[data-children-ul-id=' + data.result.Task.id + ']').find('li').removeClass('notyet').removeClass('done').addClass('delete')
                             $.when(
                                 $('#task_'+data.result.Task.id).removeClass('notyet').removeClass('done').addClass('delete').hide()
                             ).then(

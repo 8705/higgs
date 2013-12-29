@@ -321,7 +321,7 @@ class TasksController extends AppController {
         //save OK
         $this->Task->id = $id;
         if($this->Task->saveField('status','delete')) {
-            $this->adjustStatus($id);
+
             $result = $this->Task->find('first',array(
                 'conditions'    => array('Task.id' =>$id),
                 'recursive' => -1
@@ -338,7 +338,7 @@ class TasksController extends AppController {
                 array('Task.status' => "'delete'"),
                 array('Task.id' => $child_id)
             );
-
+            $this->adjustStatus($id);
             $this->Task->removeFromTree($id);
 
             if($parent) {
@@ -392,27 +392,14 @@ class TasksController extends AppController {
         if ($this->Task->save($this->request->data)) {
 
             $this->adjustStatus($id);
-            // $parentArr = array_reverse($this->Task->getPath($id));
-            // foreach($parentArr as $row) {
-            //     if($this->Task->childCount($row['Task']['id']) == 0) {
-            //         continue;
-            //     }
-            //     $childArr = $this->Task->children($row['Task']['id'],true,null,'lft',null,1,-1);
-            //     $resultArr = array();
-            //     foreach ($childArr as $subrow) {
-            //         $resultArr[] = $subrow['Task']['status'] == 'notyet';
-            //     }
-            //     if (!in_array(true, $resultArr)) {
-            //         $this->Task->id = $row['Task']['id'];
-            //         $this->Task->save(array('status' => 'done'));
-            //     } else {
-            //         $this->Task->id = $row['Task']['id'];
-            //         $this->Task->save(array('status' => 'notyet'));
-            //     }
-            // }
 
-            $options = array('conditions' => array('Task.' . $this->Task->primaryKey => $id));
-            $result = $this->Task->find('first', $options);
+            // $options = array('conditions' => array('Task.' . $this->Task->primaryKey => $id));
+            $result = $this->Task->find('first',array(
+                'conditions' => array(
+                    'id' => $id,
+                ),
+                'recursive' => -1,
+            ));
             $all_d = $this->getdbar($id);
             $attainment = $this->getattainment($id);
             $error = false;
@@ -628,11 +615,13 @@ class TasksController extends AppController {
         $parentArr = array_reverse($this->Task->getPath($id));
         // var_dump($parentArr);
         foreach($parentArr as $row) {
+
             if($this->Task->childCount($row['Task']['id']) == 0) {
                 continue;
             }
+            // echo 'id:'.$row['Task']['id'];
             $childArr = $this->Task->children($row['Task']['id'],true,null,'lft',null,1,-1);
-
+            // var_dump($childArr);
             $statusArr = array();
             foreach ($childArr as $subrow) {
                 if($subrow['Task']['status'] == 'delete' ) {
@@ -642,8 +631,15 @@ class TasksController extends AppController {
                 } else if($subrow['Task']['status'] == 'done') {
                     $statusArr[] = 'done';
                 }
+
             }
+            // var_dump($statusArr);exit;
+            if(count($statusArr) == 1 && $statusArr[0] == 'delete') {
+                continue;
+            }
+            // var_dump($statusArr);exit;
             if (!in_array('notyet', $statusArr)) {
+
                 $this->Task->id = $row['Task']['id'];
                 $this->Task->save(array('status' => 'done'));
             } else {
