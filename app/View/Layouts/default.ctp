@@ -90,7 +90,7 @@
 						<ul class="list-group" id="task-list-parents">
 							<?php if (count($parents)): ?>
 								<?php foreach ($parents as $parent): ?>
-									<li class="parent_<?php echo h($parent['Task']['id']); ?> jshover <?php echo $parent['Task']['status'];?> list-group-item clearfix" data-task-id="<?php echo h($parent['Task']['id']); ?>">
+									<li class="parent_<?php echo h($parent['Task']['id']); ?> jshover parent_<?php echo $parent['Task']['status'];?> list-group-item clearfix" data-task-id="<?php echo h($parent['Task']['id']); ?>">
 										<span class="body"><?php echo $this->Html->link(__(h($parent['Task']['body'])), array('controller'=>'tasks', 'action' => 'view', $parent['Task']['id'])); ?></span>
 										<span class="attainment <?php if($parent['Task']['complete'] == 100)echo 'complete'; ?>"><?php if($parent['Task']['complete'] == 100) {echo 'Complete!!';} else{echo $parent['Task']['complete'].'%';} ?></span>
 										<span class="selfbomb"><b>自爆</b></span>

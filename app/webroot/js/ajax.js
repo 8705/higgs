@@ -216,7 +216,7 @@ function addTask(data, textStatus) {
     }
 
     $('#task_'+data.result.Task.id).fadeIn('slow');
-    $('#parent_'+data.result.Task.id).fadeIn('slow');
+    $('.parent_'+data.result.Task.id).fadeIn('slow');
 
     //通知ポップ
     popUpPanel(false, '送信されました');
@@ -721,6 +721,7 @@ $(function(){
 
                     checked = 'checked';
                 }
+                console.log(data.attainment);
                 adjustDBar(data.all_d);
                 adjustattainment(data.attainment);
                 if($('#task_'+data.result.Task.id).parent().hasClass('children-ul')){
@@ -743,7 +744,7 @@ $(function(){
 
     function adjustattainment(attainment) {
         for(var id in attainment) {
-            $('#parent_'+id+' .attainment').html(Math.round(attainment[id])+'%');
+            $('.parent_'+id+' .attainment').html(Math.round(attainment[id])+'%');
         }
     }
 
@@ -778,7 +779,7 @@ $(function(){
             },
             success : function(data){
                 for(i in data.result) {
-                    $('#parent_'+data.result[i]).fadeOut('slow',function(){
+                    $('.parent_'+data.result[i]).fadeOut('slow',function(){
                         $.when($(this).remove()).then(createEmpty());
                     })
                     deleteEmpty('bombs');
@@ -789,7 +790,7 @@ $(function(){
                         +data.result[i]+'">'
                         +'<span class="body"><a href="/tasks/view/'
                         + data.result[i]+ '">'
-                        +$('#parent_'+ data.result[i]).find('.body').text()
+                        +$('.parent_'+ data.result[i]).find('.body').text()
                         +'</a></span>'
                         +'<span class="delete-task"><span class="glyphicon glyphicon-trash"></span><b>削除</b></span></li>'
                     );
@@ -1258,7 +1259,7 @@ $(function(){
                     })
                     deleteEmpty('bombs');
                     $('.parents ul').append(
-                        '<li class="parent_'+taskId+' jshover notyet list-group-item clearfix" data-task-id="'+taskId+'">'+
+                        '<li class="parent_'+taskId+' jshover parent_notyet list-group-item clearfix" data-task-id="'+taskId+'">'+
                         '<span class="body"><a href="/tasks/view/' + taskId + '">'+$('#bomb_'+taskId).find('.body').text() +'</a></span>\n'+
                         '<span class="attainment">0%</span>'+
                         '<span class="selfbomb"><b>自爆</b></span></li>'
