@@ -625,7 +625,7 @@ $(function(){
                             if($('#task_'+ data.result[0].Task.parent_id).hasClass('origin')) {
                                 $('#task_'+data.result[0].Task.parent_id).find('.check-task').replaceWith('<span class="origin">神</span>');
                             } else {
-                                $('#task_'+data.result[0].Task.parent_id).find('.check-task').replaceWith('<span class="accordion opne glyphicon glyphicon-expand"></span>');
+                                $('#task_'+data.result[0].Task.parent_id).find('.check-task').replaceWith('<span class="accordion open glyphicon glyphicon-expand"></span>');
                             }
                         //トップページの場合
                         }else {
@@ -1227,30 +1227,16 @@ $(function(){
         },
     }).disableSelection();
 
-    //編集や削除ボタンを押した時のアコーディオンの反応を消す
-    var open_flg = false;
-    $(document).on({
-        mouseenter : function(){
-            open_flg = true;
-        },
-        mouseleave : function(){
-            open_flg = false;
-        }
-    }, '.children-ul span');
-    //一族リストの折込
-    $(document).on('click','li',function(e){
+    //一族リストのアコーディオン
+    $(document).on('click','.accordion',function(e){
         // cancelEvent(e);
-        //子持ちししゃも判定
-        if ($(this).next().hasClass('children-ul')) {
-            var id = $(this).data('task-id');
-            if (!open_flg) {
-                $('ul[data-children-ul-id='+id+']').animate({
-                    height: 'toggle'
-                },250);
-                $('#task_'+id).toggleClass('close-ul');
-                $('ul[data-children-ul-id='+id+']').toggleClass('close-ul');
-            }
-        }
+        var id = $(this).parent().data('task-id');
+        $(this).toggleClass('open');
+        $('ul[data-children-ul-id='+id+']').animate({
+            height: 'toggle'
+        },250);
+        $('#task_'+id).toggleClass('close-ul');
+        $('ul[data-children-ul-id='+id+']').toggleClass('close-ul');
     })
 
     $(document).on('click','#tryagain', function(e){

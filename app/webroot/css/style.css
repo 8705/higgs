@@ -221,8 +221,28 @@ input:hover, textarea:hover {
 }
 
 /***** アコーディオン *********/
-.close-ul {
+/*.close-ul {
     border-bottom: 5px solid #CCC;
+}*/
+.accordion {
+    transition: 0.2s;
+    color: #707070;
+    cursor: pointer;
+    transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+}
+.open {
+    transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+}
+.close {
+
 }
 
 /****** ボタン / アクションテキスト *******************/
