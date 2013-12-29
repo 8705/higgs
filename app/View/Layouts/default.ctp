@@ -93,7 +93,7 @@
 									<li class="parent_<?php echo h($parent['Task']['id']); ?> jshover <?php echo $parent['Task']['status'];?> list-group-item clearfix" data-task-id="<?php echo h($parent['Task']['id']); ?>">
 										<span class="body"><?php echo $this->Html->link(__(h($parent['Task']['body'])), array('controller'=>'tasks', 'action' => 'view', $parent['Task']['id'])); ?></span>
 										<span class="attainment <?php if($parent['Task']['complete'] == 100)echo 'complete'; ?>"><?php if($parent['Task']['complete'] == 100) {echo 'Complete!!';} else{echo $parent['Task']['complete'].'%';} ?></span>
-										<span class="delete-task"><span class="glyphicon glyphicon-trash"></span><b>削除</b></span>
+										<span class="selfbomb"><b>自爆</b></span>
 									</li>
 								<?php endforeach; ?>
 							<?php else: ?>

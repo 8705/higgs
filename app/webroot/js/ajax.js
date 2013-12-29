@@ -189,17 +189,17 @@ function addTask(data, textStatus) {
         return;
     }
     var elm =$(
-        '<li id="parent_'+data.result.Task.id+'" class="notyet list-group-item clearfix" data-task-id="'+data.result.Task.id+'">'+
+        '<li class="parent_'+data.result.Task.id+' jshover notyet list-group-item clearfix" data-task-id="'+data.result.Task.id+'">'+
         '<span class="body"><a href="/tasks/view/' + data.result.Task.id + '">'+data.result.Task.body +'</a></span>\n'+
         '<span class="attainment">0%</span>'+
-        '<span class="delete-task"><span class="glyphicon glyphicon-trash"></span><b>削除</b></span></li>'
+        '<span class="selfbomb"><b>自爆</b></span></li>'
     );
     if ($('#task-list-parents .empty').length == 1 ) {
         $('#task-list-parents .empty').html('');
     }
     $('#task-list-parents').append(elm);
 
-    var elm2 =$('<div class="add-bar progress-bar progress-bar-danger" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width: 10%; display:none;">10%</div>');
+    var elm2 =$('<div class="parent_'+data.result.Task.id+' jshover add-bar progress-bar progress-bar-danger" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width: 10%; display:none;">10%</div>');
 
     $('#d-bar').append(elm2);
     $('.add-bar').fadeIn('slow');
@@ -1266,7 +1266,6 @@ $(function(){
                 $('#bomb_'+taskId+' #tryagain').html('<img src="/img/ajax-loader.gif" alt="" />');
             },
             success : function(data){
-                console.log(data);
                 if(data.error) {
                     popUpPanel(true, data.message.body);
                 } else {
@@ -1275,10 +1274,10 @@ $(function(){
                     })
                     deleteEmpty('bombs');
                     $('.parents ul').append(
-                        '<li id="parent_'+taskId+'" class="notyet list-group-item clearfix" data-task-id="'+taskId+'">'+
+                        '<li class="parent_'+taskId+' jshover notyet list-group-item clearfix" data-task-id="'+taskId+'">'+
                         '<span class="body"><a href="/tasks/view/' + taskId + '">'+$('#bomb_'+taskId).find('.body').text() +'</a></span>\n'+
                         '<span class="attainment">0%</span>'+
-                        '<span class="delete-task"><span class="glyphicon glyphicon-trash"></span><b>削除</b></span></li>'
+                        '<span class="selfbomb"><b>自爆</b></span></li>'
                     );
                     $('.parents ul').children().fadeIn('slow');
                     var elm2 =$('<div class="add-bar progress-bar progress-bar-danger" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width: 10%; display:none;">10%</div>');
@@ -1294,5 +1293,44 @@ $(function(){
                 $('#bomb_'+taskId+' #tryagain').html('今度こそ！');
             }
         })
+    });
+
+    $(document).on('click', '.selfbomb', function(e){
+        cancelEvent(e);
+        var taskId = $(this).parent().data('task-id');
+        $.ajax({
+            url : '/tasks/selfbomb/'+taskId,
+            type : 'POST',
+            dataType : 'json',
+            timeout : 5000,
+            beforeSend : function(){
+                $('.parent_'+taskId+' .selfbomb').html('<img src="/img/ajax-loader.gif" alt="" />');
+            },
+            success : function(data){
+                $('.parent_'+taskId).fadeOut('slow',function(){
+                    $.when($(this).remove()).then(createEmpty());
+                })
+                deleteEmpty('bombs');
+                $('#task-list-bombs').append(
+                    '<li id="bomb_'
+                    +taskId
+                    +'" class="bomb list-group-item clearfix" style="display:none" data-task-id="'
+                    +taskId+'">'
+                    +'<span class="body"><a href="/tasks/view/'
+                    +taskId+ '">'
+                    +$('.parent_'+taskId).find('.body').text()
+                    +'</a></span>'
+                    +'<p id="tryagain" class="btn btn-danger">今度こそ！</p></li>'
+                );
+                $('#task-list-bombs').children().fadeIn('slow');
+                adjustDBar(0);
+            },
+            error : function(){
+                popUpPanel(true, 'サーバーエラーでタスクを消去できませんでした');
+            },
+            complete : function(){
+                $('.parent_'+taskId+' .selfbomb').html('自爆');
+            },
+        });
     });
 });

@@ -7,9 +7,9 @@ $(document).ready(function() {
 $(function(){
     $(".jshover").hover(function(){
         var task_id = ($(this).attr('class')).split(" ")
-        $('.'+task_id[0]).addClass("hover");
+        $('.'+task_id[0]).addClass("jshover-active");
     },function(){
         var task_id = ($(this).attr('class')).split(" ")
-        $('.'+task_id[0]).removeClass("hover");
+        $('.'+task_id[0]).removeClass("jshover-active");
     })
 })

@@ -466,6 +466,35 @@ class TasksController extends AppController {
         }
     }
 
+    public function selfbomb($id) {
+        if (!$this->request->is('ajax')) {
+            throw new NotFoundException(__('Invalid post'));
+        }
+        $this->autoRender = false;   // 自動描画をさせない
+        $res = $this->Task->updateAll(
+            array('Task.status' => "'bomb'",'Task.bomb' => 1, 'Task.num_bomb' => 'Task.num_bomb + 1'),
+            array('Task.id' => $id)
+        );
+        //save OK
+        if($res) {
+            $error = false;
+            $result = $id;
+            $all_d = $this->getdbar($id);
+            $res = array("error" => $error, "result" => $result, "all_d" => $all_d);
+            $this->response->type('json');
+            echo json_encode($res);
+            exit;
+        //save NG
+        } else {
+            $error = true;
+            $message = $this->Task->validationErrors;
+            $res = $res = compact('error', 'message');
+            $this->response->type('json');
+            echo json_encode($res);
+            exit;
+        }
+    }
+
     //Sortable
     public function sort($order, $day = null) {
         if (!$this->request->is('ajax')) {
