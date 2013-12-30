@@ -345,10 +345,15 @@ class TasksController extends AppController {
                 $bomb = new BombController;
                 $bomb->_modifyinfluence($parent['Task']['id']);
             }
-
-            $all_d = $this->getdbar($id);
+            $all_d = $this->getdbar($parent['Task']['id']);
+            $attainment = $this->getattainment($parent['Task']['id']);
             $error = false;
-            $res = array("error" => $error, "result" => $result, "all_d" => $all_d);
+            $res = array(
+                "error" => $error,
+                "result" => $result,
+                "all_d" => $all_d,
+                "attainment"=>$attainment
+            );
             $this->response->type('json');
             echo json_encode($res);
         //save NG
