@@ -1,4 +1,4 @@
-<h2>今日まで</h2><a class="btn btn-success sort-link" href="/tasks/sort/d/today">D値並べ替え</a>
+<h2>今日まで</h2>
 <ul class="list-group task-list sort-list" id="task-list-today">
 <?php if (count($tasks_today)): ?>
 	<?php foreach ($tasks_today as $task): ?>
@@ -12,7 +12,7 @@
 	<li class="empty list-group-item clearfix">タスクがありません</li>
 <?php endif; ?>
 </ul>
-<h2>明日</h2><a class="btn btn-success sort-link" href="/tasks/sort/d/tomorrow">D値並べ替え</a>
+<h2>明日</h2>
 <ul class="list-group task-list sort-list" id="task-list-tomorrow">
 <?php if (count($tasks_tomorrow)): ?>
 	<?php foreach ($tasks_tomorrow as $task): ?>
@@ -26,7 +26,7 @@
 	<li class="empty list-group-item clearfix">タスクがありません</li>
 <?php endif; ?>
 </ul>
-<h2>明後日</h2><a class="btn btn-success sort-link" href="/tasks/sort/d/dayaftertomorrow">D値並べ替え</a>
+<h2>明後日</h2>
 <ul class="list-group task-list sort-list" id="task-list-dayaftertomorrow">
 <?php if (count($tasks_dayaftertomorrow)): ?>
 	<?php foreach ($tasks_dayaftertomorrow as $task): ?>
