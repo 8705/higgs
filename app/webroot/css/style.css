@@ -267,7 +267,7 @@ input:hover, textarea:hover {
     /*float:left;*/
     margin-right: 5px;
 }
-.open {
+.spread {
     transform: rotate(90deg);
     -webkit-transform: rotate(90deg);
     -moz-transform: rotate(90deg);

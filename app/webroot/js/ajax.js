@@ -628,7 +628,7 @@ $(function(){
                             if($('#task_'+ data.result[0].Task.parent_id).hasClass('origin')) {
                                 $('#task_'+data.result[0].Task.parent_id).find('.check-task').replaceWith('<span class="origin">神</span>');
                             } else {
-                                $('#task_'+data.result[0].Task.parent_id).find('.check-task').replaceWith('<span class="accordion open glyphicon glyphicon-expand"></span>');
+                                $('#task_'+data.result[0].Task.parent_id).find('.check-task').replaceWith('<span class="accordion spread glyphicon glyphicon-expand"></span>');
                             }
                         //トップページの場合
                         }else {
@@ -1227,7 +1227,7 @@ $(function(){
     $(document).on('click','.accordion',function(e){
         // cancelEvent(e);
         var id = $(this).parent().data('task-id');
-        $(this).toggleClass('open');
+        $(this).toggleClass('spread');
         $('ul[data-children-ul-id='+id+']').animate({
             height: 'toggle'
         },250);

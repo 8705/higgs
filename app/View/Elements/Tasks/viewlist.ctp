@@ -2,7 +2,7 @@
      <?php if($task['Task']['childCount'] != 0 && $task['Task']['parent_id'] == null): ?>
      <span class="origin">神</span>
      <?php elseif($task['Task']['childCount'] != 0): ?>
-     <span class="accordion open glyphicon glyphicon-expand"></span>
+     <span class="accordion spread glyphicon glyphicon-expand"></span>
      <?php else: ?>
      <span class="check-task"><input type="checkbox" <?php if($task['Task']['status'] == 'done'){echo h('checked');} ?>></span>
      <?php endif; ?>
