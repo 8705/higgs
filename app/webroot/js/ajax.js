@@ -12,14 +12,26 @@ function cancelEvent(e) {
     }
 }
 //タスクのhtml部品
-function htmlAddElm(data, breadcrumb) {
+function htmlAddElm(data) {
+    if($('#task_'+data.result.Task.id).parent().hasClass('children-ul')) {
+        var breadcrumbElm = '';
+    } else {
+        var breadcrumbElm = '<div class="bread-crumb">'+data.breadcrumb+'</div>';
+    }
+    if($('ul[data-children-ul-id='+data.result.Task.id+']').hasClass('children-ul') && data.result.Task.parent_id == null) {
+        var checkElm = '<span class="origin">神</span>';
+    } else if($('ul[data-children-ul-id='+data.result.Task.id+']').hasClass('children-ul')) {
+        var checkElm = '<span class="accordion spread glyphicon glyphicon-expand"></span>\n';
+    } else {
+        var checkElm = '<span class="check-task"><input type="checkbox"></span>\n';
+    }
     var elm =$(
         '<li id="task_'+data.result.Task.id+'" class="list-group-item notyet clearfix" style="display:none;" data-task-id="'+ data.result.Task.id +'">\n' +
-        '<span class="check-task"><input type="checkbox"></span>\n'+
+        checkElm +'\n'+
         '<span class="body edit-task"><a href="/tasks/view/' + data.result.Task.id + '">'+ data.result.Task.body +'</a></span>\n' +
         '<span class="delete-task"><span class="glyphicon glyphicon-trash"></span><b>削除</b></span>\n' +
         '<span class="start_time">'+ roundStartTime(data.result.Task.start_time) +'</span>\n'+
-        breadcrumb+
+        breadcrumbElm +
         '</li>'
     );
     return elm;
@@ -446,19 +458,24 @@ $(function(){
                 }
                 $('#task_' + taskId).removeClass('edit');
 
-                if(!$('#task_'+data.result.Task.id).next().is('ul') && data.result.Task.parent_id == null) {
+                if($('ul[data-children-ul-id='+data.result.Task.id+']').hasClass('children-ul') && data.result.Task.parent_id == null) {
                     var checkElm = '<span class="origin">神</span>';
-                } else if(!$('#task_'+data.result.Task.id).next().is('ul')) {
-                    var checkElm = '<span class="check-task"><input type="checkbox"></span>\n';
+                } else if($('ul[data-children-ul-id='+data.result.Task.id+']').hasClass('children-ul')) {
+                    var checkElm = '<span class="accordion spread glyphicon glyphicon-expand"></span>\n';
                 } else {
                     var checkElm = '<span class="check-task"><input type="checkbox"></span>\n';
+                }
+                if($('#task_'+data.result.Task.id).parent().hasClass('children-ul')) {
+                    var breadcrumbElm = '';
+                } else {
+                    var breadcrumbElm = '<div class="bread-crumb">'+ data.breadcrumb +'</div>'
                 }
                 var elm = $(
                     checkElm +
                     '<span class="body edit-task"><a href="/tasks/view/' + data.result.Task.id + '">'+ data.result.Task.body +'</a></span>\n' +
                     '<span class="delete-task"><span class="glyphicon glyphicon-trash"></span>削除</span>\n' +
                     '<span class="start_time">'+ roundStartTime(data.result.Task.start_time) +'</span>\n' +
-                    '<div class="bread-crumb">'+ data.breadcrumb +'</div>'
+                    breadcrumbElm
                 );
 
                 $('#task_' + taskId).empty().append(elm);
@@ -472,11 +489,6 @@ $(function(){
                     $(this).remove();
                 });
 
-                //キャンセルボタンを分割ボタンにする
-                // $('#task_'+taskId).find('.divide-cancel').replaceWith('<span class="divide-task btn btn-default">分割</span>');
-
-                //親タスクのbtnを元に戻す
-                // $('#task_'+taskId).find('.disable-edit').replaceWith('<span class="edit-task btn btn-default">編集</span>');
                 $('#task_'+taskId).find('.delete-task').fadeIn(100);
             },
             error : function() {
@@ -581,7 +593,7 @@ $(function(){
                     beforeSend : function() {
                         //分割タスクが入力されてないと終了
                         divideStart = true;
-                        $('.li-divide .divide-input').each(function(){
+                        $('.li-divide .edit-input').each(function(){
                             if ($(this).val().length == 0) {
                                 divideStart = false;
                             }

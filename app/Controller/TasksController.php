@@ -217,7 +217,10 @@ class TasksController extends AppController {
                 //syori
                 $this->Task->id = $id;
                 if ($this->Task->save($this->request->data)) {
-                    $options = array('conditions' => array('Task.' . $this->Task->primaryKey => $id));
+                    $options = array(
+                        'conditions' => array('Task.' . $this->Task->primaryKey => $id),
+                        'recursive' => -1
+                    );
                     $result = $this->Task->find('first', $options);
                     $all_d = $this->getdbar($id);
                     $error = false;
