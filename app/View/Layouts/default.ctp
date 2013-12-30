@@ -122,7 +122,6 @@
 			</p>
 		</div>
 	</div>
-	<?php echo $this->element('sql_dump'); ?>
 </div>
 <!-- ajax用 -->
 <?php echo isset($token)?"<script>var token = '{$token}'</script>":"";?>
