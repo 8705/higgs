@@ -231,7 +231,8 @@ input:hover, textarea:hover {
 }
 
 .complete {
-    color: red;
+    color: #fff;
+    bottom: 5px;
 }
 
 /***** view表示 タスクリスト ******************/

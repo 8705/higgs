@@ -752,7 +752,14 @@ $(function(){
 
     function adjustattainment(attainment) {
         for(var id in attainment) {
-            $('.parent_'+id+' .attainment').html(Math.round(attainment[id])+'%');
+            if(attainment[id] != 100) {
+                $('.parent_'+id+' .attainment').html(Math.round(attainment[id])+'%');
+                $('.parent_'+id+' .attainment').removeClass('complete btn btn-danger');
+            } else {
+                $('.parent_'+id+' .attainment').html('Complete!!');
+                $('.parent_'+id+' .attainment').addClass('complete btn btn-danger');
+            }
+                
         }
     }
 
