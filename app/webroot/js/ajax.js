@@ -761,7 +761,7 @@ $(function(){
         cancelEvent(e);
         var cleanArr = new Array();
 
-        $('#task-list-parents li.bomb').each(function(){
+        $('#task-list-parents li.parent_bomb').each(function(){
             cleanArr.push($(this).data('task-id'));
         });
 
