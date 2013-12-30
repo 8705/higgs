@@ -67,13 +67,20 @@ class TasksController extends AppController {
             'order' => array('Task.sequence'=>'asc'),
         );
         $tasks_today = $this->Task->find('all', $opt_today);
+        $tasks_tomorrow = $this->Task->find('all', $opt_tomorrow);
+        $tasks_dayaftertomorrow = $this->Task->find('all', $opt_dayaftertomorrow);
         foreach($tasks_today as $key => $row) {
             $tasks_today[$key]['Task']['breadcrumb'] = $this->makepankuzu($row['Task']['id']);
         }
-        // $this->set('tasks_today', $this->Task->find('all', $opt_today));
+        foreach($tasks_tomorrow as $key => $row) {
+            $tasks_tomorrow[$key]['Task']['breadcrumb'] = $this->makepankuzu($row['Task']['id']);
+        }
+        foreach($tasks_dayaftertomorrow as $key => $row) {
+            $tasks_dayaftertomorrow[$key]['Task']['breadcrumb'] = $this->makepankuzu($row['Task']['id']);
+        }
 		$this->set('tasks_today', $tasks_today);
-        $this->set('tasks_tomorrow', $this->Task->find('all', $opt_tomorrow));
-        $this->set('tasks_dayaftertomorrow', $this->Task->find('all', $opt_dayaftertomorrow));
+        $this->set('tasks_tomorrow', $tasks_tomorrow);
+        $this->set('tasks_dayaftertomorrow', $tasks_dayaftertomorrow);
 	}
 
 	public function view($id = null) {
