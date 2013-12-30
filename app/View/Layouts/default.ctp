@@ -23,39 +23,37 @@
 <div class="container">
 	<?php if($this->params["controller"] != 'users'): ?>
 		<div id="header" class="row clearfix">
-			<div class="col-md-12 column">
-				<nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
-					<div class="row clearfix">
-						<div class="col-md-1 column navbar-header">
-							<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="/">ホーム</a>
-						</div>
-						<div id="d-bar" class="col-md-10 column progress progress-striped">
-							<?php foreach($bar as $id => $val): ?>
-								<div class="parent_<?php echo $id; ?> jshover progress-bar progress-bar-danger" role="progressbar" aria-valuenow="<?php echo $val; ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $val; ?>%;<?php if($val == 0)echo 'border-right: none;' ?>">
-									<?php echo round($val)."%"; ?>
-								</div>
-							<?php endforeach; ?>
-						</div>
-						<div class="col-md-1 column">
-							<ul class="nav navbar-nav navbar-right">
-								<li class="dropdown">
-							 		<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class=" glyphicon glyphicon-cog"></i> Setting<strong class="caret"></strong></a>
-									<ul class="dropdown-menu">
-										<li>
-											<a href="#">アカウント設定</a>
-										</li>
-										<li class="divider">
-										</li>
-										<li>
-											<?php echo $this->Html->link(__('ログアウト'), array('controller' => 'users', 'action' => 'logout')); ?>
-										</li>
-									</ul>
-								</li>
-							</ul>
-						</div>
+			<nav class="col-md-12 column navbar-inverse" role="navigation">
+				<div class="row clearfix">
+					<div class="col-md-2 column navbar-header">
+						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="/">ホーム</a>
 					</div>
-				</nav>
-			</div>
+					<div id="d-bar" class="col-md-8 column progress progress-striped">
+						<?php foreach($bar as $id => $val): ?>
+							<div class="parent_<?php echo $id; ?> jshover progress-bar progress-bar-danger" role="progressbar" aria-valuenow="<?php echo $val; ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $val; ?>%;<?php if($val == 0)echo 'border-right: none;' ?>">
+								<?php echo round($val)."%"; ?>
+							</div>
+						<?php endforeach; ?>
+					</div>
+					<div class="col-md-2 column">
+						<ul class="nav navbar-nav navbar-right">
+							<li class="dropdown">
+						 		<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class=" glyphicon glyphicon-cog"></i> Setting<strong class="caret"></strong></a>
+								<ul class="dropdown-menu">
+									<li>
+										<a href="#">アカウント設定</a>
+									</li>
+									<li class="divider">
+									</li>
+									<li>
+										<?php echo $this->Html->link(__('ログアウト'), array('controller' => 'users', 'action' => 'logout')); ?>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</nav>
 		</div>
 	<?php endif; ?>
 	<div id="noticePanel"></div>
