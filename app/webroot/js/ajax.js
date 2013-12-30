@@ -989,7 +989,8 @@ $(function(){
                 }
                 $('#calendarPanel').addClass(data.result.status).append(
                     '<div class="body-area">\n'+
-                    '<p class="task-body"><span class="check-cal-task" data-cal-task-id="'+data.result.id+'"><input type="checkbox" '+checked+'/></span><span class="body">'+data.result.body+'</span></p>\n'+
+                    // '<p class="task-body"><span class="check-cal-task" data-cal-task-id="'+data.result.id+'"><input type="checkbox" '+checked+'/></span><span class="body">'+data.result.body+'</span></p>\n'+
+                    '<p class="task-body"><span class="body">'+data.result.body+'</span></p>\n'+
                     '<p class="task-date"><span>'+data.result.start_time+'</span></p>\n'+
                     '</div>\n'+
                     '<div class="action-area clearfix">\n'+
@@ -1089,7 +1090,8 @@ $(function(){
             },
             success : function(data) {
                 $('#calendarPanel').removeClass('edit');
-                $('#calendarPanel .task-body').html('<span><input data-cal-task-id="'+data.result.id+'" type="checkbox" /></span><span class="body">'+data.result.body+'</span>')
+                // $('#calendarPanel .task-body').html('<span><input data-cal-task-id="'+data.result.id+'" type="checkbox" /></span><span class="body">'+data.result.body+'</span>')
+                $('#calendarPanel .task-body').html('<span class="body">'+data.result.body+'</span>')
                 $('#calendarPanel .task-date').html('<span>'+data.result.start_time+'</span>');
                 $('#calendarPanel .action-area').html('');
                 $('#calendarPanel .action-area').append(

@@ -51,7 +51,10 @@ class CalendarsController extends AppController {
 		$options = array(
 			'conditions' => array(
 				'Task.user_id' => $this->Auth->user('id'),
-				'Task.status ' => array('notyet','done'),
+				'OR' => array(
+					array('Task.status' => 'notyet'),
+					array('Task.status' => 'done')
+				),
 			),
 			'order' => array('Task.sequence' => 'asc')
 		);
