@@ -7,13 +7,16 @@ $(function(){
         $('input.datepicker').val(getFutureDate(0));
     });
 
-    $(".jshover").hover(function(){
-        var task_id = ($(this).attr('class')).split(" ")
-        $('.'+task_id[0]).addClass("jshover-active");
-    },function(){
-        var task_id = ($(this).attr('class')).split(" ")
-        $('.'+task_id[0]).removeClass("jshover-active");
-    })
+    $(document).on({
+        mouseenter: function () {
+            var task_id = ($(this).attr('class')).split(" ")
+            $('.'+task_id[0]).addClass("jshover-active");
+        },
+        mouseleave: function () {
+            var task_id = ($(this).attr('class')).split(" ")
+            $('.'+task_id[0]).removeClass("jshover-active");
+        }
+    }, ".jshover");
 
     $('#viewWrapper ul#task-list').draggable({
         axis : 'x',
