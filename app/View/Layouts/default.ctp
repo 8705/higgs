@@ -60,7 +60,32 @@
 	<div id="main" class="row clearfix">
 		<?php if($this->params["controller"] != 'users'): ?>
 				<div id="side-menu" class="tasks col-md-4 column">
-					<p id="clean-bomb" class="btn btn-danger">Bomb一掃</p>
+					<div class="actions">
+						<h2><?php echo __('Actions'); ?></h2>
+						<ul>
+							<li><?php echo $this->Html->link(__('今日のタスク'), array('controller'=>'tasks', 'action' => 'index')); ?> </li>
+							<li><?php echo $this->Html->link(__('Bombタスク一覧'), array('controller'=>'tasks', 'action' => 'bomb')); ?> </li>
+							<li><?php echo $this->Html->link(__('カレンダー表示'), array('controller'=>'calendars', 'action' => 'viewcalendar')); ?></li>
+						</ul>
+					</div>
+					<div class="tasks parents">
+						<h2><?php echo __('Projects'); ?></h2>
+						<ul class="list-group" id="task-list-parents">
+							<?php $bomb = 'false'; ?>
+							<?php if (count($parents)): ?>
+								<?php foreach ($parents as $parent): ?>
+									<li class="parent_<?php echo h($parent['Task']['id']); ?> jshover parent_<?php echo $parent['Task']['status'];?> list-group-item clearfix" data-task-id="<?php echo h($parent['Task']['id']); ?>">
+										<span class="body"><?php echo $this->Html->link(__(h($parent['Task']['body'])), array('controller'=>'tasks', 'action' => 'view', $parent['Task']['id'])); ?></span>
+										<span class="attainment <?php if($parent['Task']['complete'] == 100)echo 'complete btn btn-danger'; ?>"><?php if($parent['Task']['complete'] == 100) {echo 'Complete!!';} else{echo $parent['Task']['complete'].'%';} ?></span>
+										<span class="selfbomb"><b>自爆</b></span>
+									</li>
+									<?php if($parent['Task']['status'] ==='bomb')$bomb='true'; ?>
+								<?php endforeach; ?>
+							<?php else: ?>
+								<li class="empty list-group-item clearfix">タスクがありません</li>
+							<?php endif; ?>
+						</ul>
+					</div>
 					<div class="tasks">
 						<?php echo $this->Form->create('Task'); ?>
 						<fieldset>
@@ -83,30 +108,9 @@
 						</fieldset>
 						<?php echo $this->Form->end(); ?>
 					</div>
-					<div class="tasks parents">
-						<h2>Projects</h2>
-						<ul class="list-group" id="task-list-parents">
-							<?php if (count($parents)): ?>
-								<?php foreach ($parents as $parent): ?>
-									<li class="parent_<?php echo h($parent['Task']['id']); ?> jshover parent_<?php echo $parent['Task']['status'];?> list-group-item clearfix" data-task-id="<?php echo h($parent['Task']['id']); ?>">
-										<span class="body"><?php echo $this->Html->link(__(h($parent['Task']['body'])), array('controller'=>'tasks', 'action' => 'view', $parent['Task']['id'])); ?></span>
-										<span class="attainment <?php if($parent['Task']['complete'] == 100)echo 'complete btn btn-danger'; ?>"><?php if($parent['Task']['complete'] == 100) {echo 'Complete!!';} else{echo $parent['Task']['complete'].'%';} ?></span>
-										<span class="selfbomb"><b>自爆</b></span>
-									</li>
-								<?php endforeach; ?>
-							<?php else: ?>
-								<li class="empty list-group-item clearfix">タスクがありません</li>
-							<?php endif; ?>
-						</ul>
-					</div>
-					<div class="actions">
-						<h3><?php echo __('Actions'); ?></h3>
-						<ul>
-							<li><?php echo $this->Html->link(__('List Tasks'), array('controller'=>'tasks', 'action' => 'index')); ?> </li>
-							<li><?php echo $this->Html->link(__('List Bombs'), array('controller'=>'tasks', 'action' => 'bomb')); ?> </li>
-							<li><?php echo $this->Html->link(__('カレンダー表示'), array('controller'=>'calendars', 'action' => 'viewcalendar')); ?></li>
-						</ul>
-					</div>
+					<?php if($bomb == 'true'): ?>
+						<p id="clean-bomb" class="btn btn-danger">爆発したタスクがあります。</p>
+					<?php endif; ?>
 				</div>
 		<?php endif; ?>
 		<div id="tasks" class="index col-md-8 column">
