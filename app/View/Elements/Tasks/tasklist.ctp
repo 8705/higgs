@@ -8,4 +8,5 @@
     <span class="delete-task"><span class="glyphicon glyphicon-trash"></span>削除</span>
     <span class="start_time"><?php echo h(str_replace('-','/',substr($task['Task']['start_time'],5))); ?></span>
     <span class="sequence" style="display:none;"><?php echo h($task['Task']['sequence']); ?></span>
+    <div class="bread-crumb"><?php echo $task['Task']['breadcrumb']; ?></div>
 </li>

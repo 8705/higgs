@@ -30,7 +30,7 @@ function htmlDivideUl(parentId){
         '<ul class="ul-divide no-empty-form" data-parent-id="'+parentId+'">\n'+
         '<li class="li-divide list-group-item clearfix">\n'+
             '<span><input class="body edit-input no-empty-body" type="text" value="" placeholder="細分化したタスクを入力して下さい"/></span>\n'+
-            '<span><input class="start_time edit-input datepicker no-empty-cal" type="text" value="" placeholder="2014-01-01" readonly /></span>\n'+
+            '<span><input class="start_time divide-input datepicker no-empty-cal" type="text" value="" placeholder="2014-01-01" readonly /></span>\n'+
             '<input class="parent_id" type="hidden" name="parent_id" value="'+parentId+'" />'+
         '</li>\n'+
         '<li class="divide-btn-area list-group-item clearfix">'+
@@ -46,7 +46,7 @@ function htmlDivideLi(parentId) {
     var elm = $(
         '<li class="li-divide li-divide-more list-group-item clearfix">\n'+
             '<span><input class="body edit-input no-empty-body" type="text" value="" placeholder="細分化したタスクを入力して下さい"/></span>\n'+
-            '<span><input class="start_time edit-input datepicker no-empty-cal" type="text" value="" placeholder="2014-01-01" readonly /></span>\n'+
+            '<span><input class="start_time divide-input datepicker no-empty-cal" type="text" value="" placeholder="2014-01-01" readonly /></span>\n'+
             '<span class="divide-del btn btn-danger">☓</span>\n'+
             '<input class="parent_id" type="hidden" name="parent_id" value="'+parentId+'" />\n'+
         '</li>\n'
@@ -315,7 +315,7 @@ $(function(){
                     }
                 });
                 adjustDBar(data.all_d);
-                adjustattainment(data.attainment)
+                adjustattainment(data.attainment);
             },
             error : function() {
                 popUpPanel(true, 'サーバーエラーでタスクを消去できませんでした');
@@ -372,11 +372,8 @@ $(function(){
                 }, 200);
 
                 //今日の日付をプリセット
-                $("input.datepicker").val(getFutureDate(0));
+                $("input.divide-input").val(getFutureDate(0));
                 $('ul[data-parent-id='+taskId+']').find('.body').focus();
-
-                //分割ボタンを分割キャンセルボタンにする
-                // $('#task_'+taskId).find('.divide-task').replaceWith('<span class="divide-cancel btn btn-default">キャンセル</span>');
 
                 //親タスクのbtnを止める
                 // $('#task_'+taskId).find('.edit-task').replaceWith('<span class="disable-edit btn btn-default btn-disabled">編集</span>');
@@ -408,7 +405,7 @@ $(function(){
         }, 200);
 
         //今日の日付をプリセット
-        // $("input.datepicker").val(getFutureDate(0));
+        $("input.divide-input").val(getFutureDate(0));
 
         makeDatePicker();
     })
@@ -449,10 +446,10 @@ $(function(){
                 }
                 $('#task_' + taskId).removeClass('edit');
 
-                if(data.result.Task.parent_id == null){
+                if(!$('#task_'+data.result.Task.id).next().is('ul') && data.result.Task.parent_id == null) {
                     var checkElm = '<span class="origin">神</span>';
-                } else if($('ul[data-children-ul-id='+data.result.Task.id+']').hasClass('children-ul')) {
-                    var checkElm = '<span class="accordion open glyphicon glyphicon-expand"></span>\n';
+                } else if(!$('#task_'+data.result.Task.id).next().is('ul')) {
+                    var checkElm = '<span class="check-task"><input type="checkbox"></span>\n';
                 } else {
                     var checkElm = '<span class="check-task"><input type="checkbox"></span>\n';
                 }
@@ -583,7 +580,7 @@ $(function(){
                     beforeSend : function() {
                         //分割タスクが入力されてないと終了
                         divideStart = true;
-                        $('.li-divide .edit-input').each(function(){
+                        $('.li-divide .divide-input').each(function(){
                             if ($(this).val().length == 0) {
                                 divideStart = false;
                             }
@@ -612,7 +609,6 @@ $(function(){
                                     '<ul class="children-ul" data-children-ul-id="'+data.result[0].Task.parent_id+'"></ul>'
                                 );
                             }
-                            console.log(data.result);
                             for(var i in data.result) {
                                 $('ul[data-children-ul-id='+data.result[0].Task.parent_id+']')
                                 .append(

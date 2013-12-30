@@ -167,6 +167,10 @@ input:hover, textarea:hover {
 }
 
 .task-list li {
+    padding-bottom:5px;
+}
+.task-list li:hover {
+    background-color: #f5f5f5;
 }
 .task-list li span {
     display: inline-block;
@@ -197,7 +201,19 @@ input:hover, textarea:hover {
     margin-right: 10px;
     float: right;
 }
+.task-list .bread-crumb {
+    float: left;
+    width: 100%;
+    margin-left: 13px;
+    color: #CCC;
+    font-size: 12px;
 
+}
+.task-list .bread-crumb a {
+    margin: 0px 5px;
+    color: #CCC;
+    /*font-style: italic;*/
+}
 /* 爆発したけどリストにいるタスク */
 .parents li.parent_bomb {
     background-color: red;
@@ -293,7 +309,7 @@ input:hover, textarea:hover {
     bottom: 11px;
 }
 .edit-task {
-    font-size: 12px;
+    font-size: 14px;
     color: #CCC;
     cursor: pointer;
 }

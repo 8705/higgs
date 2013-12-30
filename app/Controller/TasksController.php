@@ -66,7 +66,12 @@ class TasksController extends AppController {
             ),
             'order' => array('Task.sequence'=>'asc'),
         );
-		$this->set('tasks_today', $this->Task->find('all', $opt_today));
+        $tasks_today = $this->Task->find('all', $opt_today);
+        foreach($tasks_today as $key => $row) {
+            $tasks_today[$key]['Task']['breadcrumb'] = $this->makepankuzu($row['Task']['id']);
+        }
+        // $this->set('tasks_today', $this->Task->find('all', $opt_today));
+		$this->set('tasks_today', $tasks_today);
         $this->set('tasks_tomorrow', $this->Task->find('all', $opt_tomorrow));
         $this->set('tasks_dayaftertomorrow', $this->Task->find('all', $opt_dayaftertomorrow));
 	}

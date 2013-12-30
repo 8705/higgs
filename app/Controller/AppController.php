@@ -40,7 +40,7 @@ class AppController extends Controller {
             $sum_dparam = 0;
             foreach($children as $child) {
                 if(
-                    $child['Task']['status'] == 'notyet' and 
+                    $child['Task']['status'] == 'notyet' and
                     $child['Task']['rght'] - $child['Task']['lft'] == 1
                 ) {
                     $sum_dparam += $child['Task']['influence'];
@@ -93,7 +93,7 @@ class AppController extends Controller {
             $sum_influence = 0;
             foreach($children as $child) {
                 if(
-                    $child['Task']['status'] == 'notyet' and 
+                    $child['Task']['status'] == 'notyet' and
                     $child['Task']['rght'] - $child['Task']['lft'] == 1
                 ) {
                     $sum_influence += $child['Task']['influence'];
@@ -112,7 +112,7 @@ class AppController extends Controller {
         $sum_dparam = 0;
         foreach($children as $child) {
             if(
-                $child['Task']['status'] == 'notyet' and 
+                $child['Task']['status'] == 'notyet' and
                 $child['Task']['rght'] - $child['Task']['lft'] == 1
             ) {
                 $sum_dparam += $child['Task']['influence'];
@@ -129,7 +129,7 @@ class AppController extends Controller {
         $sum_dparam = 0;
         foreach($children as $child) {
             if(
-                $child['Task']['status'] == 'done' and 
+                $child['Task']['status'] == 'done' and
                 $child['Task']['rght'] - $child['Task']['lft'] == 1
             ) {
                 $sum_dparam += $child['Task']['influence'];
@@ -140,12 +140,17 @@ class AppController extends Controller {
     }
 
     public function makepankuzu($id) {
-        $parents = $this->Task->getPath($id,array('Task.body'));
-        $elm = '<a href="/tasks/view/'.$parents[0].'">';
-        foreach ($parents as $id => $body) {
-            $elm .= '>>'.$body ;
+        // $parents = $this->Task->getPath($id,array('Task.body'));
+        $parents = $this->Task->getPath($id);
+        $count = 0;
+        $elm = '<a href="/tasks/view/'.$parents[0]['Task']['id'].'">';
+        foreach ($parents as $id => $row) {
+            if($count != 0) $elm .= ' &gt; ';
+            $elm .= $row['Task']['body'];
+            $count++;
         }
         $elm .= '</a>';
-        echo $elm;
+        // echo $elm;
+        return $elm;
     }
 }
