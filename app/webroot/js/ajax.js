@@ -759,7 +759,7 @@ $(function(){
                 $('.parent_'+id+' .attainment').html('Complete!!');
                 $('.parent_'+id+' .attainment').addClass('complete btn btn-danger');
             }
-                
+
         }
     }
 
@@ -1176,16 +1176,16 @@ $(function(){
                 $('.check-cal-task').html('<img src="/img/ajax-loader.gif" alt="" />');
             },
             success : function(data) {
-                $('#calendarPanel').removeAttr('class').addClass(data.result.status);
-                if (data.result.status == 'done') {
+                $('#calendarPanel').removeAttr('class').addClass(data.result.Task.status);
+                if (data.result.Task.status == 'done') {
                     $('#calendarPanel .action-area .edit-cal-task').remove();
-                    $('#task_'+data.result.id).removeClass('notyet').addClass('done');
+                    $('#task_'+data.result.Task.id).removeClass('notyet').addClass('done');
                     checked = 'checked';
                 } else {
                     $('#calendarPanel .action-area').prepend(
-                        '<a data-cal-task-id="'+data.result.id+'" class="edit-cal-task action-icon"><span class="glyphicon glyphicon-edit"></span>編集</a>'
+                        '<a data-cal-task-id="'+data.result.Task.id+'" class="edit-cal-task action-icon"><span class="glyphicon glyphicon-edit"></span>編集</a>'
                     );
-                    $('#task_'+data.result.id).removeClass('done').addClass('notyet');
+                    $('#task_'+data.result.Task.id).removeClass('done').addClass('notyet');
                 }
             },
             error : function(XMLHttpRequest, textStatus, errorThrown) {
