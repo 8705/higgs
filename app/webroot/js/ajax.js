@@ -17,8 +17,8 @@ function htmlAddElm(data) {
         '<li id="task_'+data.result.Task.id+'" class="list-group-item notyet clearfix" style="display:none;" data-task-id="'+ data.result.Task.id +'">\n' +
         '<span class="check-task"><input type="checkbox"></span>\n'+
         '<span class="body edit-task"><a href="/tasks/view/' + data.result.Task.id + '">'+ data.result.Task.body +'</a></span>\n' +
-        '<span class="start_time">'+ roundStartTime(data.result.Task.start_time) +'</span>\n'+
         '<span class="delete-task"><span class="glyphicon glyphicon-trash"></span><b>削除</b></span>\n' +
+        '<span class="start_time">'+ roundStartTime(data.result.Task.start_time) +'</span>\n'+
         '<span class="sequence" style="display:none;">0</span>\n' +
         '</li>'
     );
@@ -622,7 +622,7 @@ $(function(){
                                     '<span class="status">notyet</span>\n'+
                                     '<span class="d_param">'+ data.result[i].Task.d_param +'</span>\n'+
                                     '<span class="delete-task"><span class="glyphicon glyphicon-trash"></span><b>削除</b></span>\n' +
-                                    '<span class="start_time">'+ roundStartTime(data.result[i].Task.start_time) +'</span>\n'
+                                    '<span class="start_time">'+ roundStartTime(data.result[i].Task.start_time) +'</span>\n'+
                                     '</li>'
                                 );
                                 $('#task_'+data.result[i].Task.id).fadeIn(100);
