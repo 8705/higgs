@@ -66,7 +66,7 @@
 				<div class="form-group">
 					<div class="col-sm-7">
 						<div class="checkbox">
-							<label><?php echo $this->Form->checkbox('remember_me'); ?>Remember NAKAI!!!!!!!!!!!!!!!!!</label>
+							<label><?php echo $this->Form->checkbox('remember_me'); ?>Remember me</label>
 						</div>
 					</div>
 				</div>
