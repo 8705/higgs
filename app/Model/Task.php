@@ -31,6 +31,10 @@ class Task extends AppModel {
 				//'last' => false, // Stop validation after this rule
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
+			'maxLength' => Array(
+            'rule' => Array('maxLength', 30),
+            'message' => 'タスクは30文字以内で入力してください。'
+        ),
 		),
 		'start_time' => array(
 			'notEmpty' => array(
