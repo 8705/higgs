@@ -277,7 +277,9 @@ input:hover, textarea:hover {
 #projects {
     margin-top: 15px;
 }
-
+#projects input {
+    margin: 5px 5px 0 0;
+}
 #projects li.parent_bomb {
     background-color: red;
 }

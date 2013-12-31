@@ -25,24 +25,24 @@
 		<div id="header" class="row clearfix">
 			<nav class="col-md-12 column navbar-inverse" role="navigation">
 				<div class="row clearfix">
-					<div class="col-md-2 column navbar-header">
+					<div class="col-md-2 col-xs-2 col-sm-2 column navbar-header">
 						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="/">ホーム</a>
 					</div>
-					<div id="d-bar" class="col-md-8 column progress progress-striped">
+					<div id="d-bar" class="col-md-8 col-xs-8 col-sm-8 column progress progress-striped">
 						<?php foreach($bar as $id => $val): ?>
 							<div class="parent_<?php echo $id; ?> jshover progress-bar progress-bar-danger" role="progressbar" aria-valuenow="<?php echo $val; ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $val; ?>%;<?php if($val == 0)echo 'border-right: none;' ?>">
 								<?php echo round($val)."kg"; ?>
 							</div>
 						<?php endforeach; ?>
 					</div>
-					<div class="col-md-2 column">
+					<div class="col-md-2 col-xs-2 col-sm-2 column">
 						<ul class="nav navbar-nav navbar-right">
 							<li class="dropdown">
 						 		<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class=" glyphicon glyphicon-cog"></i> Setting<strong class="caret"></strong></a>
 								<ul class="dropdown-menu">
-									<li>
+									<!-- <li>
 										<a href="#">アカウント設定</a>
-									</li>
+									</li> -->
 									<li class="divider">
 									</li>
 									<li>
@@ -58,8 +58,11 @@
 	<?php endif; ?>
 	<div id="noticePanel"></div>
 	<div id="main" class="row clearfix">
+		<div id="tasks" class="index col-md-8 col-md-push-4 column">
+			<?php echo $this->fetch('content'); ?>
+		</div>
 		<?php if($this->params["controller"] == 'tasks' or 'calendars'): ?>
-				<div id="side-menu" class="tasks col-md-4 column">
+				<div id="side-menu" class="tasks col-md-4 col-md-pull-8 column">
 					<div class="actions">
 						<ul>
 							<li><?php echo $this->Html->link(__('今日のタスク'), array('controller'=>'tasks', 'action' => 'index')); ?> </li>
@@ -112,14 +115,11 @@
 					<?php endif; ?>
 				</div>
 		<?php endif; ?>
-		<div id="tasks" class="index col-md-8 column">
-			<?php echo $this->fetch('content'); ?>
-		</div>
 	</div>
 	<div id="footer" class="row clearfix">
 		<div class="col-md-12 column">
 			<p class="text-center">
-				&copy;2013 temp-space. All rights Reserved.
+				&copy;2013-2014 PYNS CREATE. All rights Reserved.
 			</p>
 		</div>
 	</div>
