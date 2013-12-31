@@ -1317,8 +1317,7 @@ $(function(){
                 })
                 deleteEmpty('bombs');
                 $('#task-list-bombs').append(
-                    '<li id="bomb_'
-                    +taskId
+                    '<li id="bomb_'+taskId
                     +'" class="bomb list-group-item clearfix" style="display:none" data-task-id="'
                     +taskId+'">'
                     +'<span class="body"><a href="/tasks/view/'
@@ -1335,6 +1334,43 @@ $(function(){
             },
             complete : function(){
                 $('.parent_'+taskId+' .selfbomb').html('自爆');
+            },
+        });
+    });
+
+    $(document).on('click', '.complete', function(e){
+        cancelEvent(e);
+        var taskId = $(this).parent().data('task-id');
+        $.ajax({
+            url : '/tasks/complete/'+taskId,
+            type : 'POST',
+            dataType : 'json',
+            timeout : 5000,
+            beforeSend : function(){
+                $('.parent_'+taskId+' .complete').html('<img src="/img/ajax-loader.gif" alt="" />');
+            },
+            success : function(data){
+                $('.parent_'+taskId).fadeOut('slow',function(){
+                    $.when($(this).remove()).then(createEmpty());
+                })
+                deleteEmpty('complete');
+                $('#task-list-complete').append(
+                    '<li id="complete_'+taskId
+                    +'" class="list-group-item clearfix" style="display:none" data-task-id="'
+                    +taskId+'">'
+                    +'<span class="body"><a href="/tasks/view/'
+                    +taskId+ '">'
+                    +$('.parent_'+taskId).find('.body').text()
+                    +'</a></span></li>'
+                );
+                $('#task-list-complete').children().fadeIn('slow');
+                adjustDBar(0);
+            },
+            error : function(){
+                popUpPanel(true, 'サーバーエラーでタスクを消去できませんでした');
+            },
+            complete : function(){
+                $('.parent_'+taskId+' .complete').html('Complete!!');
             },
         });
     });

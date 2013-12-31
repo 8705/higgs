@@ -109,8 +109,23 @@ class TasksController extends AppController {
                 'Task.parent_id' => null,
                 'Task.bomb' => 1,
             ),
+            'order' => 'modified',
         );
         $this->set('bombs', $this->Task->find('all', $opt_bombs));
+    }
+
+    public function viewcomplete() {
+        $this->Task->recursive = -1;
+        $opt_complete = array(
+            'conditions' => array(
+                'Task.user_id' => $this->Auth->user('id'),
+                'Task.status' => 'done',
+                'Task.parent_id' => null,
+                'Task.bomb' => 2,
+            ),
+            'order' => 'modified',
+        );
+        $this->set('complete', $this->Task->find('all', $opt_complete));
     }
 
 	public function add() {
@@ -494,6 +509,34 @@ class TasksController extends AppController {
             $result = $id;
             $all_d = $this->getdbar($id);
             $res = array("error" => $error, "result" => $result, "all_d" => $all_d);
+            $this->response->type('json');
+            echo json_encode($res);
+            exit;
+        //save NG
+        } else {
+            $error = true;
+            $message = $this->Task->validationErrors;
+            $res = $res = compact('error', 'message');
+            $this->response->type('json');
+            echo json_encode($res);
+            exit;
+        }
+    }
+
+    public function complete($id) {
+        if (!$this->request->is('ajax')) {
+            throw new NotFoundException(__('Invalid post'));
+        }
+        $this->autoRender = false;   // 自動描画をさせない
+        $res = $this->Task->updateAll(
+            array('Task.bomb' => 2),
+            array('Task.id' => $id)
+        );
+        //save OK
+        if($res) {
+            $error = false;
+            $result = $id;
+            $res = array("error" => $error, "result" => $result);
             $this->response->type('json');
             echo json_encode($res);
             exit;

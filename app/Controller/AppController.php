@@ -62,6 +62,7 @@ class AppController extends Controller {
             $this->params['action'] == 'divide' ||
             $this->params['action'] == 'clean' ||
             $this->params['action'] == 'selfbomb' ||
+            $this->params['action'] == 'complete' ||
             $this->params['action'] == 'sort' ||
             $this->params['action'] == 'tryagain'
         ) {
