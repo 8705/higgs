@@ -61,14 +61,13 @@
 		<?php if($this->params["controller"] != 'users'): ?>
 				<div id="side-menu" class="tasks col-md-4 column">
 					<div class="actions">
-						<h2><?php echo __('Actions'); ?></h2>
 						<ul>
 							<li><?php echo $this->Html->link(__('今日のタスク'), array('controller'=>'tasks', 'action' => 'index')); ?> </li>
 							<li><?php echo $this->Html->link(__('Bombタスク一覧'), array('controller'=>'tasks', 'action' => 'bomb')); ?> </li>
 							<li><?php echo $this->Html->link(__('カレンダー表示'), array('controller'=>'calendars', 'action' => 'viewcalendar')); ?></li>
 						</ul>
 					</div>
-					<div class="tasks parents">
+					<div id="projects">
 						<h2><?php echo __('Projects'); ?></h2>
 						<ul class="list-group" id="task-list-parents">
 							<?php $bomb = 'false'; ?>
@@ -84,29 +83,28 @@
 							<?php else: ?>
 								<li class="empty list-group-item clearfix">タスクがありません</li>
 							<?php endif; ?>
+							<li>
+								<?php echo $this->Form->create('Task'); ?>
+								<fieldset>
+									<?php
+										echo $this->Form->input('user_id', array('type'=>'hidden', 'default' => $author['id']));
+										echo $this->Form->input('dbar', array('type'=>'hidden', 'default' => array_sum($bar)));
+										echo $this->Form->input('body', array('placeholder' => 'Add Project'));
+										echo $this->Form->input('start_time', array('type'=>'text', 'class' => 'datepicker','readonly' => 'readonly'));
+										echo $this->Js->submit('Submit', array(
+											'url'		=> '/tasks/add',
+											'type'		=> 'json',
+											'success'	=> 'addTask(data, textStatus)',
+											'error'		=> 'popUpPanel(true, "サーバーエラー")',
+											'async'		=> true,
+											'class' 	=> 'btn btn-primary',
+											'complete'	=> '$("input.datepicker").val(getFutureDate(0))'
+										));
+									?>
+								</fieldset>
+								<?php echo $this->Form->end(); ?>
+							</li>
 						</ul>
-					</div>
-					<div class="tasks">
-						<?php echo $this->Form->create('Task'); ?>
-						<fieldset>
-						<?php
-							echo $this->Form->input('user_id', array('type'=>'hidden', 'default' => $author['id']));
-							echo $this->Form->input('dbar', array('type'=>'hidden', 'default' => array_sum($bar)));
-							echo $this->Form->input('body', array('placeholder' => 'Add Project'));
-							echo $this->Form->input('start_time', array('type'=>'text', 'class' => 'datepicker','readonly' => 'readonly'));
-							//ajax送信用設定
-							echo $this->Js->submit('Submit', array(
-								'url'		=> '/tasks/add',
-								'type'		=> 'json',
-								'success'	=> 'addTask(data, textStatus)',
-								'error'		=> 'popUpPanel(true, "サーバーエラー")',
-								'async'		=> true,
-								'class' 	=> 'btn btn-primary',
-								'complete'  => '$("input.datepicker").val(getFutureDate(0))'
-							));
-						?>
-						</fieldset>
-						<?php echo $this->Form->end(); ?>
 					</div>
 					<?php if($bomb == 'true'): ?>
 						<p id="clean-bomb" class="btn btn-danger">爆発したタスクがあります。</p>
