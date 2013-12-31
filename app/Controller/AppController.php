@@ -144,7 +144,7 @@ class AppController extends Controller {
         $parents = $this->Task->getPath($id);
         $count = 0;
         $elm = '<a href="/tasks/view/'.$parents[0]['Task']['id'].'">';
-        $elm .= '<span class="origin glyphicon glyphicon-flag"></span> ';
+        $elm .= '<span class="glyphicon glyphicon-flag"></span>';
         foreach ($parents as $id => $row) {
             if($count != 0) $elm .= ' &gt; ';
             $elm .= $row['Task']['body'];

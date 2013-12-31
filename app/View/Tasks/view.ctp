@@ -1,6 +1,9 @@
 <div class="tasks view">
 
-	<h3>一族</h3>
+	<div class="title clearfix">
+		<h3>プロジェクト</h3>
+		<a href="/calendars/selectcalendar/<?php echo h($id); ?>"><span class="link btn btn-info"><span class="glyphicon glyphicon-calendar"></span>カレンダーで見る</span></a>
+	</div>
 	<div id="viewWrapper">
 		<ul class="list-group task-list children-ul" id="task-list">
 			<?php $prev = 0; ?>
