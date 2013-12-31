@@ -350,6 +350,19 @@ span.overtime {
 
 }
 
+/* 爆発タスク一覧のデザイン */
+#tryagain {
+    position: absolute;
+    right: 10px;
+    bottom: 5px;
+}
+
+.num_bomb {
+    position: absolute;
+    right: 110px;
+    bottom: 5px;
+}
+
 /****** ボタン / アクションテキスト *******************/
 /* ボタン全般 */
 .btn {

@@ -1,4 +1,4 @@
-<h2>Bombs</h2>
+<h2>爆発タスク一覧</h2>
 <div class="tasks bombs">
     <ul class="list-group" id="task-list-bombs">
         <?php if (count($bombs)): ?>
@@ -8,7 +8,7 @@
                         <?php echo $this->Html->link(__(h($bomb['Task']['body'])), array('action' => 'view', $bomb['Task']['id'])); ?>
                     </span>
                     <span class="num_bomb">
-                        <?php echo __(h($bomb['Task']['num_bomb'])); ?>
+                        <?php echo __(h('爆発回数：'.$bomb['Task']['num_bomb'].'回')); ?>
                     </span>
                     <p id="tryagain" class="btn btn-danger">今度こそ！</p>
                 </li>
