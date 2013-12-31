@@ -816,7 +816,7 @@ $(function(){
                 popUpPanel(true, 'サーバーエラーでタスクを消去できませんでした');
             },
             complete : function(){
-                $('#clean-bomb').html('done一括削除');
+                $('#clean-bomb').remove();
             },
         });
     });

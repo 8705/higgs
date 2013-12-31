@@ -215,12 +215,20 @@ input:hover, textarea:hover {
     /*font-style: italic;*/
 }
 /* 爆発したけどリストにいるタスク */
-.parents li.parent_bomb {
+#projects {
+    margin-top: 15px;
+}
+
+#projects li.parent_bomb {
     background-color: red;
 }
 
 .task-list .bomb {
     background-color: red;
+}
+
+span.overtime {
+    color: red;
 }
 
 /* タスクの達成度 */

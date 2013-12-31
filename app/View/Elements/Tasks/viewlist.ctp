@@ -10,5 +10,5 @@
      <span class="status"><?php echo h($task['Task']['status']); ?></span>
      <span class="d_param"><?php echo h($task['Task']['d_param']); ?></span>
      <span class="delete-task"><span class="glyphicon glyphicon-trash"></span>削除</span>
-     <span class="start_time"><?php echo h(str_replace('-','/',substr($task['Task']['start_time'],5))); ?></span>
+     <span class="start_time  <?php if($task['Task']['start_time'] < date('Y-m-d')) echo 'overtime'?>"><?php echo h(str_replace('-','/',substr($task['Task']['start_time'],5))); ?></span>
 </li>
