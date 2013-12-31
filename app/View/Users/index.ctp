@@ -1,4 +1,4 @@
-<div id="top-img" class="col-md-8 col-xs-12 column">
+<div class="col-md-8 col-xs-12 column">
 	<h2>ツリー型タスク管理ツール</h2>
 	<h3><span class="glyphicon glyphicon-check"></span>ツリー表示と今日やる事表示を切り替えれます</h3>
 	<p class="view-swich"><img src="/img/view_swich.png" alt=""></p>
