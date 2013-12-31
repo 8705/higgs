@@ -227,6 +227,10 @@ input:hover, textarea:hover {
     background-color: red;
 }
 
+span.overtime {
+    color: red;
+}
+
 /* タスクの達成度 */
 .attainment {
     position: absolute;
