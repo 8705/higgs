@@ -252,7 +252,7 @@ input:hover, textarea:hover {
 .task-list li .check-task {
     width:12px;
     margin-right: 5px;
-    margin-top: -3px;
+    margin-top: 1px;
 }
 /* start_time */
 .task-list li span.start_time {
@@ -381,7 +381,7 @@ span.overtime {
     bottom: 11px;
 }
 .edit-task {
-    font-size: 14px;
+    font-size: 17px;
     color: #CCC;
     cursor: pointer;
 }
