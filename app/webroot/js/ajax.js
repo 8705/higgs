@@ -19,7 +19,7 @@ function htmlAddElm(data) {
         var breadcrumbElm = '<div class="bread-crumb">'+data.breadcrumb+'</div>';
     }
     if($('ul[data-children-ul-id='+data.result.Task.id+']').hasClass('children-ul') && data.result.Task.parent_id == null) {
-        var checkElm = '<span class="origin">神</span>';
+        var checkElm = '<span class="origin glyphicon glyphicon-flag"></span>';
     } else if($('ul[data-children-ul-id='+data.result.Task.id+']').hasClass('children-ul')) {
         var checkElm = '<span class="accordion spread glyphicon glyphicon-expand"></span>\n';
     } else {
@@ -460,7 +460,7 @@ $(function(){
                 $('#task_' + taskId).removeClass('edit');
 
                 if($('ul[data-children-ul-id='+data.result.Task.id+']').hasClass('children-ul') && data.result.Task.parent_id == null) {
-                    var checkElm = '<span class="origin">神</span>';
+                    var checkElm = '<span class="origin glyphicon glyphicon-flag"></span>';
                 } else if($('ul[data-children-ul-id='+data.result.Task.id+']').hasClass('children-ul')) {
                     var checkElm = '<span class="accordion spread glyphicon glyphicon-expand"></span>\n';
                 } else {
@@ -639,7 +639,7 @@ $(function(){
                             }
                             //分割生成元が教祖出ない場合、アイコンを開閉に置き換え
                             if($('#task_'+ data.result[0].Task.parent_id).hasClass('origin')) {
-                                $('#task_'+data.result[0].Task.parent_id).find('.check-task').replaceWith('<span class="origin">神</span>');
+                                $('#task_'+data.result[0].Task.parent_id).find('.check-task').replaceWith('<span class="origin glyphicon glyphicon-flag"></span>');
                             } else {
                                 $('#task_'+data.result[0].Task.parent_id).find('.check-task').replaceWith('<span class="accordion spread glyphicon glyphicon-expand"></span>');
                             }
@@ -981,22 +981,24 @@ $(function(){
         });
             },
             success : function(data) {
-                if (data.result.status == 'notyet') {
-                    var editElm = '<a data-cal-task-id="'+data.result.id+'" class="edit-cal-task action-icon"><span class="glyphicon glyphicon-edit"></span>編集</a>\n';
+                if (data.result.Task.status == 'notyet') {
+                    var editElm = '<a data-cal-task-id="'+data.result.Task.id+'" class="edit-cal-task action-icon"><span class="glyphicon glyphicon-edit"></span>編集</a>\n';
                     var checked = '';
                 } else {
                     var editElm = '';
                     var checked = 'checked';
                 }
-                $('#calendarPanel').addClass(data.result.status).append(
+                $('#calendarPanel').addClass(data.result.Task.status).append(
                     '<div class="body-area">\n'+
-                    // '<p class="task-body"><span class="check-cal-task" data-cal-task-id="'+data.result.id+'"><input type="checkbox" '+checked+'/></span><span class="body">'+data.result.body+'</span></p>\n'+
-                    '<p class="task-body"><span class="body">'+data.result.body+'</span></p>\n'+
-                    '<p class="task-date"><span>'+data.result.start_time+'</span></p>\n'+
+                    // '<p class="task-body"><span class="check-cal-task" data-cal-task-id="'+data.result.Task.id+'"><input type="checkbox" '+checked+'/></span><span class="body">'+data.result.Task.body+'</span></p>\n'+
+                    '<p class="task-body"><span class="body">'+data.result.Task.body+'</span></p>\n'+
+                    '<p class="task-date"><span>'+data.result.Task.start_time+'</span></p>\n'+
+                    '<p class="bread-crumb">'+data.breadcrumb+'</p>'+
                     '</div>\n'+
                     '<div class="action-area clearfix">\n'+
                     editElm +
-                    '<a data-cal-task-id="'+data.result.id+'" class="delete-cal-task action-icon"><span class="glyphicon glyphicon-trash"></span>削除</a>\n'+
+                    '<a class="action-icon calendar-link" href="/calendars/selectcalendar/'+data.result.Task.id+'"><span class="glyphicon glyphicon-calendar"></span>このプロジェクトのみ表示</a>'+
+                    '<a data-cal-task-id="'+data.result.Task.id+'" class="delete-cal-task action-icon"><span class="glyphicon glyphicon-trash"></span>削除</a>\n'+
                     '</div>\n'+
                     '\n'+
                     '<a class="cal-panel-cancel"><span class="glyphicon glyphicon-remove"></span></a>\n'

@@ -1,6 +1,6 @@
 <li id="task_<?php echo h($task['Task']['id']); ?>" class="<?php if($task['Task']['parent_id'] == null){echo 'origin';} ?> <?php echo h($task['Task']['status']);?> list-group-item clearfix" data-task-id="<?php echo h($task['Task']['id']); ?>">
      <?php if($task['Task']['childCount'] != 0 && $task['Task']['parent_id'] == null): ?>
-     <span class="origin">神</span>
+     <span class="origin glyphicon glyphicon-flag"></span>
      <?php elseif($task['Task']['childCount'] != 0): ?>
      <span class="accordion spread glyphicon glyphicon-expand"></span>
      <?php else: ?>

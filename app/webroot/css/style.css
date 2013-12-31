@@ -448,7 +448,15 @@ li.done span.body a {
     margin-left: 6px;
 }
 #calendarPanel .task-date {
-    margin:10px 0 0 20px;
+    margin:10px 0 0 7px;
+}
+#calendarPanel .bread-crumb {
+    width: 100%;
+    font-size: 12px;
+    margin: 15px 0 0 7px;
+}
+#calendarPanel .bread-crumb a {
+    color: #CCC;
 }
 #calendarPanel .action-area {
     border-top: 1px solid #E2E2E2;
@@ -472,7 +480,7 @@ li.done span.body a {
     cursor: pointer;
 }
 #calendarPanel .action-icon:hover {
-    color:#6f6f6f;
+    color:#1E48A2;
     text-decoration: none;
 }
 #calendarPanel .action-icon:first-child {
@@ -491,6 +499,10 @@ li.done span.body a {
 }
 #calendarPanel .delete-cal-task span {
     font-size:11px;
+}
+#calendarPanel .calendar-link span {
+    font-size:11px;
+    margin:0 0 0 5px;
 }
 #calendarPanel .btn {
     font-size:9px;
