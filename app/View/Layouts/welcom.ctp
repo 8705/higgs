@@ -3,9 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>
-        ようこそ！
-        <?php echo __('ToDo(B)'); ?>
-        <?php echo $title_for_layout; ?>
+        PYNS TODO(仮)(β)
     </title>
     <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
     <meta name="description" content="">

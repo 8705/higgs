@@ -1,3 +1,6 @@
+<dvi class="row">
+	<h1>PYNS TODO(仮)(β)</h1>
+</dvi>
 <div class="col-md-8 col-xs-12 column">
 	<h2>ツリー型タスク管理ツール</h2>
 	<h3><span class="glyphicon glyphicon-check"></span>ツリー表示と今日やる事表示を切り替えれます</h3>
@@ -10,7 +13,7 @@
 			<li><span class="glyphicon glyphicon-star-empty"></span>抱えることの出来る重さは100kgまでです</li>
 			<li><span class="glyphicon glyphicon-star-empty"></span>期限のきれたタスクの体重は毎日増えます</li>
 			<li><p><span class="glyphicon glyphicon-star-empty"></span>
-				重量オーバーになるとタスクが消えていきます</p>
+				重量オーバーになるとタスクが爆発します（よかったですね、これでもうこのタスクをしなくて済みますよ）</p>
 				<p class="kieru"><img src="/img/kieru.png" alt=""></p>
 			</li>
 			<li><span class="glyphicon glyphicon-star-empty"></span>現在の体重は常に画面上部で確認できます</li>
