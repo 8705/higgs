@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>
-		<?php echo __('PYNS TODO(仮)(β); ?>
+		<?php echo __('PYNS TODO(仮)(β)'); ?>
 		<?php echo $title_for_layout; ?>
 	</title>
 	<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
