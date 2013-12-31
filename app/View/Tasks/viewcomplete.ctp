@@ -1,11 +1,11 @@
 <h2>Completeタスク一覧</h2>
-<div class="tasks complete">
+<div id="complete">
     <ul class="list-group" id="task-list-complete">
         <?php if (count($complete)): ?>
-            <?php foreach ($complete as $complete): ?>
-                <li id="complete_<?php echo h($complete['Task']['id']); ?>" class="list-group-item clearfix" data-task-id="<?php echo h($complete['Task']['id']); ?>">
+            <?php foreach ($complete as $comp): ?>
+                <li id="complete_<?php echo h($comp['Task']['id']); ?>" class="list-group-item clearfix" data-task-id="<?php echo h($comp['Task']['id']); ?>">
                     <span class="body">
-                        <?php echo $this->Html->link(__(h($complete['Task']['body'])), array('action' => 'view', $complete['Task']['id'])); ?>
+                        <?php echo __(h($comp['Task']['body'])); ?>
                     </span>
                 </li>
             <?php endforeach; ?>

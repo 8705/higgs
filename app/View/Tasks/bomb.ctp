@@ -5,7 +5,7 @@
             <?php foreach ($bombs as $bomb): ?>
                 <li id="bomb_<?php echo h($bomb['Task']['id']); ?>" class="<?php echo h($bomb['Task']['status']);?> list-group-item clearfix" data-task-id="<?php echo h($bomb['Task']['id']); ?>">
                     <span class="body">
-                        <?php echo $this->Html->link(__(h($bomb['Task']['body'])), array('action' => 'view', $bomb['Task']['id'])); ?>
+                        <?php echo __(h($bomb['Task']['body'])); ?>
                     </span>
                     <span class="num_bomb">
                         <?php echo __(h('爆発回数：'.$bomb['Task']['num_bomb'].'回')); ?>

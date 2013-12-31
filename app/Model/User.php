@@ -6,7 +6,7 @@ App::uses('SimplePasswordHasher', 'Controller/Component/Auth');
 class User extends AppModel {
 
 	public $validate = array(
-		'user_name' => array(
+		'username' => array(
 			'notEmpty' => array(
 				'rule' => array('notEmpty'),
 				//'message' => 'Your custom message here',
@@ -15,8 +15,12 @@ class User extends AppModel {
 				//'last' => false, // Stop validation after this rule
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
+			'isUnique' => array(
+				'rule' => array('isUnique'),
+        		'message' => 'このユーザ名はすでに使用されています。'
+        	),
 		),
-		'mail_address' => array(
+		'email' => array(
 			'email' => array(
 				'rule' => array('email'),
 				//'message' => 'Your custom message here',
@@ -43,6 +47,10 @@ class User extends AppModel {
 				//'last' => false, // Stop validation after this rule
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
+			'minLength' => array(
+            	'rule' => array('minLength', 6),
+            	'message' => 'パスワードが短すぎます。６文字以上で入力してください。'
+            ),
 		),
 	);
 
