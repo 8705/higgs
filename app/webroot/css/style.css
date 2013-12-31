@@ -84,8 +84,8 @@ h2 {
     float:right;
 }
 #side-menu {
-    border: solid 2px;
-    border-color: #7BD0FF;
+    border: solid 1px;
+    border-color: #ccc;
     border-radius: 4px;
     background-color: #FFF;
     padding: 15px;
@@ -241,9 +241,9 @@ input:hover, textarea:hover {
 .task-list input {
     margin-right: 10px;
 }
-.task-list li .body {
-    /*float:left;*/
-}
+/*.task-list li:hover .body a {
+    color: #42B7EE;
+}*/
 .task-list li span.btn {
     margin-left:10px;
 }
@@ -382,6 +382,10 @@ span.overtime {
     right: 10px;
     bottom: 11px;*/
     float: right;
+}
+.task-list li:hover span.delete-task,
+.task-list li:hover .bread-crumb a{
+    color:#979797;
 }
 .delete-task:hover, .edit-task:hover {
     color: #979797;
