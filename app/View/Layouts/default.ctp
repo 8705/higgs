@@ -21,7 +21,7 @@
 </head>
 <body>
 <div class="container">
-	<?php if($this->params["controller"] != 'users'): ?>
+	<?php if($this->params["controller"] == 'tasks'): ?>
 		<div id="header" class="row clearfix">
 			<nav class="col-md-12 column navbar-inverse" role="navigation">
 				<div class="row clearfix">
@@ -31,7 +31,7 @@
 					<div id="d-bar" class="col-md-8 column progress progress-striped">
 						<?php foreach($bar as $id => $val): ?>
 							<div class="parent_<?php echo $id; ?> jshover progress-bar progress-bar-danger" role="progressbar" aria-valuenow="<?php echo $val; ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $val; ?>%;<?php if($val == 0)echo 'border-right: none;' ?>">
-								<?php echo round($val)."%"; ?>
+								<?php echo round($val)."kg"; ?>
 							</div>
 						<?php endforeach; ?>
 					</div>
@@ -58,7 +58,7 @@
 	<?php endif; ?>
 	<div id="noticePanel"></div>
 	<div id="main" class="row clearfix">
-		<?php if($this->params["controller"] != 'users'): ?>
+		<?php if($this->params["controller"] == 'tasks'): ?>
 				<div id="side-menu" class="tasks col-md-4 column">
 					<div class="actions">
 						<ul>
