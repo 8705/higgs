@@ -98,6 +98,7 @@ class TasksController extends AppController {
             $allChildren[$key]['Task']['childCount']  = $this->Task->childCount($val['Task']['id']);
         }
         $this->set('tasks', $allChildren);
+        $this->set('id', $id);
 	}
 
     public function bomb() {
