@@ -104,16 +104,16 @@ class CalendarsController extends AppController {
         if (!$this->Task->exists($id)) {
             throw new NotFoundException(__('Non exist $id'));
         }
-        $row = $this->Task->find('first',array(
+        $result = $this->Task->find('first',array(
         	'conditions' => array(
         		'Task.id' => $id,
         	),
         	'recursive' => 1,
         ));
-        if($row) {
-        	$result = $row['Task'];
+        $breadcrumb = $this->makepankuzu($id);
+        if($result) {
         	$error = false;
-            $res = array("error" => $error,"result" => $result);
+            $res = array("error" => $error,"result" => $result,"breadcrumb"=>$breadcrumb);
             $this->response->type('json');
             echo json_encode($res);
             exit;
