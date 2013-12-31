@@ -210,7 +210,7 @@ function addTask(data, textStatus) {
     $('#projects li:eq(-2)').after(elm);
     $('#projects li:eq(-2)').fadeIn('slow');
 
-    var elm2 =$('<div class="parent_'+data.result.Task.id+' jshover add-bar progress-bar progress-bar-danger" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width: 10%; display:none;">10%</div>');
+    var elm2 =$('<div class="parent_'+data.result.Task.id+' jshover add-bar progress-bar progress-bar-danger" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width: 10%; display:none;">10kg</div>');
 
     $('#d-bar').append(elm2);
     $('.add-bar').fadeIn('slow');
@@ -747,7 +747,7 @@ $(function(){
     function adjustDBar(dbar) {
         for(var id in dbar) {
             $('#d-bar .parent_'+id).css({'width':dbar[id]+'%'});
-            $('#d-bar .parent_'+id).html(Math.round(dbar[id])+'%');
+            $('#d-bar .parent_'+id).html(Math.round(dbar[id])+'kg');
         }
     }
 
@@ -1285,7 +1285,7 @@ $(function(){
                         '<span class="selfbomb"><b>自爆</b></span></li>'
                     );
                     $('#projects li:eq(-2)').fadeIn('slow');
-                    var elm2 =$('<div class="add-bar progress-bar progress-bar-danger" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width: 10%; display:none;">10%</div>');
+                    var elm2 =$('<div class="add-bar progress-bar progress-bar-danger" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width: 10%; display:none;">10kg</div>');
 
                     $('#d-bar').append(elm2);
                     $('.add-bar').fadeIn('slow');
