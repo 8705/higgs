@@ -11,9 +11,9 @@
 		<ul class="bread">
 			<li><span class="glyphicon glyphicon-star-empty"></span>新しいプロジェクトを追加すると、その分体重も増えます</li>
 			<li><span class="glyphicon glyphicon-star-empty"></span>抱えることの出来る重さは100kgまでです</li>
-			<li><span class="glyphicon glyphicon-star-empty"></span>期限のきれたタスクの体重は毎日増えます</li>
+			<li><span class="glyphicon glyphicon-star-empty"></span>期限の切れたタスクの体重は毎日増えます</li>
 			<li><p><span class="glyphicon glyphicon-star-empty"></span>
-				重量オーバーになるとタスクが爆発します（よかったですね、これでもうこのタスクをしなくて済みますよ）</p>
+				重量オーバーになるとタスクが爆発します（よかったですね、これでもうこのタスクをやらなくて済みますよ）</p>
 				<p class="kieru"><img src="/img/kieru.png" alt=""></p>
 			</li>
 			<li><span class="glyphicon glyphicon-star-empty"></span>現在の体重は常に画面上部で確認できます</li>
