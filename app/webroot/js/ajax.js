@@ -199,7 +199,7 @@ function addTask(data, textStatus) {
         return;
     }
     var elm =$(
-        '<li class="parent_'+data.result.Task.id+' jshover notyet list-group-item clearfix" data-task-id="'+data.result.Task.id+'">'+
+        '<li class="parent_'+data.result.Task.id+' jshover notyet list-group-item clearfix" style="display: none;" data-task-id="'+data.result.Task.id+'">'+
         '<span class="body"><a href="/tasks/view/' + data.result.Task.id + '">'+data.result.Task.body +'</a></span>\n'+
         '<span class="attainment">0%</span>'+
         '<span class="selfbomb"><b>自爆</b></span></li>'
@@ -207,7 +207,8 @@ function addTask(data, textStatus) {
     if ($('#task-list-parents .empty').length == 1 ) {
         $('#task-list-parents .empty').html('');
     }
-    $('#task-list-parents').append(elm);
+    $('#projects li:eq(-2)').after(elm);
+    $('#projects li:eq(-2)').fadeIn('slow');
 
     var elm2 =$('<div class="parent_'+data.result.Task.id+' jshover add-bar progress-bar progress-bar-danger" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width: 10%; display:none;">10%</div>');
 
@@ -1277,13 +1278,13 @@ $(function(){
                         $.when($(this).remove()).then(createEmpty());
                     })
                     deleteEmpty('bombs');
-                    $('.parents ul').append(
-                        '<li class="parent_'+taskId+' jshover parent_notyet list-group-item clearfix" data-task-id="'+taskId+'">'+
+                    $('#projects li:eq(-2)').after(
+                        '<li class="parent_'+taskId+' jshover parent_notyet list-group-item clearfix" style="display:none;" data-task-id="'+taskId+'">'+
                         '<span class="body"><a href="/tasks/view/' + taskId + '">'+$('#bomb_'+taskId).find('.body').text() +'</a></span>\n'+
                         '<span class="attainment">0%</span>'+
                         '<span class="selfbomb"><b>自爆</b></span></li>'
                     );
-                    $('.parents ul').children().fadeIn('slow');
+                    $('#projects li:eq(-2)').fadeIn('slow');
                     var elm2 =$('<div class="add-bar progress-bar progress-bar-danger" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width: 10%; display:none;">10%</div>');
 
                     $('#d-bar').append(elm2);
