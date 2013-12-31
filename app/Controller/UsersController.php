@@ -28,6 +28,7 @@ class UsersController extends AppController {
 	}
 
 	public function index() {
+		$this->layout = 'welcom';
 		if($this->Auth->login()) $this->redirect($this->Auth->redirectUrl());
 	}
 
