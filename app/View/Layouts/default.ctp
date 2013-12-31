@@ -66,7 +66,7 @@
 					<div class="actions">
 						<ul>
 							<li><?php echo $this->Html->link(__('今日のタスク'), array('controller'=>'tasks', 'action' => 'index')); ?> </li>
-							<li><?php echo $this->Html->link(__('Bombタスク一覧'), array('controller'=>'tasks', 'action' => 'bomb')); ?> </li>
+							<li><?php echo $this->Html->link(__('爆発タスク一覧'), array('controller'=>'tasks', 'action' => 'bomb')); ?> </li>
 							<li><?php echo $this->Html->link(__('Completeタスク一覧'), array('controller'=>'tasks', 'action' => 'viewcomplete')); ?> </li>
 							<li><?php echo $this->Html->link(__('カレンダー表示'), array('controller'=>'calendars', 'action' => 'viewcalendar')); ?></li>
 						</ul>
