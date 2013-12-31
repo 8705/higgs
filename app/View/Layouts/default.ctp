@@ -21,7 +21,7 @@
 </head>
 <body>
 <div class="container">
-	<?php if($this->params["controller"] == 'tasks'): ?>
+	<?php if($this->params["controller"] == 'tasks' or 'calendars'): ?>
 		<div id="header" class="row clearfix">
 			<nav class="col-md-12 column navbar-inverse" role="navigation">
 				<div class="row clearfix">
@@ -58,7 +58,7 @@
 	<?php endif; ?>
 	<div id="noticePanel"></div>
 	<div id="main" class="row clearfix">
-		<?php if($this->params["controller"] == 'tasks'): ?>
+		<?php if($this->params["controller"] == 'tasks' or 'calendars'): ?>
 				<div id="side-menu" class="tasks col-md-4 column">
 					<div class="actions">
 						<ul>
