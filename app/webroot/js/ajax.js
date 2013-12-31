@@ -289,7 +289,7 @@ $(function(){
     //Delete Task
     $(document).on('click','.delete-task', function(e){
         cancelEvent(e);
-        if (!confirm('消すなら書くな！書いたら消すな！＼(^^)／')){
+        if (!confirm('このタスクを消去します')){
             return false;
         }
 
@@ -1302,6 +1302,9 @@ $(function(){
 
     $(document).on('click', '.selfbomb', function(e){
         cancelEvent(e);
+        if (!confirm('このプロジェクトを爆発させます')){
+            return false;
+        }
         var taskId = $(this).parent().data('task-id');
         $.ajax({
             url : '/tasks/selfbomb/'+taskId,

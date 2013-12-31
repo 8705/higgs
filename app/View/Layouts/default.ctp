@@ -63,6 +63,7 @@
 		</div>
 		<?php if($this->params["controller"] == 'tasks' or 'calendars'): ?>
 				<div id="side-menu" class="tasks col-md-4 col-md-pull-8 column">
+					<p class="username">ようこそ、<?php echo h($author['username']); ?>さん</p>
 					<div class="actions">
 						<ul>
 							<li><?php echo $this->Html->link(__('今日のタスク'), array('controller'=>'tasks', 'action' => 'index')); ?> </li>

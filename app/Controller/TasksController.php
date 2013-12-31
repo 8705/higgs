@@ -153,9 +153,9 @@ class TasksController extends AppController {
                 'order' => array('Task.id' => 'desc'),
                 'recursive' => -1
             ));
-
+            $breadcrumb = $this->makepankuzu($result['Task']['id']);
             $error = false;
-            $res = array("error" => $error,"result" => $result);
+            $res = array("error" => $error,"result" => $result,"breadcrumb"=>$breadcrumb);
             $this->response->type('json');
             echo json_encode($res);
             exit;
