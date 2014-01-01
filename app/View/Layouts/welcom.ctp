@@ -26,7 +26,7 @@
     <div id="footer" class="row clearfix">
         <div class="col-md-12 column">
             <p class="text-center">
-                &copy;2013 PYNS CREATE. All rights Reserved.
+                &copy;2013-2014 PYNS CREATE. All rights Reserved.
             </p>
         </div>
     </div>
