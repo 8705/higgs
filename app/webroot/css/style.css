@@ -607,7 +607,13 @@ li.done span.body a {
 #calendarPanel .cal-panel-cancel:hover {
     color:#6f6f6f;
 }
-
+/****************************
+    400系エラーページ
+****************************/
+#error a.logo {
+    color: #000;
+    text-decoration: none;
+}
 /****************************
     [tmp] 開発中一時的に
 ****************************/

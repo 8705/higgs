@@ -16,6 +16,10 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 ?>
+<?php $this->layout = "error";  //エラーページのレイアウトを指定 ?>
+<a class="logo" href="/">
+    <h1>PYNS TODO(仮)(β)</h1>
+</a>
 <h2><?php echo $name; ?></h2>
 <p class="error">
 	<strong><?php echo __d('cake', 'Error'); ?>: </strong>
