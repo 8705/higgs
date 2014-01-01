@@ -269,13 +269,13 @@ input:hover, textarea:hover {
     float: left;
     width: 100%;
     margin-left: 13px;
-    color: #555;
+    color: #ccc;
     font-size: 12px;
 
 }
 .task-list .bread-crumb a {
     margin: 0px 5px;
-    color: #555;
+    color: #ccc;
     /*font-style: italic;*/
 }
 /* 爆発したけどリストにいるタスク */

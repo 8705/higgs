@@ -274,6 +274,27 @@ $(function(){
             $('#TaskIndexForm .submit input').removeAttr('disabled');
         }
     });
+    //ログインフォームのバリデーション
+    // $('#UserLoginForm button').attr({disabled : "disabled"});
+    $('.UserLoginForm').keyup(function(){
+        if (('' == $('#UserLoginForm #UserUsername').val() || $('#UserLoginForm #UserUsername').val().length < 5) ||
+            ('' == $('#UserLoginForm #inputPassword3').val() || $('#UserLoginForm #inputPassword3').val().length < 5) ) {
+            $('#UserLoginForm button').attr({disabled : "disabled"});
+        }else {
+            $('#UserLoginForm button').removeAttr("disabled");
+        }
+    })
+    //サインアップフォームのバリデーション
+    // $('#UserRegisterForm button').attr({disabled : "disabled"});
+    $('.UserRegisterForm').keyup(function(){
+        if (('' == $('#UserRegisterForm #UserUsername').val() || $('#UserRegisterForm #UserUsername').val().length < 5) ||
+            ('' == $('#inputEmail3').val() || !$('#inputEmail3').val().match(/^[A-Za-z0-9]+[\w-]+@[\w\.-]+\.\w{2,}$/)) ||
+            ('' == $('#UserRegisterForm #inputPassword3').val() || $('#UserRegisterForm #inputPassword3').val().length < 5) ) {
+            $('#UserRegisterForm button').attr({disabled : "disabled"});
+        }else {
+            $('#UserRegisterForm button').removeAttr("disabled");
+        }
+    })
 
     //タスク新規追加時にトップ画面のタスクリストから適切なシーケンスを取得
     $('#TaskIndexForm .submit').mouseover(function(){

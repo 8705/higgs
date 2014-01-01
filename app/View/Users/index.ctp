@@ -30,13 +30,13 @@
 				<div class="form-group">
 					<!--<label for="inputEmail3" class="col-sm-2 control-label">User Id</label>-->
 					<div class="col-md-10">
-						<?php echo $this->Form->input('username', array('class'=>'form-control', 'placeholder' => 'User ID')); ?>
+						<?php echo $this->Form->input('username', array('class'=>'UserLoginForm form-control', 'placeholder' => 'User ID')); ?>
 					</div>
 				</div>
 				<div class="form-group">
 					<!-- <label for="inputPassword3" class="col-sm-2 control-label">Password</label> -->
 					<div class="col-md-10">
-						<?php echo $this->Form->input('password', array('type'=>'password', 'class'=>'form-control', 'id'=>'inputPassword3', 'placeholder' => 'Password')); ?>
+						<?php echo $this->Form->input('password', array('type'=>'password', 'class'=>'UserLoginForm form-control', 'id'=>'inputPassword3', 'placeholder' => 'Password')); ?>
 					</div>
 				</div>
 				<div class="form-group">
@@ -48,7 +48,7 @@
 				</div>
 				<div class="form-group">
 					<div class="col-md-10">
-						<?php echo $this->Form->button('Sign in', array('class'=>'btn btn-default')); ?>
+						<?php echo $this->Form->button('Sign in', array('class'=>'btn btn-default','disabled'=>'disabled')); ?>
 					</div>
 				</div>
 			<?php echo $this->Form->end(); ?>
@@ -61,24 +61,24 @@
 				<div class="form-group">
 					<!--<label for="inputEmail3" class="col-sm-2 control-label">User Id</label>-->
 					<div class="col-md-10">
-						<?php echo $this->Form->input('username', array('class'=>'form-control', 'placeholder' => 'User ID')); ?>
+						<?php echo $this->Form->input('username', array('class'=>'UserRegisterForm form-control', 'placeholder' => 'User ID')); ?>
 					</div>
 				</div>
 				<div class="form-group">
 					<!--<label for="inputEmail3" class="col-sm-2 control-label">Email</label>-->
 					<div class="col-md-10">
-						<?php echo $this->Form->input('email', array('type'=>'email', 'class'=>'form-control', 'id'=>'inputEmail3', 'placeholder' => 'E-mail')); ?>
+						<?php echo $this->Form->input('email', array('type'=>'email', 'class'=>'UserRegisterForm form-control', 'id'=>'inputEmail3', 'placeholder' => 'E-mail')); ?>
 					</div>
 				</div>
 				<div class="form-group">
 					<!--<label for="inputPassword3" class="col-sm-2 control-label">Password</label>-->
 					<div class="col-md-10">
-						<?php echo $this->Form->input('password', array('type'=>'password', 'class'=>'form-control', 'id'=>'inputPassword3', 'placeholder' => 'Password')); ?>
+						<?php echo $this->Form->input('password', array('type'=>'password', 'class'=>'UserRegisterForm form-control', 'id'=>'inputPassword3', 'placeholder' => 'Password')); ?>
 					</div>
 				</div>
 				<div class="form-group">
 					<div class="col-md-10">
-						<?php echo $this->Form->button('Sign up', array('class'=>'btn btn-default')); ?>
+						<?php echo $this->Form->button('Sign up', array('class'=>'btn btn-default','disabled'=>'disabled')); ?>
 					</div>
 				</div>
 			<?php echo $this->Form->end(); ?></div>
