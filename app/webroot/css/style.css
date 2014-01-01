@@ -269,13 +269,13 @@ input:hover, textarea:hover {
     float: left;
     width: 100%;
     margin-left: 13px;
-    color: #555;
+    color: #ccc;
     font-size: 12px;
 
 }
 .task-list .bread-crumb a {
     margin: 0px 5px;
-    color: #555;
+    color: #ccc;
     /*font-style: italic;*/
 }
 /* 爆発したけどリストにいるタスク */
@@ -607,7 +607,13 @@ li.done span.body a {
 #calendarPanel .cal-panel-cancel:hover {
     color:#6f6f6f;
 }
-
+/****************************
+    400系エラーページ
+****************************/
+#error a.logo {
+    color: #000;
+    text-decoration: none;
+}
 /****************************
     [tmp] 開発中一時的に
 ****************************/
