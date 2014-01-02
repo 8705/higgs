@@ -4,16 +4,11 @@ App::uses('AppController', 'Controller');
 App::uses('TasksController', 'Controller');
 
 class SuportsController extends AppController {
-
-    function public aboutpyns(){
-        
+    public function beforeFilter() {
+        parent::beforeFilter();
+        $this->Auth->allow('rule');
     }
 
-    function public rule(){
-
-    }
-
-    function public disclaimer(){
-        
+    public function rule(){
     }
 }

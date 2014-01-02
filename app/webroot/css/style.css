@@ -99,7 +99,11 @@ h2 {
 	vertical-align: center;
 	left: 0;
     right: 0;
+    padding: 5px 0;
+}
 
+#footer a {
+    color: #fff;
 }
 
 #top-img {
@@ -634,4 +638,17 @@ li.delete {
 }
 .status {
     display: none !important;
+}
+
+/* 免責事項 */
+#rule {
+    margin-left: -300px;
+}
+#rule ul {
+    list-style: square;
+    padding-left: 20px;
+}
+
+#rule h2 {
+    font-weight: bold;
 }
