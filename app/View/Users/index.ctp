@@ -5,18 +5,17 @@
 	<h2>ツリー型タスク管理ツール</h2>
 	<h3><span class="glyphicon glyphicon-check"></span>ツリー表示と今日やる事表示を切り替えれます</h3>
 	<p class="view-swich"><img src="/img/view_swich.png" alt=""></p>
-	<h3><span class="glyphicon glyphicon-check"></span>タスクには体重があります</h3>
+	<h3><span class="glyphicon glyphicon-check"></span>やらないタスクは勝手に消えます</h3>
 	<div class="clearfix">
 		<p class="hakari"><img src="/img/hakari.png" alt=""></p>
 		<ul class="bread">
-			<li><span class="glyphicon glyphicon-star-empty"></span>新しいプロジェクトを追加すると、その分体重も増えます</li>
-			<li><span class="glyphicon glyphicon-star-empty"></span>抱えることの出来る重さは100kgまでです</li>
-			<li><span class="glyphicon glyphicon-star-empty"></span>期限の切れたタスクの体重は毎日増えます</li>
+			<li><span class="glyphicon glyphicon-star-empty"></span>タスクにはそれぞれ体重があり、期限を過ぎると体重が増えてきます。</li>
+			<li><span class="glyphicon glyphicon-star-empty"></span>あなたが抱えることの出来る重さは100kgまでです</li>
 			<li><p><span class="glyphicon glyphicon-star-empty"></span>
-				重量オーバーになるとタスクが爆発します（よかったですね、これでもうこのタスクをやらなくて済みますよ）</p>
+				重量オーバーになるとタスクが爆発し、爆発リストに移動します（何回も爆発しているタスクはあなたにとって重要なものでない可能性があります。もう１度しっかり考えましょう。）</p>
 				<p class="kieru"><img src="/img/kieru.png" alt=""></p>
 			</li>
-			<li><span class="glyphicon glyphicon-star-empty"></span>現在の体重は常に画面上部で確認できます</li>
+			<li><span class="glyphicon glyphicon-star-empty"></span>現在の総体重は常に画面上部で確認できます</li>
 		</ul>
 	</div>
 </div>
