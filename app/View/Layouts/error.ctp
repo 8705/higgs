@@ -39,8 +39,7 @@
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-19902347-12']);
-  _gaq.push(['_setDomainName', 'pyns.jp']);
+  _gaq.push(['_setAccount', 'UA-19902347-17']);
   _gaq.push(['_trackPageview']);
 
   (function() {
