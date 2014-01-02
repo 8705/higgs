@@ -21,7 +21,7 @@
 </head>
 <body>
 <div class="container">
-	<?php if($this->params["controller"] == 'tasks' or 'calendars'): ?>
+	<?php if($this->params["controller"] == 'tasks' or $this->params["controller"] == 'calendars'): ?>
 		<div id="header" class="row clearfix">
 			<nav class="col-md-12 column navbar-inverse" role="navigation">
 				<div class="row clearfix">
@@ -61,7 +61,7 @@
 		<div id="tasks" class="index col-md-8 col-md-push-4 column">
 			<?php echo $this->fetch('content'); ?>
 		</div>
-		<?php if($this->params["controller"] == 'tasks' or 'calendars'): ?>
+		<?php if($this->params["controller"] == 'tasks' or $this->params["controller"] == 'calendars'): ?>
 				<div id="side-menu" class="tasks col-md-4 col-md-pull-8 column">
 					<p class="username">ようこそ、<?php echo h($author['username']); ?>さん</p>
 					<div class="actions">
@@ -119,6 +119,11 @@
 	</div>
 	<div id="footer" class="row clearfix">
 		<div class="col-md-12 column">
+			<p class="about">
+				<a href="/">ホーム</a>
+				<span>|</span>
+				<a href="/suports/rule">このサイトについて</a>
+			</p>
 			<p class="text-center">
 				&copy;2013-2014 PYNS CREATE. All rights Reserved.
 			</p>

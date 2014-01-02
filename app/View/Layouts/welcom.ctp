@@ -25,6 +25,11 @@
     </div>
     <div id="footer" class="row clearfix">
         <div class="col-md-12 column">
+            <p class="about">
+                <a href="/">ホーム</a>
+                <span>|</span>
+                <a href="/suports/rule">このサイトについて</a>
+            </p>
             <p class="text-center">
                 &copy;2013-2014 PYNS CREATE. All rights Reserved.
             </p>
