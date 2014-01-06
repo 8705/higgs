@@ -194,6 +194,7 @@ input:hover, textarea:hover {
     height: 30px;
     margin-bottom: 0;
     padding: 0;
+    border-radius:20px;
 }
 
 .progress {
