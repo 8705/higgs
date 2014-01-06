@@ -18,8 +18,8 @@ $(function(){
         }
     }, ".jshover");
 
-    $('#viewWrapper ul#task-list').draggable({
-        axis : 'x',
-        cursor : 'pointer'
-    });
+    // $('#viewWrapper ul#task-list').draggable({
+    //     axis : 'x',
+    //     cursor : 'pointer'
+    // });
 })

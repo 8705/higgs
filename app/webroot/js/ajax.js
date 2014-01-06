@@ -759,6 +759,9 @@ $(function(){
                 }
 
             },
+            error : function() {
+                popUpPanel(true, 'サーバーエラー')
+            },
             complete : function() {
                 $('#task_' + taskId +' .check-task').html('<input type="checkbox" '+ checked +'/>');
             },
