@@ -477,6 +477,14 @@ li.done span.body a {
 /********************************
     カレンダー
 *********************************/
+.calendar-view .title {
+    text-align: right;
+    margin:0 0 5px 0;
+}
+.calendar-view .link {
+    font-size: 10px;
+    padding: 2px 10px 1px;
+}
 .table.calendar {
     font-size:11px;
 }
@@ -529,6 +537,7 @@ li.done span.body a {
     box-shadow: 3px 3px 2px 0px rgba(0,0,0,0.2);
     width:400px;
     border: 1px solid #F1F1F1;
+    z-index: 1;
 }
 #calendarPanel span, #calendarPanel a {
     display: inline-block;
