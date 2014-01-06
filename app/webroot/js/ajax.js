@@ -439,7 +439,7 @@ $(function(){
         }, 200);
 
         //今日の日付をプリセット
-        $("input.divide-input").val(getFutureDate(0));
+        $(".li-divide:last input.divide-input").val(getFutureDate(0));
 
         makeDatePicker();
     })
