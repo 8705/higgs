@@ -55,7 +55,7 @@
 		<div class="signinform col-md-12 col-xs-6">
 			<h3>新規登録登録</h3>
 			<?php echo $this->Form->create('User',
-				array('action'=>'register', 'class'=>'form-horizontal', 'role'=>'form')
+				array('action'=>'register', 'class'=>'form-horizontal', 'role'=>'form', 'autocomplete'=>'off')
 			);?>
 				<div class="form-group">
 					<!--<label for="inputEmail3" class="col-sm-2 control-label">User Id</label>-->
