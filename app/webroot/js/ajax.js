@@ -439,7 +439,7 @@ $(function(){
         }, 200);
 
         //今日の日付をプリセット
-        $("input.divide-input").val(getFutureDate(0));
+        $(".li-divide:last input.divide-input").val(getFutureDate(0));
 
         makeDatePicker();
     })
@@ -758,6 +758,9 @@ $(function(){
                     adjustCheckBtn(data.result.Task.id);
                 }
 
+            },
+            error : function() {
+                popUpPanel(true, 'サーバーエラー')
             },
             complete : function() {
                 $('#task_' + taskId +' .check-task').html('<input type="checkbox" '+ checked +'/>');
