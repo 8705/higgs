@@ -29,13 +29,13 @@
 				<div class="form-group">
 					<!--<label for="inputEmail3" class="col-sm-2 control-label">User Id</label>-->
 					<div class="col-md-10">
-						<?php echo $this->Form->input('username', array('class'=>'UserLoginForm form-control', 'placeholder' => 'User ID')); ?>
+						<?php echo $this->Form->input('username', array('class'=>'UserLoginForm form-control LoginUsername', 'placeholder' => 'User ID')); ?>
 					</div>
 				</div>
 				<div class="form-group">
 					<!-- <label for="inputPassword3" class="col-sm-2 control-label">Password</label> -->
 					<div class="col-md-10">
-						<?php echo $this->Form->input('password', array('type'=>'password', 'class'=>'UserLoginForm form-control', 'id'=>'inputPassword3', 'placeholder' => 'Password')); ?>
+						<?php echo $this->Form->input('password', array('type'=>'password', 'class'=>'UserLoginForm form-control LoginPassword', 'id'=>'inputPassword3', 'placeholder' => 'Password')); ?>
 					</div>
 				</div>
 				<div class="form-group">
@@ -47,7 +47,7 @@
 				</div>
 				<div class="form-group">
 					<div class="col-md-10">
-						<?php echo $this->Form->button('Sign in', array('class'=>'btn btn-default','disabled'=>'disabled')); ?>
+						<?php echo $this->Form->button('Sign in', array('class'=>'btn btn-primary')); ?>
 					</div>
 				</div>
 			<?php echo $this->Form->end(); ?>
@@ -77,7 +77,7 @@
 				</div>
 				<div class="form-group">
 					<div class="col-md-10">
-						<?php echo $this->Form->button('Sign up', array('class'=>'btn btn-default','disabled'=>'disabled')); ?>
+						<?php echo $this->Form->button('Sign up', array('class'=>'btn btn-primary')); ?>
 					</div>
 				</div>
 			<?php echo $this->Form->end(); ?></div>
