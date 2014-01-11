@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>
-        Higgs
+        <?php echo __('Higgs'); ?>
     </title>
     <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
     <meta name="description" content="">
@@ -19,9 +19,15 @@
     <?php echo $this->Html->script('script'); ?>
 </head>
 <body>
-<div class="container">
-    <div id="welcom" class="row clearfix">
-    <?php echo $this->fetch('content'); ?>
+<div class="container" id="single">
+    <header class="row">
+        <h1><a href="/">Higgs</a></h1>
+    </header>
+    <div class="row clearfix">
+        <?php echo $this->Session->flash(); ?>
+        <div class="col-md-6 col-md-offset-3 column">
+        <?php echo $this->fetch('content'); ?>
+        </div>
     </div>
     <div id="footer" class="row clearfix">
         <div class="col-md-12 column">

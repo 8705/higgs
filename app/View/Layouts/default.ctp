@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>
-		<?php echo __('PYNS TODO(仮)(β)'); ?>
+		<?php echo __('Higgs'); ?>
 		<?php echo $title_for_layout; ?>
 	</title>
 	<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
@@ -59,7 +59,6 @@
 	<div id="noticePanel"></div>
 	<div id="main" class="row clearfix">
 		<div id="tasks" class="index col-md-8 col-md-push-4 column">
-			<?php echo $this->Session->flash(); ?>
 			<?php echo $this->fetch('content'); ?>
 		</div>
 		<?php if($this->params["controller"] == 'tasks' or $this->params["controller"] == 'calendars'): ?>

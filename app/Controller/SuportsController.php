@@ -10,5 +10,6 @@ class SuportsController extends AppController {
     }
 
     public function rule(){
+        $this->layout = 'single';
     }
 }
