@@ -21,6 +21,7 @@
 <body>
 <div class="container">
     <div id="welcom" class="row clearfix">
+        <?php echo $this->Session->flash(); ?>
     <?php echo $this->fetch('content'); ?>
     </div>
     <div id="footer" class="row clearfix">

@@ -16,6 +16,9 @@ class UsersController extends AppController {
 
 	public function beforeFilter() {
 		parent::beforeFilter();
+
+		$this->Security->validatePost = false;
+
 		$this->Auth->autoRedirect = false;
 		$this->Auth->allow('index', 'register');
 		$this->Cookie->name = 'remember_me';
@@ -81,6 +84,7 @@ class UsersController extends AppController {
 				$this->redirect(array('controller'=>'tasks', 'action'=>'index'));
 			} else {
 				$this->Session->setFlash(__('The user could not be saved. Please, try again.'));
+				// $this->redirect(array('controller'=>'users', 'action'=>'index'));
 			}
 		}
 	}

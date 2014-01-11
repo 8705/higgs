@@ -59,6 +59,7 @@
 	<div id="noticePanel"></div>
 	<div id="main" class="row clearfix">
 		<div id="tasks" class="index col-md-8 col-md-push-4 column">
+			<?php echo $this->Session->flash(); ?>
 			<?php echo $this->fetch('content'); ?>
 		</div>
 		<?php if($this->params["controller"] == 'tasks' or $this->params["controller"] == 'calendars'): ?>
@@ -135,8 +136,10 @@
 <?php echo $this->Html->script('ajax'); ?>
 <?php echo $this->Js->writeBuffer(array( 'inline' => 'true')); ?>
 <?php echo $this->Html->script('jquery-ui-1.10.3.custom.min'); ?>
+<?php if($author['username'] == 'egami' || $author['username'] == 'ishino'): ?>
+<?php echo $this->Html->script('no-analytics'); ?>
+<?php else: ?>
 <script type="text/javascript">
-
   var _gaq = _gaq || [];
   _gaq.push(['_setAccount', 'UA-19902347-17']);
   _gaq.push(['_trackPageview']);
@@ -148,5 +151,6 @@
   })();
 
 </script>
+<?php endif; ?>
 </body>
 </html>
