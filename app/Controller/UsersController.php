@@ -18,12 +18,9 @@ class UsersController extends AppController {
 		parent::beforeFilter();
 
 		$this->Security->validatePost = false;
-		if($this->params['action'] != 'logout') {
-			if($this->Auth->login()) $this->redirect($this->Auth->redirectUrl());
-		}
 
 		$this->Auth->autoRedirect = false;
-		$this->Auth->allow('index', 'register');
+		$this->Auth->allow('index', 'login', 'register');
 		$this->Cookie->name = 'remember_me';
 		$this->Cookie->time = '1 weeks';  // または '1 hour'
 		$this->Cookie->path = '/todo/';
@@ -38,6 +35,7 @@ class UsersController extends AppController {
 	}
 
 	public function login() {
+		if($this->Auth->login()) $this->redirect($this->Auth->redirectUrl());
 		$this->layout = 'single';
 		if($this->request->is('post')){
 			if($this->Auth->login()) {
@@ -86,7 +84,7 @@ class UsersController extends AppController {
 
 	public function register() {
 		$this->layout = 'single';
-		// if($this->Auth->login()) $this->redirect($this->Auth->redirectUrl());
+		if($this->Auth->login()) $this->redirect($this->Auth->redirectUrl());
 		if ($this->request->is('post')) {
 			$this->User->create();
 			if ($this->User->save($this->request->data)) {
