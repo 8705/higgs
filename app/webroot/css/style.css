@@ -61,11 +61,15 @@ img {
     全体
 **********************************/
 /** レイアウト **/
+html {
+    height: 100%;
+}
 #welcom {
     padding: 0px 15px 100px;
     background-color: #F7FDFF;
 }
 body {
+    height: 100%;
 	background-color: #7BD0FF;
 }
 h1 a, h1 a:hover {
