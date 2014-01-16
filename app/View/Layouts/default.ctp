@@ -23,7 +23,7 @@
 <div class="container">
 	<?php if($this->params["controller"] == 'tasks' or $this->params["controller"] == 'calendars'): ?>
 		<div id="header" class="row clearfix">
-			<nav class="col-md-12 column navbar-inverse" role="navigation">
+			<nav class="col-md-12 column navbar-inverse navbar navbar-default navbar-fixed-top" role="navigation">
 				<div class="row clearfix">
 					<div class="col-md-2 col-xs-2 col-sm-2 column navbar-header">
 						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="/">ホーム</a>

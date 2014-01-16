@@ -63,10 +63,10 @@ img {
 /** レイアウト **/
 #welcom {
     padding: 0px 15px 100px;
-    background-color: #F7FDFF;
+    background-color: #e8e8e8;
 }
 body {
-	background-color: #7BD0FF;
+	background-color: #e8e8e8;
 }
 
 h2 {
@@ -75,7 +75,7 @@ h2 {
 
 #main {
     padding: 80px 15px 100px;
-    background-color: #F7FDFF;
+    /*background-color: #F7FDFF;*/
 }
 .title h3 {
     float: left;
@@ -94,8 +94,7 @@ h2 {
     margin: 0 0 10px 0;
 }
 #footer {
-	background-color: #222;
-	color: #FFF;
+	color: #000;
 	vertical-align: center;
 	left: 0;
     right: 0;
@@ -103,7 +102,7 @@ h2 {
 }
 
 #footer a {
-    color: #fff;
+    color: #000;
 }
 
 #top-img {

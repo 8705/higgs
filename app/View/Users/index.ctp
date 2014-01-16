@@ -53,7 +53,7 @@
 			<?php echo $this->Form->end(); ?>
 		</div>
 		<div class="signinform col-md-12 col-xs-6">
-			<h3>新規登録登録</h3>
+			<h3>新規登録</h3>
 			<?php echo $this->Form->create('User',
 				array('action'=>'register', 'class'=>'form-horizontal', 'role'=>'form', 'autocomplete'=>'off')
 			);?>
