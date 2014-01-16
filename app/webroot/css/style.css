@@ -61,14 +61,21 @@ img {
     全体
 **********************************/
 /** レイアウト **/
+html {
+    height: 100%;
+}
 #welcom {
     padding: 0px 15px 100px;
     background-color: #e8e8e8;
 }
 body {
-	background-color: #e8e8e8;
+	height: 100%;
+    background-color: #e8e8e8;
 }
-
+h1 a, h1 a:hover {
+    color:#000;
+    text-decoration: none;
+}
 h2 {
     font-size: 18px;
 }
@@ -630,6 +637,50 @@ li.done span.body a {
     color: #000;
     text-decoration: none;
 }
+
+
+/****************************
+    Single
+****************************/
+#single {
+}
+#single header {
+    margin-bottom:20px;
+}
+#single ul {
+    list-style: square;
+    padding-left: 20px;
+}
+#single h2 {
+    font-weight: bold;
+    margin:0 0 20px 0;
+}
+#single h3 {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/* Sign up */
+.lead-to-signup {
+    margin-left: 97px;
+}
+.lead-to-signup a {
+    color:#000;
+}
+/* flashMessage */
+#flashMessage {
+    background-color: #FF8C8C;
+    border: 1px solid #C45252;
+    border-radius: 3px;
+    padding: 3px 5px 2px;
+    width: 320px;
+    margin: 0px auto 20px;
+    color: #FFF;
+}
+.error-message {
+    color:#FF2525;
+}
+
 /****************************
     [tmp] 開発中一時的に
 ****************************/
@@ -650,17 +701,4 @@ li.delete {
 }
 .status {
     display: none !important;
-}
-
-/* 免責事項 */
-#rule {
-    margin-left: -300px;
-}
-#rule ul {
-    list-style: square;
-    padding-left: 20px;
-}
-
-#rule h2 {
-    font-weight: bold;
 }

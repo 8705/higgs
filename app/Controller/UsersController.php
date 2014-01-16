@@ -20,7 +20,7 @@ class UsersController extends AppController {
 		$this->Security->validatePost = false;
 
 		$this->Auth->autoRedirect = false;
-		$this->Auth->allow('index', 'register');
+		$this->Auth->allow('index', 'login', 'register');
 		$this->Cookie->name = 'remember_me';
 		$this->Cookie->time = '1 weeks';  // または '1 hour'
 		$this->Cookie->path = '/todo/';
@@ -32,10 +32,11 @@ class UsersController extends AppController {
 
 	public function index() {
 		$this->layout = 'welcom';
-		if($this->Auth->login()) $this->redirect($this->Auth->redirectUrl());
 	}
 
 	public function login() {
+		if($this->Auth->login()) $this->redirect($this->Auth->redirectUrl());
+		$this->layout = 'single';
 		if($this->request->is('post')){
 			if($this->Auth->login()) {
 				$user = $this->Auth->user();
@@ -46,17 +47,24 @@ class UsersController extends AppController {
 				}
 				unset($this->data['User']['remember_me']);
 				$this->redirect($this->Auth->redirectUrl());
+			} else {
+				$this->Session->setFlash('入力がただしくありません');
 			}
 		}
 
 		$cookiePassport=$this->Cookie->Read('User');
 		if($cookiePassport){
-			$deadline = date('Y-m-d H:i:s', strtotime("-".$this->expires));
-			$options=array('conditions'=>array('Passport.passport'=>$cookiePassport['passport'],'Passport.updated >'=>" $deadline"));
-			$passport = $this->Passport->find("first",$options);
+			$deadline 	= date('Y-m-d H:i:s', strtotime("-".$this->expires));
+			$options 	= array(
+				'conditions' => array(
+					'Passport.passport' => $cookiePassport['passport'],
+					'Passport.updated >' => " $deadline"
+				)
+			);
+			$passport 	= $this->Passport->find("first",$options);
 			if($passport){
-				$user['username']=$passport['User']['username'];
-				$user['password']=$passport['User']['password'];
+				$user['username'] = $passport['User']['username'];
+				$user['password'] = $passport['User']['password'];
 
 				if($this->Auth->login($user)){
 					$this->__passportWrite($passport);
@@ -64,7 +72,7 @@ class UsersController extends AppController {
 				}
 			}
 		}
-		$this->redirect(array('action'=>'index'));
+		// $this->redirect(array('action'=>'index'));
 	}
 
 	public function logout() {
@@ -75,6 +83,7 @@ class UsersController extends AppController {
 	}
 
 	public function register() {
+		$this->layout = 'single';
 		if($this->Auth->login()) $this->redirect($this->Auth->redirectUrl());
 		if ($this->request->is('post')) {
 			$this->User->create();
@@ -83,7 +92,7 @@ class UsersController extends AppController {
 				$this->Auth->login();
 				$this->redirect(array('controller'=>'tasks', 'action'=>'index'));
 			} else {
-				$this->Session->setFlash(__('The user could not be saved. Please, try again.'));
+				$this->Session->setFlash('入力がただしくありません');
 				// $this->redirect(array('controller'=>'users', 'action'=>'index'));
 			}
 		}

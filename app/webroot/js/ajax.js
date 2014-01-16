@@ -89,6 +89,7 @@ function getFutureDate(day) {
     d.setDate(d.getDate() + day);
     year = d.getFullYear();
     month = d.getMonth() + 1;
+    month = ('0'+month).slice(-2);
     date = d.getDate();
 
     return year +'-'+ month +'-'+ date;
@@ -137,9 +138,7 @@ function getAddDay(start_time) {
 
 //start_timeと追加エレメントを渡すとその日の場所にタスクを追加する
 function appendToDay(start_time, elm) {
-
     addDay = getAddDay(start_time);
-
     switch(addDay) {
         case 'today' :
             deleteEmpty(addDay)
@@ -671,20 +670,22 @@ $(function(){
                             }
                         //トップページの場合
                         }else {
-                            $('#task_'+taskId).hide();
+                            // $('#task_'+taskId).hide();
+                            $('#task_'+taskId).remove();
                             for(var i in data.result) {
-                                $('#task_'+taskId).after(
+                                var elm =$(
                                     '<li id="task_'+data.result[i].Task.id+'" class="list-group-item notyet clearfix" style="display:none;" data-task-id="'+ data.result[i].Task.id +'">\n' +
                                     '<span class="check-task"><input type="checkbox"></span>\n'+
                                     '<span class="body edit-task"><a href="/tasks/view/' + data.result[i].Task.id + '">'+ data.result[i].Task.body +'</a></span>\n' +
                                     '<span class="delete-task"><span class="glyphicon glyphicon-trash"></span><b>削除</b></span>\n' +
-                                    '<span class="start_time">'+ data.result[i].Task.start_time +'</span>\n'+
+                                    '<span class="start_time">'+ roundStartTime(data.result[i].Task.start_time) +'</span>\n'+
                                     '<div class="bread-crumb">'+ data.result[i].Task.breadcrumb +'</div>'+
                                     '</li>'
                                 );
+
+                                $.when(appendToDay(data.result[i].Task.start_time, elm)).then(createEmpty());
                                 $('#task_'+data.result[i].Task.id).fadeIn(10);
                             }
-                            $('#task_'+taskId).remove();
                         }
 
 
@@ -756,7 +757,6 @@ $(function(){
 
                     checked = 'checked';
                 }
-                console.log(data.attainment);
                 adjustDBar(data.all_d);
                 adjustattainment(data.attainment);
                 if($('#task_'+data.result.Task.id).parent().hasClass('children-ul')){

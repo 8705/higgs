@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>
-		<?php echo __('PYNS TODO(仮)(β)'); ?>
+		<?php echo __('Higgs'); ?>
 		<?php echo $title_for_layout; ?>
 	</title>
 	<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
@@ -59,7 +59,6 @@
 	<div id="noticePanel"></div>
 	<div id="main" class="row clearfix">
 		<div id="tasks" class="index col-md-8 col-md-push-4 column">
-			<?php echo $this->Session->flash(); ?>
 			<?php echo $this->fetch('content'); ?>
 		</div>
 		<?php if($this->params["controller"] == 'tasks' or $this->params["controller"] == 'calendars'): ?>
@@ -139,16 +138,14 @@
 <?php if($author['username'] == 'egami' || $author['username'] == 'ishino'): ?>
 <?php echo $this->Html->script('no-analytics'); ?>
 <?php else: ?>
-<script type="text/javascript">
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-19902347-17']);
-  _gaq.push(['_trackPageview']);
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
+  ga('create', 'UA-19902347-17', 'pyns.jp');
+  ga('send', 'pageview');
 
 </script>
 <?php endif; ?>

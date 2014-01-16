@@ -9,6 +9,7 @@ class AppController extends Controller {
 		'Paginator',
 		'Session',
 		'Auth'=> array(
+            'loginAction' => array('controller'=>'users', 'action'=>'index'),
 			'loginRedirect' => array('controller' => 'tasks', 'action' => 'index'),
 			'logoutRedirect' => array('controller' => 'users', 'action' => 'index'),
 		),
