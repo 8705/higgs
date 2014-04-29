@@ -24,7 +24,7 @@ class UsersController extends AppController {
 		$this->Cookie->name = 'remember_me';
 		$this->Cookie->time = '1 weeks';  // または '1 hour'
 		$this->Cookie->path = '/todo/';
-		$this->Cookie->domain = 'todo.pyns.jp';
+		$this->Cookie->domain = 'higgs.pyns.jp';
 		$this->Cookie->secure = false;  // セキュアな HTTPS で接続している時のみ発行されます
 		$this->Cookie->key = 'cw94r8vy34(*(hn93N&Q#3q4P*@^OAIW3myw8P*CP#Rp08ppoYfh!@fpp';
 		$this->Cookie->httpOnly = true;
